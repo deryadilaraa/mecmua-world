@@ -1,0 +1,93 @@
+/* ===========================================================================
+   deryadilara · Dark Mode
+   ---------------------------------------------------------------------------
+   "The Sanctuary, after dark." A single global override: when
+   <html data-theme="dark"> is set, the parchment/ink/surface tokens are
+   remapped to the brand's midnight register. Because the semantic tokens
+   (--text-primary, --surface-card, --hairline …) already reference these
+   base tokens, type, surfaces and lines all cascade automatically.
+
+   This mirrors the "Sacred art" night palette that performs best with the
+   audience — deep IKB midnight, warm gold, parchment-light type.
+   ========================================================================== */
+
+html[data-theme="dark"] {
+  /* ---- Surfaces: parchment → midnight ---------------------------------- */
+  --parchment-50:  #0a0a26;   /* page ground (night-900) */
+  --parchment-100: #10103a;   /* primary panel (night-800) */
+  --parchment-200: #16163f;   /* sunk panel */
+  --parchment-300: #2b2b56;   /* (used as border-soft) lifted line */
+
+  --surface-page:       #0a0a26;
+  --surface-raised:     #14143c;
+  --surface-sunk:       #07071c;
+  --surface-card:       #13133a;
+
+  /* ---- Type: ink → parchment-light ------------------------------------- */
+  --ink-900: #f3ecdd;   /* primary text */
+  --ink-700: #cfc7b4;   /* secondary */
+  --ink-500: #9f9785;   /* muted / captions */
+  --ink-300: #756f60;   /* faint metadata */
+
+  /* ---- Lines & accents ------------------------------------------------- */
+  --border-hairline: rgba(242,236,222,0.16);
+  --border-soft:     rgba(201,160,99,0.20);
+  --border-on-night: rgba(201,160,99,0.30);
+
+  /* slightly brighter gold reads better on midnight */
+  --gold-700: #b07f3c;
+
+  /* warm grain is invisible/over-bright on dark — quiet it */
+  --grain: none;  /* @kind other */
+
+  /* deepen the warm shadows into true night shadows */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.4);
+  --shadow-sm:  0 4px 14px rgba(0,0,0,0.45);
+  --shadow-md:  0 12px 34px rgba(0,0,0,0.5);
+  --shadow-lg:  0 26px 70px rgba(0,0,0,0.6);
+
+  color-scheme: dark;
+}
+
+/* ---- Targeted fixes for hand-built pages that hardcode cream values ----- */
+
+/* The sticky cream header bars on most pages → midnight glass */
+html[data-theme="dark"] header {
+  background: rgba(12,16,48,0.5) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+  border-bottom-color: rgba(214,178,112,0.30);
+}
+
+/* Cream search / form fields → midnight glass */
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+  background: rgba(242,233,221,0.06) !important;
+  color: #f3ecdd;
+  border-color: rgba(201,160,99,0.32);
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder { color: rgba(242,233,221,0.45); }
+
+/* Images sit a touch quieter at night so type leads */
+html[data-theme="dark"] main img { filter: brightness(0.94) saturate(1.02); }
+
+/* ===========================================================================
+   The theme toggle button (injected by dark-toggle.js)
+   ========================================================================== */
+.dm-toggle {
+  position: fixed; right: 22px; bottom: 22px; z-index: 9999;
+  width: 46px; height: 46px; border-radius: 999px; cursor: pointer;
+  display: grid; place-items: center; padding: 0;
+  font-size: 18px; line-height: 1;
+  background: var(--surface-card);
+  color: var(--gold-500);
+  border: 1px solid rgba(201,160,99,0.45);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--dur-fast, 160ms) var(--ease-quiet, ease),
+              background var(--dur-base, 240ms) ease, color var(--dur-base, 240ms) ease;
+}
+.dm-toggle:hover { transform: translateY(-2px) scale(1.04); }
+.dm-toggle:active { transform: scale(0.96); }
+@media print { .dm-toggle { display: none !important; } }

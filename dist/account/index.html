@@ -1,0 +1,364 @@
+<!-- @dsCard group="mecmûa" viewport="1320x900" name="The Account" subtitle="Magic-link sign-in & member area — saved images, birth chart, reading list, oracle draws" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mecmûa — Your Account</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../shared/midnight.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { color: #f2e9dd; font-family: var(--font-text);
+    background: radial-gradient(120% 80% at 50% 0%, #1c2658 0%, #121a42 42%, #0a0e2c 74%, #070a20 100%) no-repeat; background-attachment: fixed; min-height: 100vh; }
+  a { color: inherit; text-decoration: none; }
+
+  header { position: sticky; top: 0; z-index: 50; padding: 0 40px; height: 70px; display: flex; align-items: center; gap: 22px; }
+  .wm { font-family: var(--font-display); text-transform: lowercase; letter-spacing: 0.04em; font-size: 28px;
+    background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .crumb { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.22em; font-size: 11px; color: rgba(243,236,221,0.5); }
+  .spacer { flex: 1; }
+  .nav { display: flex; gap: 4px; }
+  .nav a { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em; font-size: 10px; color: rgba(243,236,221,0.66);
+    padding: 8px 12px; border-radius: 999px; transition: color var(--dur-fast) var(--ease-quiet); }
+  .nav a:hover { color: #e6c785; }
+
+  /* ===== signed-out: sign-in screen ===== */
+  .gate { max-width: 460px; margin: 0 auto; padding: 80px 30px 100px; text-align: center; }
+  .gate .star { font-size: 20px; color: #e6c785; letter-spacing: 0.6em; padding-left: 0.6em; }
+  .gate h1 { font-family: var(--font-display), var(--font-serif); text-transform: lowercase; font-weight: 400; letter-spacing: 0.01em;
+    font-size: clamp(40px, 7vw, 64px); line-height: 1; margin: 18px 0 0;
+    background: linear-gradient(180deg, #e8d09a 0%, #d2a851 54%, #b98b3d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .gate .lede { font-family: var(--font-serif); font-style: italic; font-size: 19px; color: rgba(242,233,221,0.74); margin: 16px 0 0; }
+  .gate .panel { margin-top: 38px; background: rgba(255,255,255,0.025); border: 1px solid rgba(214,178,112,0.26); border-radius: 18px; padding: 30px 28px; text-align: left; }
+  .tabs { display: flex; gap: 4px; background: rgba(255,255,255,0.04); border: 1px solid rgba(214,178,112,0.2); border-radius: 999px; padding: 4px; margin: 0 auto 22px; width: max-content; }
+  .tab { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(243,236,221,0.6); background: transparent; border: none; border-radius: 999px; padding: 9px 18px; cursor: pointer; }
+  .tab.on { background: rgba(214,178,112,0.16); color: #e6c785; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(243,236,221,0.5); margin-bottom: 7px; }
+  .field input { width: 100%; font-family: var(--font-serif); font-size: 16px; padding: 13px 16px; border-radius: 11px; border: 1px solid rgba(214,178,112,0.3); background: rgba(255,255,255,0.03); color: #f4ecdd; outline: none; transition: border-color .2s; }
+  .field input:focus { border-color: rgba(214,178,112,0.7); }
+  .gbtn { width: 100%; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em; font-size: 11px; padding: 15px 0; border-radius: 999px; border: none;
+    background: linear-gradient(180deg, #e8d09a, #d2a851 60%, #b98b3d); color: #2a1410; cursor: pointer; margin-top: 6px; transition: filter .15s; }
+  .gbtn:hover { filter: brightness(1.06); }
+  .gnote { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(243,236,221,0.4); text-align: center; margin-top: 18px; line-height: 1.7; }
+  .perks { display: grid; gap: 12px; margin-top: 34px; text-align: left; }
+  .perk { display: flex; gap: 12px; align-items: flex-start; font-family: var(--font-text); font-size: 13.5px; color: rgba(243,236,221,0.7); }
+  .perk .i { color: #e6c785; font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ===== signed-in: member area ===== */
+  .member { max-width: 1200px; margin: 0 auto; padding: 40px 40px 110px; }
+  .welcome { display: flex; align-items: center; gap: 20px; border-bottom: 1px solid rgba(214,178,112,0.22); padding-bottom: 28px; margin-bottom: 30px; flex-wrap: wrap; }
+  .avatar { width: 66px; height: 66px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-display); font-size: 28px; color: #2a1410;
+    background: linear-gradient(180deg, #e8d09a, #d2a851 60%, #b98b3d); flex-shrink: 0; }
+  .whoami { flex: 1 1 auto; min-width: 0; }
+  .whoami .hi { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(214,178,112,0.8); }
+  .whoami h1 { font-family: var(--font-serif); font-weight: 500; font-size: 34px; letter-spacing: -0.01em; margin: 4px 0 2px; white-space: nowrap; }
+  .whoami .em { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; color: rgba(243,236,221,0.5); }
+  .signout { margin-left: auto; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(243,236,221,0.6);
+    border: 1px solid rgba(214,178,112,0.3); background: transparent; padding: 10px 18px; border-radius: 999px; cursor: pointer; transition: all var(--dur-fast); }
+  .signout:hover { border-color: var(--gold-line); color: #e6c785; }
+
+  .mtabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 28px; }
+  .mtab { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(243,236,221,0.62);
+    border: 1px solid rgba(214,178,112,0.26); background: transparent; padding: 10px 18px; border-radius: 999px; cursor: pointer; transition: all var(--dur-fast); }
+  .mtab:hover { border-color: var(--gold-line); color: #e6c785; }
+  .mtab.on { background: rgba(214,178,112,0.14); border-color: var(--gold-line); color: #e6c785; }
+  .mtab .ct { color: rgba(243,236,221,0.4); margin-left: 7px; }
+
+  .pane { display: none; }
+  .pane.on { display: block; }
+  .secdesc { font-family: var(--font-serif); font-style: italic; font-size: 17px; color: rgba(242,233,221,0.66); margin: 0 0 24px; }
+
+  .imgs { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+  .imgs .it { position: relative; aspect-ratio: 3/4; border-radius: 11px; overflow: hidden; border: 1px solid rgba(214,178,112,0.2); background: #0c1132; }
+  .imgs .it img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .imgs .it .nm { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 12px 10px; font-family: var(--font-serif); font-size: 13px;
+    background: linear-gradient(transparent, rgba(8,10,32,0.86)); }
+
+  .empty { text-align: center; padding: 70px 20px; }
+  .empty .e1 { font-family: var(--font-serif); font-style: italic; font-size: 22px; color: rgba(243,236,221,0.6); }
+  .empty .e2 { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(243,236,221,0.36); margin-top: 12px; }
+  .empty a { color: #e6c785; }
+
+  /* birth chart */
+  .chartwrap { display: grid; grid-template-columns: 320px 1fr; gap: 40px; align-items: start; }
+  @media (max-width: 760px){ .chartwrap { grid-template-columns: 1fr; } }
+  .chartform .field { margin-bottom: 16px; }
+  .chartform .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .wheel { position: relative; width: 100%; max-width: 360px; aspect-ratio: 1; margin: 0 auto; }
+  .wheel svg { width: 100%; height: 100%; }
+  .bigthree { display: grid; gap: 12px; margin-top: 24px; }
+  .b3 { display: flex; align-items: center; gap: 14px; border: 1px solid rgba(214,178,112,0.22); border-radius: 12px; padding: 14px 18px; background: rgba(255,255,255,0.02); }
+  .b3 .gl { font-size: 24px; color: #e6c785; width: 34px; text-align: center; }
+  .b3 .lab { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(243,236,221,0.5); }
+  .b3 .val { font-family: var(--font-serif); font-size: 19px; }
+
+  .list { display: grid; gap: 12px; }
+  .lrow { display: flex; align-items: center; gap: 16px; border: 1px solid rgba(214,178,112,0.2); border-radius: 12px; padding: 14px 18px; background: rgba(255,255,255,0.02); }
+  .lrow .ix { font-family: var(--font-mono); font-size: 11px; color: rgba(214,178,112,0.7); }
+  .lrow .t { font-family: var(--font-serif); font-size: 18px; }
+  .lrow .k { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(243,236,221,0.42); margin-left: auto; }
+
+  footer { max-width: 1200px; margin: 0 auto; padding: 30px 40px 70px; display: grid; grid-template-columns: repeat(3,1fr);
+    border-top: 1px solid rgba(214,178,112,0.2); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.24em; font-size: 10px; color: rgba(243,236,221,0.5); }
+  footer span:nth-child(2){ text-align: center; } footer span:nth-child(3){ text-align: right; }
+</style>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
+<script defer src="../shared/dark-toggle.js"></script>
+<script defer src="../shared/auth.js"></script>
+<script src="../collection/asset-manifest.js"></script>
+<script src="../shared/astronomy-engine.min.js"></script>
+<script src="../shared/astro-calc.js"></script>
+</head>
+<body>
+  <header>
+    <a class="wm" href="../mecmua/index.html">mecmûa</a>
+    <span class="crumb">/ Account</span>
+    <div class="spacer"></div>
+    <nav class="nav">
+      <a href="../mecmua/index.html">Home</a>
+      <a href="../library/index.html">Library</a>
+      <a href="../collection/index.html">Collection</a>
+    </nav>
+  </header>
+
+  <!-- signed-out -->
+  <section class="gate" id="gate" style="display:none">
+    <div class="star">✦</div>
+    <h1>your sanctuary</h1>
+    <p class="lede">Sign in to keep what you love.</p>
+    <div class="panel">
+      <div class="tabs">
+        <button class="tab on" data-m="in">Sign in</button>
+        <button class="tab" data-m="up">Create account</button>
+      </div>
+      <div id="gateform"></div>
+    </div>
+    <div class="perks">
+      <div class="perk"><span class="i">👁</span><span>Keep the images you’re <em>watching</em> in The Collection.</span></div>
+      <div class="perk"><span class="i">☾</span><span>Save your birth chart & big three.</span></div>
+      <div class="perk"><span class="i">❡</span><span>Build a reading list from the Library & Magazine.</span></div>
+      <div class="perk"><span class="i">✦</span><span>Remember the oracle draws that spoke to you.</span></div>
+    </div>
+  </section>
+
+  <!-- signed-in -->
+  <section class="member" id="member" style="display:none">
+    <div class="welcome">
+      <div class="avatar" id="av">✦</div>
+      <div class="whoami">
+        <div class="hi">Welcome back</div>
+        <h1 id="uname">—</h1>
+        <div class="em" id="uemail">—</div>
+      </div>
+      <button class="signout" id="signout">Sign out</button>
+    </div>
+
+    <div class="mtabs" id="mtabs">
+      <button class="mtab on" data-p="saved">👁 Watching <span class="ct" id="c-saved">0</span></button>
+      <button class="mtab" data-p="chart">☾ Birth Chart</button>
+      <button class="mtab" data-p="reading">❡ Reading List <span class="ct" id="c-read">0</span></button>
+      <button class="mtab" data-p="oracle">✦ Oracle Draws <span class="ct" id="c-oracle">0</span></button>
+    </div>
+
+    <div class="pane on" id="pane-saved">
+      <p class="secdesc">The images you’re watching across The Collection.</p>
+      <div class="imgs" id="savedGrid"></div>
+    </div>
+
+    <div class="pane" id="pane-chart">
+      <p class="secdesc">Your place in the sky — kept for next time.</p>
+      <div class="chartwrap">
+        <div class="chartform">
+          <div class="field"><label>Name</label><input id="bc-name" type="text" placeholder="Your name"></div>
+          <div class="row">
+            <div class="field"><label>Birth date</label><input id="bc-date" type="date"></div>
+            <div class="field"><label>Birth time</label><input id="bc-time" type="time"></div>
+          </div>
+          <div class="field"><label>Birth place</label><input id="bc-place" type="text" placeholder="City, country"></div>
+          <button class="gbtn" id="bc-save">Save my chart</button>
+          <p class="secdesc" style="margin-top:14px;">This quick reading uses local clock time as entered, with no timezone or exact coordinates. For a precise wheel, aspects and astrocartography, use the <a href="../chart/index.html" style="color:#e6c785;">full Chart tool</a> — its "Save to your account" button fills this in with real coordinates.</p>
+        </div>
+        <div>
+          <div class="wheel" id="wheel"></div>
+          <div class="bigthree" id="bigthree"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane" id="pane-reading">
+      <p class="secdesc">Pieces you’ve set aside to return to.</p>
+      <div id="readingBox"></div>
+    </div>
+
+    <div class="pane" id="pane-oracle">
+      <p class="secdesc">The cards the Crystal Globe Oracle dealt you.</p>
+      <div id="oracleBox"></div>
+    </div>
+  </section>
+
+  <footer><span>Gather what you love</span><span>Keep it beautifully</span><span>Return to it often</span></footer>
+
+  <script>
+    const DIR = '../../assets/imagery/';
+    const MANIFEST = (window.ASSET_MANIFEST || []);
+    const bySrc = {}; MANIFEST.forEach(a => { bySrc[a.src] = a; });
+
+    // ---------- gate (signed-out) form ----------
+    let gmode = 'in';
+    function gateForm(){
+      const f = document.getElementById('gateform');
+      const isUp = gmode === 'up';
+      f.innerHTML =
+        (isUp ? '<div class="field"><label>Your name</label><input id="g-name" type="text" placeholder="e.g. Lilad"></div>' : '') +
+        '<div class="field"><label>Email</label><input id="g-email" type="email" placeholder="you@example.com"></div>' +
+        '<button class="gbtn" id="g-send">Send me a magic link →</button>' +
+        '<div class="gnote">No password — we email you a link.<br>Designed mockup · saved in this browser.</div>';
+      f.querySelector('#g-send').onclick = ()=>{
+        const email = (f.querySelector('#g-email').value||'').trim();
+        const name = isUp ? (f.querySelector('#g-name').value||'').trim() : '';
+        if(!/^\S+@\S+\.\S+$/.test(email)){ f.querySelector('#g-email').style.borderColor='#c0264b'; f.querySelector('#g-email').focus(); return; }
+        f.innerHTML = '<div style="text-align:center"><div style="font-size:38px;margin:6px 0 12px">✉</div>'+
+          '<div style="font-family:var(--font-serif);font-style:italic;font-size:17px;color:rgba(242,233,221,0.74);margin-bottom:20px">A link is on its way to <span style="color:#e6c785">'+email.replace(/</g,'&lt;')+'</span></div>'+
+          '<button class="gbtn" id="g-open">✦ Open your link →</button>'+
+          '<div class="gnote">(Live, this lands in your inbox. Here, tap to continue.)</div></div>';
+        f.querySelector('#g-open').onclick = ()=>{ window.mecmuaAuth.signIn({name:name, email:email}); paintAll(); };
+      };
+    }
+    document.querySelectorAll('#gate .tab').forEach(t=> t.onclick = ()=>{
+      gmode = t.dataset.m;
+      document.querySelectorAll('#gate .tab').forEach(x=> x.classList.toggle('on', x===t));
+      gateForm();
+    });
+
+    // ---------- member panes ----------
+    document.querySelectorAll('.mtab').forEach(t=> t.onclick = ()=>{
+      document.querySelectorAll('.mtab').forEach(x=> x.classList.toggle('on', x===t));
+      document.querySelectorAll('.pane').forEach(p=> p.classList.remove('on'));
+      document.getElementById('pane-'+t.dataset.p).classList.add('on');
+    });
+
+    document.getElementById('signout').onclick = ()=>{ window.mecmuaAuth.signOut(); paintAll(); };
+
+    function loadSet(k){ try { return JSON.parse(localStorage.getItem(k)||'[]'); } catch(e){ return []; } }
+
+    function renderSaved(){
+      const keys = loadSet('mecmua-collection-saved');
+      document.getElementById('c-saved').textContent = keys.length;
+      const grid = document.getElementById('savedGrid');
+      if(!keys.length){ grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="e1">Nothing watched yet.</div><div class="e2">Open <a href="../collection/index.html">The Collection</a> and tap the 👁 on what moves you.</div></div>'; return; }
+      grid.innerHTML = keys.map(k=>{
+        const a = bySrc[k];
+        const src = a ? DIR + a.src : (k.indexOf('blob:')===0 ? '' : k);
+        const name = a ? a.name : 'Saved image';
+        if(!src) return '';
+        return '<div class="it"><img src="'+src+'" alt="'+name+'" loading="lazy"><div class="nm">'+name+'</div></div>';
+      }).join('');
+    }
+
+    function renderReading(){
+      const items = loadSet('mecmua-reading-list');
+      document.getElementById('c-read').textContent = items.length;
+      const box = document.getElementById('readingBox');
+      if(!items.length){ box.innerHTML = '<div class="empty"><div class="e1">Your reading list is empty.</div><div class="e2">Save pieces from the <a href="../library/index.html">Library</a> & <a href="../magazine/index.html">Magazine</a>.</div></div>'; return; }
+      box.innerHTML = '<div class="list">'+items.map((it,i)=> '<div class="lrow"><span class="ix">'+String(i+1).padStart(2,'0')+'</span><span class="t">'+(it.title||it)+'</span><span class="k">'+(it.source||'Saved')+'</span></div>').join('')+'</div>';
+    }
+
+    function renderOracle(){
+      const draws = loadSet('mecmua-oracle-draws');
+      document.getElementById('c-oracle').textContent = draws.length;
+      const box = document.getElementById('oracleBox');
+      if(!draws.length){ box.innerHTML = '<div class="empty"><div class="e1">No draws kept yet.</div><div class="e2">Consult the <a href="../wheel/index.html">Crystal Globe Oracle</a> and keep what speaks.</div></div>'; return; }
+      box.innerHTML = '<div class="list">'+draws.map((d,i)=> '<div class="lrow"><span class="ix">'+String(i+1).padStart(2,'0')+'</span><span class="t">'+(d.title||d)+'</span><span class="k">'+(d.deck||'Oracle')+'</span></div>').join('')+'</div>';
+    }
+
+    // ---------- birth chart ----------
+    // Real positions come from MecmuaAstro (window.Astronomy + astro-calc.js) —
+    // the same tropical/geocentric engine that powers the full Chart tool.
+    const SIGNS = ['Aries','Taurus','Gemini','Cancer','Leo','Virgo','Libra','Scorpio','Sagittarius','Capricorn','Aquarius','Pisces'];
+    const GLYPH = ['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'];
+    function drawWheel(sunIdx){
+      const cx=180, cy=180, R=170, r=120;
+      let seg='';
+      for(let i=0;i<12;i++){
+        const a0 = (i*30-90)*Math.PI/180, a1=((i+1)*30-90)*Math.PI/180, am=((i+0.5)*30-90)*Math.PI/180;
+        const x0=cx+R*Math.cos(a0), y0=cy+R*Math.sin(a0), x1=cx+R*Math.cos(a1), y1=cy+R*Math.sin(a1);
+        const ix0=cx+r*Math.cos(a0), iy0=cy+r*Math.sin(a0), ix1=cx+r*Math.cos(a1), iy1=cy+r*Math.sin(a1);
+        const on = i===sunIdx;
+        seg += '<path d="M'+ix0+' '+iy0+' L'+x0+' '+y0+' A'+R+' '+R+' 0 0 1 '+x1+' '+y1+' L'+ix1+' '+iy1+' A'+r+' '+r+' 0 0 0 '+ix0+' '+iy0+' Z" fill="'+(on?'rgba(214,178,112,0.22)':'transparent')+'" stroke="rgba(214,178,112,0.3)" stroke-width="1"/>';
+        const gx=cx+((R+r)/2)*Math.cos(am), gy=cy+((R+r)/2)*Math.sin(am);
+        seg += '<text x="'+gx+'" y="'+(gy+6)+'" text-anchor="middle" font-size="17" fill="'+(on?'#e6c785':'rgba(236,215,155,0.55)')+'">'+GLYPH[i]+'</text>';
+      }
+      document.getElementById('wheel').innerHTML =
+        '<svg viewBox="0 0 360 360"><circle cx="180" cy="180" r="170" fill="none" stroke="rgba(214,178,112,0.35)"/>'+
+        '<circle cx="180" cy="180" r="120" fill="none" stroke="rgba(214,178,112,0.25)"/>'+
+        '<circle cx="180" cy="180" r="54" fill="none" stroke="rgba(214,178,112,0.4)"/>'+
+        seg + '<text x="180" y="186" text-anchor="middle" font-size="30" fill="#e6c785">'+(sunIdx!=null?GLYPH[sunIdx]:'✦')+'</text></svg>';
+    }
+    function renderChart(){
+      let c = {}; try { c = JSON.parse(localStorage.getItem('mecmua-birth-chart')||'{}'); } catch(e){}
+      if(c.name) document.getElementById('bc-name').value = c.name;
+      if(c.date) document.getElementById('bc-date').value = c.date;
+      if(c.time) document.getElementById('bc-time').value = c.time;
+      if(c.place) document.getElementById('bc-place').value = c.place;
+
+      let sunIdx = null, moonIdx = null, riseIdx = null;
+      if (c.date) {
+        const parts = c.date.split('-').map(Number);
+        const timeStr = c.time || '12:00';
+        const tparts = timeStr.split(':').map(Number);
+        const hasPlace = typeof c.lat === 'number' && typeof c.lonEast === 'number';
+        const chart = MecmuaAstro.computeChart({
+          year: parts[0], month: parts[1], day: parts[2],
+          hour: tparts[0], minute: tparts[1],
+          utcOffsetHours: typeof c.utcOffset === 'number' ? c.utcOffset : 0,
+          lat: hasPlace ? c.lat : undefined,
+          lonEast: hasPlace ? c.lonEast : undefined,
+          unknownTime: !c.time || !hasPlace
+        });
+        const sun = chart.planets.find(p=>p.key==='Sun'), moon = chart.planets.find(p=>p.key==='Moon');
+        sunIdx = Math.floor(sun.lon/30);
+        moonIdx = Math.floor(moon.lon/30);
+        if (typeof chart.asc === 'number') riseIdx = Math.floor(chart.asc/30);
+      }
+      drawWheel(sunIdx);
+      const b3 = [['☉','Sun', sunIdx],['☾','Moon', moonIdx],['↑','Rising', riseIdx]];
+      document.getElementById('bigthree').innerHTML = b3.map(([g,l,idx])=>
+        '<div class="b3"><span class="gl">'+g+'</span><div><div class="lab">'+l+'</div><div class="val">'+(idx!=null?SIGNS[idx]:'—')+'</div></div></div>').join('');
+    }
+    document.getElementById('bc-save').onclick = ()=>{
+      let prev = {}; try { prev = JSON.parse(localStorage.getItem('mecmua-birth-chart')||'{}')||{}; } catch(e){}
+      const place = document.getElementById('bc-place').value;
+      const c = { name:document.getElementById('bc-name').value, date:document.getElementById('bc-date').value,
+        time:document.getElementById('bc-time').value, place: place };
+      // keep the precise coordinates from the full Chart tool as long as the place text hasn't changed
+      if (prev.place && prev.place === place && typeof prev.lat === 'number' && typeof prev.lonEast === 'number') {
+        c.lat = prev.lat; c.lonEast = prev.lonEast;
+        if (typeof prev.utcOffset === 'number') c.utcOffset = prev.utcOffset;
+      }
+      try { localStorage.setItem('mecmua-birth-chart', JSON.stringify(c)); } catch(e){}
+      renderChart();
+      const b = document.getElementById('bc-save'); const t=b.textContent; b.textContent='✦ Saved'; setTimeout(()=>b.textContent=t,1400);
+    };
+
+    // ---------- paint ----------
+    function paintAll(){
+      const s = window.mecmuaAuth.get();
+      document.getElementById('gate').style.display = s ? 'none' : 'block';
+      document.getElementById('member').style.display = s ? 'block' : 'none';
+      if(s){
+        document.getElementById('uname').textContent = s.name || '—';
+        document.getElementById('uemail').textContent = s.email || '';
+        document.getElementById('av').textContent = (window.mecmuaAuth.first(s)[0]||'✦').toUpperCase();
+        renderSaved(); renderReading(); renderOracle(); renderChart();
+      } else {
+        gmode='in'; gateForm();
+      }
+    }
+    // wait for auth.js
+    (function boot(){ if(window.mecmuaAuth){ paintAll(); } else setTimeout(boot,40); })();
+  </script>
+</body>
+</html>

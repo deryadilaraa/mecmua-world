@@ -1,0 +1,10 @@
+# The archive is being built in the open, but is not meant to be found.
+#
+# This asks search engines to stay out, which keeps it from being indexed,
+# cached and archived — the part that cannot be undone later. It is not a
+# lock: anyone with the URL still gets in, and crawlers that ignore this
+# file will too.
+#
+# Replace this with a real Access gate before anything personal goes in.
+User-agent: *
+Disallow: /

@@ -1,0 +1,38 @@
+{
+  // Serves dist/ as a static site, plus a small JSON API for the findings
+  // catalogue. Static assets are matched first; only paths that miss an asset
+  // reach the Worker, which answers /api/* and hands everything else back to
+  // the assets binding.
+  //
+  // Access (the login gate) is switched on in the dashboard, not here:
+  //   Workers & Pages → mecmua → Domains → workers.dev → Enable Access
+  "name": "mecmua",
+  "compatibility_date": "2026-08-14",
+  "main": "src/index.js",
+
+  "assets": {
+    // The site root. dist/index.html is the landing page.
+    "directory": "./dist",
+
+    // Named so the Worker can serve assets itself via env.ASSETS.fetch().
+    "binding": "ASSETS",
+
+    // Maps /library/ to /library/index.html, which is how every internal
+    // link in the site is written.
+    "html_handling": "auto-trailing-slash",
+
+    // No 404.html exists, so unmatched paths return a plain 404 rather than
+    // being rewritten. Change to "404-page" if a dist/404.html is ever added.
+    "not_found_handling": "none"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "mecmua",
+      // From `wrangler d1 create mecmua`. Also visible in the dashboard at
+      // Storage & Databases → D1 → mecmua → Database ID.
+      "database_id": "37ce5385-a636-41c6-b72f-7cf2c3ce78e6"
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mecmûa — Wearable Prints</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../shared/midnight.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { color: #f2e9dd; font-family: var(--font-text);
+    background: radial-gradient(120% 80% at 50% 0%, #1c2658 0%, #121a42 42%, #0a0e2c 74%, #070a20 100%) no-repeat; background-attachment: fixed; }
+  a { color: inherit; text-decoration: none; }
+
+  header { position: sticky; top: 0; z-index: 50; padding: 0 40px; height: 70px; display: flex; align-items: center; gap: 22px; }
+  .wm { font-family: var(--font-display); text-transform: lowercase; letter-spacing: 0.04em; font-size: 28px; line-height: 1;
+    background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .crumb { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.22em; font-size: 11px; color: rgba(243,236,221,0.5); }
+  .spacer { flex: 1; }
+  .nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .nav a { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em; font-size: 10px; color: rgba(243,236,221,0.66);
+    padding: 8px 12px; border-radius: 999px; transition: color var(--dur-fast) var(--ease-quiet); white-space: nowrap; }
+  .nav a:hover, .nav a.here { color: #e6c785; }
+
+  .hero { max-width: 1320px; margin: 0 auto; padding: 58px 40px 24px; text-align: center; }
+  .hero .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.34em; text-transform: uppercase; color: rgba(214,178,112,0.8);
+    display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .hero .eyebrow .r { width: 40px; height: 1px; background: rgba(214,178,112,0.4); }
+  .hero h1 { font-family: var(--font-display), var(--font-serif); text-transform: lowercase; font-weight: 400; letter-spacing: 0.01em;
+    font-size: clamp(44px, 7vw, 84px); line-height: 0.96; margin: 16px 0 0;
+    background: linear-gradient(180deg, #e8d09a 0%, #d2a851 52%, #b98b3d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { font-family: var(--font-serif); font-style: italic; font-size: clamp(16px, 2vw, 21px); color: rgba(242,233,221,0.72); margin: 16px auto 0; max-width: 52ch; }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 40px 40px 120px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 30px; }
+  @media (max-width: 1000px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px){ .grid { grid-template-columns: 1fr; } }
+
+  .item { display: flex; flex-direction: column; }
+  .stage { position: relative; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden;
+    background: radial-gradient(120% 100% at 50% 18%, #20243f 0%, #14172e 60%, #0c0e22 100%);
+    border: 1px solid rgba(214,178,112,0.18); box-shadow: 0 16px 40px rgba(0,0,0,0.4); display: grid; place-items: center; }
+
+  /* ===== the tee ===== */
+  .tee { position: relative; width: 84%; aspect-ratio: 1/1.12; filter: drop-shadow(0 14px 24px rgba(0,0,0,0.4)); }
+  .tee .body { position: absolute; inset: 0; background: var(--tee); 
+    clip-path: polygon(30% 6%, 38% 5%, 42% 12%, 50% 14.5%, 58% 12%, 62% 5%, 70% 6%, 100% 17%, 89% 41%, 80% 34%, 80% 100%, 20% 100%, 20% 34%, 11% 41%, 0% 17%); }
+  /* fabric shading + folds */
+  .tee .shade { position: absolute; inset: 0; clip-path: inherit; pointer-events: none; opacity: 0.9;
+    background:
+      linear-gradient(90deg, rgba(0,0,0,0.16) 0%, rgba(0,0,0,0) 16%, rgba(255,255,255,0.05) 50%, rgba(0,0,0,0) 84%, rgba(0,0,0,0.18) 100%),
+      radial-gradient(60% 50% at 50% 6%, rgba(0,0,0,0.14) 0%, rgba(0,0,0,0) 60%); }
+  .tee .noise { position: absolute; inset: 0; clip-path: inherit; pointer-events: none; opacity: 0.5; mix-blend-mode: overlay;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.07) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0 1px, transparent 1px 3px);
+    background-size: 3px 3px; }
+  /* collar */
+  .tee .collar { position: absolute; top: 4.5%; left: 50%; transform: translateX(-50%); width: 23%; height: 12%;
+    border: 2.4px solid rgba(0,0,0,0.18); border-top: none; border-radius: 0 0 60% 60% / 0 0 100% 100%; }
+  .tee .collar::after { content:""; position:absolute; inset: -3px -2px auto -2px; height: 5px; border-radius: 50%; box-shadow: 0 1px 2px rgba(255,255,255,0.12); }
+
+  /* the print on the chest */
+  .design { position: absolute; left: 28%; right: 28%; top: 25%; bottom: 24%; container-type: inline-size;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 5cqi; }
+  .design .q { line-height: 1.12; text-wrap: balance; }
+  .design .who { font-family: var(--font-mono); letter-spacing: 0.18em; text-transform: uppercase; }
+  .ser { font-family: var(--font-serif); font-style: italic; font-weight: 500; }
+  .serup { font-family: var(--font-serif); font-weight: 600; }
+  .disp { font-family: var(--font-display), var(--font-serif); text-transform: uppercase; letter-spacing: 0.06em; line-height: 1.02; }
+  .mono { font-family: var(--font-mono); }
+
+  /* globe motif (simple radial, no illustration) */
+  .globe-motif { width: 46cqi; height: 46cqi; border-radius: 50%; 
+    background:
+      radial-gradient(30% 26% at 30% 32%, rgba(255,255,255,0.9) 0 40%, rgba(255,255,255,0) 60%),
+      radial-gradient(22% 30% at 66% 44%, rgba(255,255,255,0.85) 0 45%, rgba(255,255,255,0) 62%),
+      radial-gradient(26% 20% at 44% 70%, rgba(255,255,255,0.8) 0 46%, rgba(255,255,255,0) 64%),
+      radial-gradient(18% 16% at 72% 74%, rgba(255,255,255,0.75) 0 46%, rgba(255,255,255,0) 64%),
+      radial-gradient(circle at 38% 34%, #cfe0ef 0%, #8fb0cf 46%, #5f86ad 100%);
+    box-shadow: inset -6px -8px 18px rgba(20,40,70,0.5); }
+
+  /* gold rule motif */
+  .rule-m { width: 40cqi; height: 2cqi; background: currentColor; border-radius: 2px; opacity: 0.9; }
+
+  /* caption */
+  .cap { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 14px 2px 0; }
+  .cap .meta { display: block; min-width: 0; }
+  .cap .nm { font-family: var(--font-serif); font-size: 19px; line-height: 1.1; color: #f4ecdd; }
+  .cap .sub { display: block; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(243,236,221,0.5); margin-top: 7px; }
+  .cap .pr { font-family: var(--font-mono); font-size: 13px; color: #e6c785; white-space: nowrap; }
+
+  .swatches { display: flex; gap: 6px; margin-top: 10px; padding: 0 2px; }
+  .swatches i { width: 15px; height: 15px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); }
+
+  footer { max-width: 1320px; margin: 0 auto; padding: 30px 40px 70px; display: grid; grid-template-columns: repeat(3,1fr);
+    border-top: 1px solid rgba(214,178,112,0.2); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.24em; font-size: 10px; color: rgba(243,236,221,0.5); }
+  footer span:nth-child(2){ text-align: center; } footer span:nth-child(3){ text-align: right; }
+</style>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
+<script defer src="../shared/dark-toggle.js"></script>
+</head>
+<body>
+  <header>
+    <a class="wm" href="../index.html">mecmûa</a>
+    <span class="crumb">/ Wearable Prints</span>
+    <div class="spacer"></div>
+    <nav class="nav">
+      <a href="../index.html">Home</a>
+      <a href="../museum/index.html">Museum</a>
+      <a href="../wheel/index.html">Oracle</a>
+      <a href="../boutique/index.html">Boutique</a>
+      <a href="../atelier/index.html">Atelier</a>
+      <a class="here" href="./tshirts.html">Tees</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow"><span class="r"></span>Wearable Prints · The Blue Hour<span class="r"></span></div>
+    <h1>the blue hour</h1>
+    <p>A capsule of typographic tees — a single blue thought, worn close. Printed to order on heavyweight organic cotton.</p>
+  </section>
+
+  <main><div class="grid" id="grid"></div></main>
+
+  <footer><span>Wear one thought</span><span>Let the blue in</span><span>Made to order</span></footer>
+
+  <script>
+    const TEES = [
+      { name:'Eternal', sub:'Cobalt · S–XXL', price:'£38', tee:'#1d44c8', ink:'#eaf0ff',
+        design:`<div class="q ser" style="font-size:15.5cqi">The blue<br>seems<br>eternal;</div><div class="who" style="font-size:5cqi;color:#cdd8ff">Virginia Woolf</div>` },
+      { name:'Good Planets', sub:'Midnight navy · S–XXL', price:'£40', tee:'#10103a', ink:'#eef1f8',
+        design:`<div class="globe-motif"></div><div class="q serup" style="font-size:8.5cqi;letter-spacing:0.01em">Good planets are<br>hard to find</div>` },
+      { name:'Into the Soul', sub:'Indigo · S–XXL', price:'£38', tee:'#1e2278', ink:'#f1ecff',
+        design:`<div class="q mono" style="font-size:8.2cqi;line-height:1.5">“A certain blue<br>enters your<br>soul.”</div><div class="who" style="font-size:4.6cqi;color:#c9c2ff">Henri Matisse</div>` },
+      { name:'Where I’m Going', sub:'Pale blue · S–XXL', price:'£38', tee:'#aebfd2', ink:'#15203a',
+        design:`<div class="q ser" style="font-size:11.5cqi;line-height:1.18">something in me knows where I’m going</div><div class="who" style="font-size:4.4cqi;color:#2a3a5e">Jackson Pollock</div>` },
+      { name:'What You Seek', sub:'Royal · S–XXL', price:'£40', tee:'#172a86', ink:'#ecd9a8',
+        design:`<div class="q disp" style="font-size:11cqi">What you<br>seek is<br>seeking<br>you</div><div class="who" style="font-size:4.4cqi;color:#d8b878">Rumi</div>` },
+      { name:'The Wound', sub:'Deep cobalt · S–XXL', price:'£40', tee:'#16205e', ink:'#eef1ff',
+        design:`<div class="q ser" style="font-size:10.5cqi;line-height:1.2">The wound is the place where the Light enters you</div><div class="rule-m" style="color:#d8b878"></div><div class="who" style="font-size:4.4cqi;color:#d8b878">Rumi</div>` },
+    ];
+
+    document.getElementById('grid').innerHTML = TEES.map(t=>`
+      <div class="item">
+        <div class="stage">
+          <div class="tee" style="--tee:${t.tee}; color:${t.ink}">
+            <div class="body"></div>
+            <div class="shade"></div>
+            <div class="noise"></div>
+            <div class="collar"></div>
+            <div class="design" style="color:${t.ink}">${t.design}</div>
+          </div>
+        </div>
+        <div class="cap">
+          <div class="meta"><div class="nm">“${t.name}” Tee</div><div class="sub">${t.sub}</div></div>
+          <div class="pr">${t.price}</div>
+        </div>
+      </div>`).join('');
+  </script>
+</body>
+</html>

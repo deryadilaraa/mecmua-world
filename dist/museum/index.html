@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mecmûa — The Museum</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../shared/midnight.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--parchment-50); color: var(--text-primary); font-family: var(--font-text);
+    background-image: var(--grain); background-repeat: repeat;
+  }
+
+  /* ===== header ===== */
+  header { position: sticky; top: 0; z-index: 40; backdrop-filter: blur(8px);
+    background: linear-gradient(180deg, rgba(244,238,222,0.94), rgba(244,238,222,0.72)); border-bottom: var(--hairline); }
+  .bar { max-width: 1400px; margin: 0 auto; padding: 18px 30px; display: flex; align-items: baseline; gap: 18px; flex-wrap: wrap; }
+  .wm { font-family: var(--font-display); text-transform: lowercase; letter-spacing: 0.04em; font-size: 30px; line-height: 1;
+    background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; text-decoration: none; }
+  .nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .nav a { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em; font-size: 10px; color: var(--ink-700);
+    padding: 8px 13px; border-radius: 999px; transition: all var(--dur-fast) var(--ease-quiet); white-space: nowrap; text-decoration: none; }
+  .nav a:hover { background: rgba(196,154,75,0.14); color: var(--ink-900); }
+  .nav a.here { background: var(--ink-900); color: var(--parchment-50); }
+  .crumb { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.22em; font-size: 11px; color: var(--text-muted); }
+  .count { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: var(--gold-700); }
+  .spacer { flex: 1; }
+
+  /* toolbar */
+  .toolbar { max-width: 1400px; margin: 0 auto; padding: 0 30px 16px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .search { position: relative; flex: 1; min-width: 220px; max-width: 360px; }
+  .search input { width: 100%; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; padding: 10px 14px 10px 34px;
+    border: var(--hairline); border-radius: 999px; background: var(--surface-card); color: var(--ink-900); outline: none; }
+  .search input::placeholder { color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.16em; font-size: 10px; }
+  .search .ic { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--text-faint); font-size: 13px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.14em; font-size: 10px; padding: 7px 12px;
+    border-radius: 999px; border: 1px solid var(--border-soft); background: transparent; color: var(--ink-700); cursor: pointer; transition: all var(--dur-fast) var(--ease-quiet); }
+  .chip:hover { border-color: var(--ink-900); }
+  .chip.on { background: var(--ink-900); color: var(--parchment-50); border-color: var(--ink-900); }
+  .seg { display: inline-flex; border: var(--hairline); border-radius: 999px; overflow: hidden; }
+  .seg button { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.14em; font-size: 10px; padding: 8px 14px; background: transparent; border: none; cursor: pointer; color: var(--ink-700); }
+  .seg button.on { background: var(--merlot); color: #f2e9dd; }
+  select.sort { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.12em; font-size: 10px; padding: 8px 12px; border: var(--hairline); border-radius: 999px; background: var(--surface-card); color: var(--ink-700); cursor: pointer; }
+
+  main { max-width: 1400px; margin: 0 auto; padding: 26px 30px 140px; }
+
+  /* ===== GRID VIEW ===== */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; }
+  .card { position: relative; cursor: pointer; }
+  .card .thumb { position: relative; border-radius: var(--radius-md); overflow: hidden; border: var(--hairline); background: var(--night-800); aspect-ratio: 4/5; }
+  .card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--dur-slow) var(--ease-quiet); }
+  .card:hover .thumb img { transform: scale(1.05); }
+  .card .id { position: absolute; top: 10px; left: 10px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.16em;
+    background: rgba(10,10,38,0.62); color: var(--gold-200); padding: 4px 8px; border-radius: 6px; }
+  .card .pick { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,0.8);
+    background: rgba(10,10,38,0.35); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; opacity: 0; transition: opacity var(--dur-fast); }
+  .card:hover .pick, .card.sel .pick { opacity: 1; }
+  .card.sel .pick { background: var(--gold-500); border-color: var(--gold-500); color: var(--night-900); }
+  .card.sel .thumb { outline: 3px solid var(--gold-500); outline-offset: 2px; }
+  .card .cap { padding: 10px 2px 0; }
+  .card .ttl { font-family: var(--font-serif); font-size: 17px; line-height: 1.16; letter-spacing: -0.01em; }
+  .card .tags { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-top: 5px; display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+  .pal { display: inline-flex; gap: 3px; margin-left: auto; }
+  .pal i { width: 11px; height: 11px; border-radius: 3px; border: 1px solid rgba(0,0,0,0.12); }
+
+  /* ===== TABLE VIEW ===== */
+  table { width: 100%; border-collapse: collapse; }
+  thead th { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted);
+    text-align: left; padding: 10px 14px; border-bottom: var(--hairline); position: sticky; top: 132px; background: var(--parchment-50); }
+  tbody tr { border-bottom: 1px solid var(--border-soft); cursor: pointer; transition: background var(--dur-fast); }
+  tbody tr:hover { background: rgba(196,154,75,0.08); }
+  tbody tr.sel { background: rgba(196,154,75,0.16); }
+  td { padding: 10px 14px; vertical-align: middle; }
+  td.tn img { width: 54px; height: 42px; object-fit: cover; border-radius: 6px; border: var(--hairline); display: block; }
+  td.idc { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--gold-700); white-space: nowrap; }
+  td.ttlc { font-family: var(--font-serif); font-size: 18px; }
+  td.metac { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-secondary); }
+  td.dim { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; color: var(--text-muted); white-space: nowrap; }
+
+  .empty { text-align: center; padding: 80px 0; font-family: var(--font-mono); letter-spacing: 0.16em; text-transform: uppercase; font-size: 12px; color: var(--text-faint); }
+
+  /* ===== detail drawer ===== */
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 94vw); z-index: 70; background: var(--surface-card);
+    border-left: var(--hairline); box-shadow: var(--shadow-lg); transform: translateX(100%); transition: transform var(--dur-base) var(--ease-quiet); overflow: auto; }
+  .drawer.on { transform: translateX(0); }
+  .drawer .dimg { width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block; }
+  .drawer .dbody { padding: 26px 30px 40px; }
+  .drawer .x { position: absolute; top: 16px; right: 18px; background: rgba(10,10,38,0.5); color: #fff; border: none; width: 34px; height: 34px; border-radius: 999px; cursor: pointer; font-size: 16px; }
+  .drawer .did { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-700); }
+  .drawer h2 { font-family: var(--font-serif); font-weight: 500; font-size: 34px; line-height: 1.08; letter-spacing: -0.015em; margin: 8px 0 18px; }
+  .drawer .meta-grid { display: grid; grid-template-columns: 100px 1fr; gap: 10px 16px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; }
+  .drawer .meta-grid .k { color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.16em; font-size: 9.5px; padding-top: 2px; }
+  .drawer .meta-grid .v { color: var(--text-primary); }
+  .drawer .palrow { display: flex; gap: 8px; margin-top: 4px; }
+  .drawer .palrow i { width: 30px; height: 30px; border-radius: 7px; border: var(--hairline); position: relative; }
+  .tagpills { display: flex; gap: 7px; flex-wrap: wrap; }
+  .tagpills span { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--border-soft); color: var(--ink-700); }
+  .dactions { display: flex; gap: 10px; margin-top: 26px; }
+  .btn { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.2em; font-size: 11px; padding: 12px 20px; border-radius: 999px; cursor: pointer; border: 1px solid transparent; }
+  .btn.gold { background: var(--grad-gold); color: var(--night-900); }
+  .btn.ghost { background: transparent; border-color: var(--ink-900); color: var(--ink-900); }
+
+  /* ===== compose bar ===== */
+  .compose { position: fixed; left: 50%; transform: translateX(-50%) translateY(140%); bottom: 26px; z-index: 65;
+    background: var(--night-800); color: var(--text-on-night); border: var(--hairline-night); border-radius: 999px; box-shadow: var(--shadow-night);
+    padding: 12px 14px 12px 24px; display: flex; align-items: center; gap: 18px; transition: transform var(--dur-base) var(--ease-quiet); }
+  .compose.on { transform: translateX(-50%) translateY(0); }
+  .compose .n { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .compose .thumbs { display: flex; }
+  .compose .thumbs img { width: 30px; height: 30px; border-radius: 6px; object-fit: cover; border: 2px solid var(--night-800); margin-left: -8px; }
+  .compose .clear { background: none; border: none; color: var(--text-on-night-muted); cursor: pointer; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .compose .go { background: var(--grad-gold); color: var(--night-900); border: none; border-radius: 999px; padding: 10px 18px; cursor: pointer; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+</style>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
+<script defer src="../shared/dark-toggle.js"></script>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <a class="wm" href="../index.html">mecmûa</a>
+      <span class="crumb">/ The Museum</span>
+      <div class="spacer"></div>
+      <nav class="nav">
+        <a href="../index.html">Home</a>
+        <a href="../library/index.html">Library</a>
+        <a href="../mind/index.html">Mind</a>
+        <a class="here" href="./index.html">Museum</a>
+        <a href="../magazine/index.html">Magazine</a>
+        <a href="../wheel/index.html">Wheel</a>
+        <a href="../chart/index.html">Chart</a>
+        <a href="../boutique/index.html">Boutique</a>
+      </nav>
+      <span class="count" id="count">— plates</span>
+    </div>
+    <div class="toolbar">
+      <div class="search"><span class="ic">⌕</span><input id="q" placeholder="Search the museum" /></div>
+      <div class="chips" id="themechips"></div>
+      <div class="spacer"></div>
+      <select class="sort" id="sort">
+        <option value="id">Sort · Plate №</option>
+        <option value="title">Sort · Title</option>
+        <option value="theme">Sort · Theme</option>
+      </select>
+      <div class="seg" id="viewseg">
+        <button data-v="grid" class="on">Grid</button>
+        <button data-v="table">Table</button>
+      </div>
+    </div>
+  </header>
+
+  <main><div id="stage" class="grid"></div></main>
+
+  <aside class="drawer" id="drawer"></aside>
+  <div class="compose" id="compose">
+    <span class="n" id="composeN">0 selected</span>
+    <div class="thumbs" id="composeThumbs"></div>
+    <button class="clear" id="composeClear">Clear</button>
+    <button class="go" id="composeGo">Compose issue →</button>
+  </div>
+
+  <script>
+    const DIR = '../assets/imagery/';
+    const A = [
+      { f:'crescent-moon-pink-clouds.jpg', t:'Crescent at Dusk', themes:['Cosmos'], motifs:['Moon','Sky'], pal:['#e7a6b1','#2a2350','#caa07f'] },
+      { f:'embroidered-eye-crescent-moon.jpg', t:'The Watchful Eye', themes:['Folk'], motifs:['Symbol','Moon'], pal:['#1e2278','#c49a4b','#c0186f'] },
+      { f:'gold-sun-red-spiral-sky.jpg', t:'Spiral Sun', themes:['Cosmos'], motifs:['Sun'], pal:['#c02a23','#e3a637','#6e1f2a'] },
+      { f:'horse-line-art-blue.jpg', t:'Horse, in Line', themes:['Myth'], motifs:['Horse','Drawing'], pal:['#2438c4','#d8ccb4','#1a2a8c'] },
+      { f:'horses-in-misty-valley.jpg', t:'Valley of Horses', themes:['Myth'], motifs:['Horse','Landscape'], pal:['#8a8a78','#5a6b5a','#c9c2b0'] },
+      { f:'lion-stars-vintage-collage.jpg', t:'Lion & Stars', themes:['Myth'], motifs:['Collage','Animal'], pal:['#b5832f','#2a2350','#8c1c2e'] },
+      { f:'meteor-over-blue-fields.jpg', t:'Meteor over Fields', themes:['Cosmos'], motifs:['Landscape','Sky'], pal:['#1a2a8c','#2f6b4f','#e3a637'] },
+      { f:'monet-style-willow-pond.jpg', t:'The Willow Pond', themes:['Nature'], motifs:['Painting','Water'], pal:['#2f6b4f','#5b7a4a','#b0a86a'] },
+      { f:'moon-above-orange-clouds.jpg', t:'Moon, Orange Cloud', themes:['Cosmos'], motifs:['Moon','Sky'], pal:['#e0612f','#e3a637','#45245e'] },
+      { f:'moonrise-white-sands-yucca.webp', t:'Moonrise, White Sands', themes:['Landscape'], motifs:['Moon'], pal:['#c9c2b0','#45245e','#e6ddcb'] },
+      { f:'mother-baby-starry-night.jpg', t:'Mother, Starry Night', themes:['Figure'], motifs:['Cosmos','Figure'], pal:['#1e2278','#c49a4b','#2a2350'] },
+      { f:'night-clouds-starry-sky.jpg', t:'Starred Cloud', themes:['Cosmos'], motifs:['Sky'], pal:['#10103a','#2a2a6e','#5b4a9c'] },
+      { f:'orange-moon-over-waves.jpg', t:'Moon over Waves', themes:['Cosmos'], motifs:['Moon','Sea'], pal:['#e0612f','#1c5f63','#e3a637'] },
+      { f:'red-sun-clouds-relief.jpg', t:'Red Sun Relief', themes:['Cosmos'], motifs:['Sun'], pal:['#c02a23','#e0612f','#6e1f2a'] },
+      { f:'snowy-street-lantern-night.jpg', t:'Lantern, Snow', themes:['Landscape'], motifs:['Night'], pal:['#2a2a6e','#e3a637','#c9c2b0'] },
+      { f:'starry-haired-woman-painting.jpg', t:'Starry-Haired', themes:['Figure'], motifs:['Painting','Figure'], pal:['#45245e','#c49a4b','#2438c4'] },
+      { f:'tern-bird-blue-mosaic.jpg', t:'Tern, in Mosaic', themes:['Folk'], motifs:['Bird','Mosaic'], pal:['#2438c4','#1c5f63','#c49a4b'] },
+      { f:'two-horses-orange-mountain.jpg', t:'Two Horses', themes:['Myth'], motifs:['Horse'], pal:['#e0612f','#c25a3a','#6e1f2a'] },
+      { f:'woman-gold-sun-stars-collage.jpg', t:'Sun & the Self', themes:['Figure'], motifs:['Collage','Cosmos'], pal:['#c49a4b','#e3a637','#1e2278'] },
+      { f:'woman-lantern-golden-willow.jpg', t:'Lantern & Willow', themes:['Figure'], motifs:['Nature','Figure'], pal:['#c49a4b','#b5832f','#2f6b4f'] },
+      { f:'woman-sitting-olive-tree.jpg', t:'Beneath the Olive', themes:['Figure'], motifs:['Nature','Figure'], pal:['#5b7a4a','#b0a86a','#c9c2b0'] },
+      { f:'blue-butterfly-on-leaf.jpg', t:'Blue Morpho', themes:['Nature'], motifs:['Butterfly'], pal:['#2438c4','#2f6b4f','#1c5f63'] },
+      { f:'dark-tulips-feather-grass.webp', t:'Dark Tulips', themes:['Nature'], motifs:['Botanical'], pal:['#5e1a2e','#3f1119','#a3958a'] },
+      { f:'giant-horse-head-sculpture.jpg', t:'The Horse Colossus', themes:['Myth'], motifs:['Sculpture','Horse'], pal:['#a3958a','#1f2a44','#c9c2b0'] },
+      { f:'green-street-dappled-light-painting.jpg', t:'Dappled Street', themes:['Landscape'], motifs:['Painting','Light'], pal:['#2f6b4f','#5b7a4a','#e3a637'] },
+      { f:'horse-tree-blue-folk-print.jpg', t:'Horse & Tree, in Blue', themes:['Folk'], motifs:['Horse','Print'], pal:['#2438c4','#f2e9dd','#1a2a8c'] },
+      { f:'marble-busts-misty-pond.png', t:'Busts in the Mist', themes:['Myth'], motifs:['Sculpture','Water'], pal:['#a3958a','#c9c2b0','#5b7a4a'] },
+      { f:'mourning-cloak-butterfly.jpg', t:'Mourning Cloak', themes:['Nature'], motifs:['Butterfly'], pal:['#3b2a24','#c9a063','#1b1b1b'] },
+      { f:'neon-carousel-twilight-forest.jpg', t:'Carousel at Twilight', themes:['Wonder'], motifs:['Night','Light'], pal:['#5b4a9c','#e0612f','#1f2a44'] },
+      { f:'orange-sunset-clouds-blue-sky.jpg', t:'Sunset Stack', themes:['Cosmos'], motifs:['Sky'], pal:['#e0612f','#e3a637','#2438c4'] },
+      { f:'palm-trees-mosaic-painting.png', t:'Palms, in Mosaic', themes:['Travel'], motifs:['Mosaic','Palm'], pal:['#1c5f63','#2f6b4f','#c9a063'] },
+      { f:'persimmon-tree-misty-cottage.jpg', t:'Persimmon Cottage', themes:['Landscape'], motifs:['Tree','Mist'], pal:['#e0612f','#a3958a','#5b7a4a'] },
+      { f:'purple-sky-meadow-landscape-painting.jpg', t:'Violet Meadow', themes:['Landscape'], motifs:['Painting','Sky'], pal:['#5b4a9c','#45245e','#5b7a4a'] },
+      { f:'saguaro-cactus-night-sky.jpg', t:'Saguaro Night', themes:['Landscape'], motifs:['Night','Desert'], pal:['#1f2a44','#2f6b4f','#16203a'] },
+      { f:'swimmer-sunset-minimal-illustration.jpg', t:'The Swimmer', themes:['Figure'], motifs:['Sea','Minimal'], pal:['#e0612f','#c0186f','#1c5f63'] },
+      { f:'willow-lily-pond-painting.jpg', t:'Willow & Lilies', themes:['Nature'], motifs:['Painting','Water'], pal:['#2f6b4f','#5b7a4a','#b0a86a'] },
+      { f:'woman-birds-canyon-illustration.jpg', t:'Birds over the Canyon', themes:['Figure'], motifs:['Illustration','Birds'], pal:['#c25a3a','#e3a637','#1f2a44'] },
+      { f:'woman-climbing-orange-tree.jpg', t:'The Orange Harvest', themes:['Figure'], motifs:['Tree','Photograph'], pal:['#2f6b4f','#e3a637','#f2e9dd'] },
+      { f:'sacred-art/blue-veil-desert-moon.jpg', t:'Veil under the Moon', themes:['Sacred','Figure'], motifs:['Veil','Moon','Desert'], pal:['#1c2f6e','#3a55a8','#9aa7c4'] },
+      { f:'sacred-art/klein-blue-glass-arch.jpg', t:'The Blue Threshold', themes:['Sacred','Interior'], motifs:['Glass','Klein Blue'], pal:['#1e2278','#5b4a9c','#e6ddcb'] },
+      { f:'sacred-art/sunken-blue-hall.jpg', t:'The Sunken Hall', themes:['Sacred','Interior'], motifs:['Water','Light'], pal:['#3a6e8c','#1f3346','#9fc2cf'] },
+      { f:'sacred-art/blue-mountain-white-figure.jpg', t:'Before the Blue Mountain', themes:['Sacred','Figure'], motifs:['Painting','Figure'], pal:['#7b86b8','#c9a23f','#5b5f8c'] },
+      { f:'sacred-art/night-pool-blue-painting.jpg', t:'Night Pool', themes:['Water','Figure'], motifs:['Painting','Pool','Night'], pal:['#1b3fc4','#141452','#0a0a26'] },
+      { f:'sacred-art/green-pool-swimmers-painting.jpg', t:'The Green Pool', themes:['Water','Figure'], motifs:['Painting','Pool'], pal:['#2f8f5e','#7fbf3f','#123a2a'] },
+      { f:'sacred-art/emerald-glass-water.jpg', t:'Emerald Water', themes:['Water','Nature'], motifs:['Sea','Texture'], pal:['#1f8a5b','#1c6f73','#bcd6cf'] },
+      { f:'sacred-art/red-sun-glass-doors.jpg', t:'Red Sun, Glass', themes:['Cosmos','Interior'], motifs:['Sun','Sea','Window'], pal:['#e7a063','#e0492f','#b5832f'] },
+      { f:'sacred-art/starlit-town-window.jpg', t:'Town of Lamps', themes:['Landscape','Interior'], motifs:['Night','Window','Stars'], pal:['#14204e','#e0a64f','#0a1030'] },
+      { f:'sacred-art/cloud-forest-jungle.jpg', t:'Cloud Forest', themes:['Nature','Landscape'], motifs:['Jungle','Mist'], pal:['#2f4a3a','#9aa7a0','#3a4a4a'] },
+      { f:'sacred-art/pink-white-sands-yucca.jpg', t:'Yucca, White Sands', themes:['Landscape','Cosmos'], motifs:['Desert','Sky'], pal:['#e89bbf','#e3a637','#e6ddcb'] },
+      { f:'art-illustration/artist-studio-angel-mural.jpg', t:'The Angel Mural', themes:['Figure','Sacred'], motifs:['Painting','Studio'], pal:['#c9a063','#7b3a2e','#e6ddcb'] },
+      { f:'art-illustration/blue-arches-abstract-painting.jpg', t:'Blue Arches', themes:['Sacred','Abstract'], motifs:['Painting','Arches'], pal:['#1e3a8c','#3a55a8','#9aa7c4'] },
+      { f:'art-illustration/cobalt-organic-forms-painting.jpg', t:'Cobalt Forms', themes:['Abstract'], motifs:['Painting','Organic'], pal:['#1b3fc4','#2a55b8','#0a1230'] },
+      { f:'art-illustration/crying-woman-sparkling-tears.jpg', t:'Sparkling Tears', themes:['Figure'], motifs:['Portrait','Surreal'], pal:['#3a55a8','#c9a063','#1a2150'] },
+      { f:'art-illustration/crystal-headpiece-portrait.jpg', t:'Crystal Crown', themes:['Figure'], motifs:['Portrait','Jewel'], pal:['#9fc2cf','#c9a063','#2a3358'] },
+      { f:'art-illustration/diver-underwater-blue-painting.jpg', t:'The Diver', themes:['Water','Figure'], motifs:['Painting','Sea'], pal:['#1b4f8c','#123f6c','#0a1f3c'] },
+      { f:'art-illustration/egyptian-profile-blue-hair.jpg', t:'Profile in Blue', themes:['Figure','Myth'], motifs:['Portrait','Egyptian'], pal:['#1e3a8c','#c9a063','#7b3a2e'] },
+      { f:'art-illustration/eye-in-black-sun.jpg', t:'Eye in the Black Sun', themes:['Sacred','Symbol'], motifs:['Eye','Sun'], pal:['#0a0a26','#c9a063','#5b1f24'] },
+      { f:'art-illustration/flute-player-with-cranes.jpg', t:'Flute & Cranes', themes:['Myth','Figure'], motifs:['Birds','Music'], pal:['#2f6b4f','#c9a063','#e6ddcb'] },
+      { f:'art-illustration/lovers-inside-pomegranate-illustration.jpg', t:'Lovers in the Pomegranate', themes:['Figure','Folk'], motifs:['Lovers','Botanical'], pal:['#8c1c2e','#c0186f','#c9a063'] },
+      { f:'art-illustration/purple-goddess-statue-painting.jpg', t:'Violet Goddess', themes:['Myth','Figure'], motifs:['Sculpture','Painting'], pal:['#5b4a9c','#45245e','#c9a063'] },
+      { f:'art-illustration/red-dancers-sun-poster.jpg', t:'Red Dancers', themes:['Figure','Folk'], motifs:['Poster','Sun'], pal:['#c02a23','#e0612f','#1a2150'] },
+      { f:'art-illustration/swimmer-blue-wave-illustration.jpg', t:'Into the Wave', themes:['Water','Figure'], motifs:['Sea','Illustration'], pal:['#1b3fc4','#2a55b8','#9aa7c4'] },
+      { f:'art-illustration/two-cheetahs-black-white-illustration.jpg', t:'Two Cheetahs', themes:['Myth'], motifs:['Animal','Drawing'], pal:['#1b1b1b','#a3958a','#e6ddcb'] },
+      { f:'art-illustration/ultramarine-fabric-relief-art.jpg', t:'Ultramarine Relief', themes:['Abstract','Sacred'], motifs:['Textile','Relief'], pal:['#1e2278','#2a3aa0','#5b4a9c'] },
+      { f:'art-illustration/woman-on-candle-flame-painting.jpg', t:'Woman of the Flame', themes:['Figure','Sacred'], motifs:['Painting','Fire'], pal:['#e0612f','#c02a23','#1a1030'] },
+      { f:'astrology-mystic/blue-painted-holy-cards.jpg', t:'Holy Cards in Blue', themes:['Sacred','Folk'], motifs:['Devotional','Collage'], pal:['#1e3a8c','#c9a063','#9aa7c4'] },
+      { f:'astrology-mystic/leo-goddess-lion-illustration.jpg', t:'Leo, the Goddess', themes:['Myth','Cosmos'], motifs:['Lion','Zodiac'], pal:['#c9a063','#b5832f','#2a2350'] },
+      { f:'astrology-mystic/pisces-fish-persian-miniature.jpg', t:'Pisces Miniature', themes:['Myth','Cosmos'], motifs:['Fish','Persian'], pal:['#1c5f63','#c9a063','#7b3a2e'] },
+      { f:'astrology-mystic/starry-blue-leopard-painting.jpg', t:'Starry Leopard', themes:['Myth','Cosmos'], motifs:['Animal','Stars'], pal:['#1e2278','#c9a063','#2a3358'] },
+      { f:'astrology-mystic/tarot-hand-crystal-ball.jpg', t:'The Crystal Ball', themes:['Sacred','Wonder'], motifs:['Tarot','Hand'], pal:['#2a3358','#c9a063','#9fc2cf'] },
+      { f:'astrology-mystic/tarot-hand-gold-stars.jpg', t:'Hand of Gold Stars', themes:['Sacred','Cosmos'], motifs:['Tarot','Stars'], pal:['#1a1030','#e3a637','#c9a063'] },
+      { f:'art-illustration/blue-black-minimalist-painting.jpg', t:'Blue & Black Minimal', themes:['Abstract'], motifs:['Painting','Minimal'], pal:['#1b2a6e','#0a0a1e','#9aa7c4'] },
+      { f:'art-illustration/blue-jazz-band-silhouettes.jpg', t:'The Jazz Band', themes:['Figure','Folk'], motifs:['Silhouette','Music'], pal:['#1e2278','#c9a063','#0a0a26'] },
+      { f:'art-illustration/boat-fingerprint-ripples-illustration.jpg', t:'Fingerprint Ripples', themes:['Abstract','Symbol'], motifs:['Illustration','Water'], pal:['#1c5f63','#c9a063','#1a2150'] },
+      { f:'art-illustration/colour-light-face-portrait.jpg', t:'Face in Colour-Light', themes:['Figure','Abstract'], motifs:['Portrait','Light'], pal:['#c0186f','#2438c4','#e3a637'] },
+      { f:'art-illustration/couple-kissing-in-water.jpg', t:'Lovers in Water', themes:['Figure','Water'], motifs:['Painting','Lovers'], pal:['#1b4f8c','#2f8f5e','#9fc2cf'] },
+      { f:'art-illustration/green-waterlily-painting.jpg', t:'Green Waterlilies', themes:['Nature','Water'], motifs:['Painting','Botanical'], pal:['#2f6b4f','#5b7a4a','#b0a86a'] },
+      { f:'art-illustration/iridescent-prism-disc.jpg', t:'Prism Disc', themes:['Abstract','Wonder'], motifs:['Iridescent','Geometry'], pal:['#7fb8c4','#c0186f','#e3a637'] },
+      { f:'art-illustration/mother-and-babies-painting.jpg', t:'Mother & Children', themes:['Figure'], motifs:['Painting','Family'], pal:['#7b3a2e','#c9a063','#2a3358'] },
+      { f:'art-illustration/mother-baby-red-painting.webp', t:'Mother & Child, in Red', themes:['Figure'], motifs:['Painting','Family'], pal:['#c02a23','#7b1f24','#e3a637'] },
+      { f:'art-illustration/mother-daughter-black-white.jpg', t:'Mother & Daughter', themes:['Figure'], motifs:['Drawing','Family'], pal:['#1b1b1b','#a3958a','#e6ddcb'] },
+      { f:'art-illustration/orange-arch-fountains-surreal.jpg', t:'Arch of Fountains', themes:['Abstract','Wonder'], motifs:['Surreal','Arch'], pal:['#e0612f','#e3a637','#1c5f63'] },
+      { f:'art-illustration/orange-seahorse-form.jpg', t:'Seahorse Form', themes:['Abstract','Nature'], motifs:['Form','Sea'], pal:['#e0612f','#c25a3a','#1a2150'] },
+      { f:'art-illustration/peacock-ornate-artwork.jpg', t:'The Peacock', themes:['Folk','Nature'], motifs:['Bird','Ornate'], pal:['#1c5f63','#2438c4','#c9a063'] },
+      { f:'art-illustration/pink-cloud-abstract-print.jpg', t:'Pink Cloud', themes:['Abstract','Cosmos'], motifs:['Print','Sky'], pal:['#e89bbf','#c0186f','#e6ddcb'] },
+      { f:'art-illustration/pink-floral-figure-illustration.jpg', t:'Floral Figure', themes:['Figure','Nature'], motifs:['Illustration','Botanical'], pal:['#e89bbf','#2f6b4f','#c9a063'] },
+      { f:'art-illustration/red-pyramid-abstract.jpg', t:'Red Pyramid', themes:['Abstract','Symbol'], motifs:['Geometry'], pal:['#c02a23','#6e1f2a','#e3a637'] },
+      { f:'interiors-architecture/blue-bath-forest-window.jpg', t:'Bath, Forest Window', themes:['Interior','Nature'], motifs:['Interior','Window'], pal:['#1b4f8c','#2f6b4f','#9fc2cf'] },
+      { f:'interiors-architecture/blue-night-lake-window.jpg', t:'Night Lake Window', themes:['Interior','Landscape'], motifs:['Interior','Night'], pal:['#14204e','#1b3fc4','#0a1030'] },
+      { f:'interiors-architecture/colorful-conservatory-interior-illustration.jpg', t:'The Conservatory', themes:['Interior','Nature'], motifs:['Illustration','Plants'], pal:['#2f6b4f','#e3a637','#c0186f'] },
+      { f:'interiors-architecture/curtain-shadows-sunlit-floor.jpg', t:'Curtain Shadows', themes:['Interior','Abstract'], motifs:['Light','Shadow'], pal:['#e6ddcb','#c9a063','#a3958a'] },
+      { f:'interiors-architecture/green-marble-kitchen-interior.jpg', t:'Green Marble Room', themes:['Interior'], motifs:['Interior','Marble'], pal:['#2f6b4f','#1c5f63','#bcd6cf'] },
+      { f:'interiors-architecture/moroccan-bedroom-brass-lanterns.jpg', t:'Moroccan Bedroom', themes:['Interior','Travel'], motifs:['Interior','Lanterns'], pal:['#b5832f','#7b3a2e','#c9a063'] },
+      { f:'interiors-architecture/sea-through-sheer-curtain.jpg', t:'Sea, Through Sheer', themes:['Interior','Water'], motifs:['Window','Sea'], pal:['#9fc2cf','#1b4f8c','#e6ddcb'] },
+      { f:'interiors-architecture/woman-armchair-art-studio.jpg', t:'The Studio Armchair', themes:['Interior','Figure'], motifs:['Interior','Studio'], pal:['#7b3a2e','#c9a063','#2a3358'] },
+      { f:'astrology-mystic/leo-lion-watercolor-clouds.jpg', t:'Leo in Watercolour', themes:['Cosmos','Myth'], motifs:['Lion','Zodiac'], pal:['#e3a637','#c25a3a','#9aa7c4'] },
+      { f:'astrology-mystic/moon-illusion-tarot-card.webp', t:'The Moon — Tarot', themes:['Sacred','Cosmos'], motifs:['Tarot','Moon'], pal:['#1e2278','#c9a063','#2a3358'] },
+      { f:'astrology-mystic/zodiac-buttons-black-coat.jpg', t:'Zodiac Buttons', themes:['Folk','Cosmos'], motifs:['Detail','Zodiac'], pal:['#0a0a1e','#c9a063','#b5832f'] },
+      { f:'astrology-mystic/tarot-star-card-back.jpg', t:'The Star — Card Back', themes:['Sacred','Cosmos'], motifs:['Tarot','Stars'], pal:['#14204e','#e3a637','#1b3fc4'] },
+      { f:'nature-scenery/adobe-desert-village.jpg', t:'Adobe Village', themes:['Landscape','Travel'], motifs:['Desert','Architecture'], pal:['#c9a063','#7b3a2e','#e6ddcb'] },
+      { f:'nature-scenery/agave-garden.jpg', t:'Agave Garden', themes:['Nature'], motifs:['Botanical','Desert'], pal:['#5b7a4a','#2f6b4f','#bcd6cf'] },
+      { f:'nature-scenery/blue-sea-horizon-light.jpg', t:'Sea, Horizon Light', themes:['Water','Landscape'], motifs:['Sea','Light'], pal:['#1b4f8c','#9fc2cf','#e6ddcb'] },
+      { f:'nature-scenery/city-skyline-dusk.jpg', t:'Skyline at Dusk', themes:['Landscape'], motifs:['City','Dusk'], pal:['#2a3358','#e0612f','#c9a063'] },
+      { f:'nature-scenery/desert-cacti-storm.jpg', t:'Cacti in the Storm', themes:['Landscape','Nature'], motifs:['Desert','Sky'], pal:['#2f4a3a','#7b6a4a','#3a4a4a'] },
+      { f:'nature-scenery/desert-dune-sunset.jpg', t:'Dune at Sunset', themes:['Landscape'], motifs:['Desert','Sun'], pal:['#e0612f','#e3a637','#7b3a2e'] },
+      { f:'nature-scenery/desert-palms-red-wall.jpg', t:'Palms, Red Wall', themes:['Travel','Nature'], motifs:['Palm','Architecture'], pal:['#c02a23','#2f6b4f','#e3a637'] },
+      { f:'nature-scenery/desert-rocky-coast.jpg', t:'Rocky Coast', themes:['Landscape','Water'], motifs:['Sea','Rock'], pal:['#1c5f63','#a3958a','#9fc2cf'] },
+      { f:'nature-scenery/figure-in-tropical-foliage.jpg', t:'Figure in Foliage', themes:['Figure','Nature'], motifs:['Jungle','Figure'], pal:['#2f4a3a','#5b7a4a','#c9a063'] },
+      { f:'nature-scenery/figure-red-rock-landscape.jpg', t:'Figure, Red Rock', themes:['Figure','Landscape'], motifs:['Desert','Figure'], pal:['#c25a3a','#e0612f','#7b3a2e'] },
+      { f:'nature-scenery/garden-stone-archway.jpg', t:'Stone Archway', themes:['Landscape','Travel'], motifs:['Garden','Arch'], pal:['#a3958a','#5b7a4a','#e6ddcb'] },
+      { f:'nature-scenery/green-forest-light.jpg', t:'Forest Light', themes:['Nature'], motifs:['Forest','Light'], pal:['#2f6b4f','#5b7a4a','#b0a86a'] },
+      { f:'nature-scenery/green-misty-mountains.jpg', t:'Misty Mountains', themes:['Landscape','Nature'], motifs:['Mountain','Mist'], pal:['#2f4a3a','#9aa7a0','#3a4a4a'] },
+      { f:'nature-scenery/green-misty-river.jpg', t:'Misty River', themes:['Water','Nature'], motifs:['River','Mist'], pal:['#2f6b4f','#9aa7a0','#bcd6cf'] },
+      { f:'nature-scenery/leaf-waterdrops.jpg', t:'Leaf & Waterdrops', themes:['Nature'], motifs:['Botanical','Water'], pal:['#2f6b4f','#5b7a4a','#9fc2cf'] },
+      { f:'nature-scenery/leopard-spotted-orchid.jpg', t:'Spotted Orchid', themes:['Nature'], motifs:['Botanical','Flower'], pal:['#c0186f','#e89bbf','#c9a063'] },
+      { f:'nature-scenery/lone-tree-on-hill.jpg', t:'Lone Tree', themes:['Landscape'], motifs:['Tree','Hill'], pal:['#5b7a4a','#b0a86a','#e6ddcb'] },
+      { f:'nature-scenery/minimal-sea-sun.jpg', t:'Sea & Sun, Minimal', themes:['Water','Cosmos'], motifs:['Sea','Sun'], pal:['#e3a637','#1b4f8c','#e6ddcb'] },
+      { f:'nature-scenery/moody-night-sea.jpg', t:'Moody Night Sea', themes:['Water','Cosmos'], motifs:['Sea','Night'], pal:['#14204e','#1b3fc4','#0a1030'] },
+      { f:'nature-scenery/moon-over-dark-sea.jpg', t:'Moon over Dark Sea', themes:['Cosmos','Water'], motifs:['Moon','Sea'], pal:['#1a2150','#e3a637','#0a0e2c'] },
+      { f:'nature-scenery/orange-sky-over-sea.jpg', t:'Orange Sky, Sea', themes:['Cosmos','Water'], motifs:['Sky','Sea'], pal:['#e0612f','#e3a637','#1b4f8c'] },
+      { f:'nature-scenery/orange-storm-cloud-house.jpg', t:'Storm over the House', themes:['Landscape','Cosmos'], motifs:['Storm','Sky'], pal:['#e0612f','#7b3a2e','#2a3358'] },
+      { f:'nature-scenery/palms-starry-sky.jpg', t:'Palms & Stars', themes:['Cosmos','Travel'], motifs:['Palm','Stars'], pal:['#14204e','#2f6b4f','#e3a637'] },
+      { f:'nature-scenery/pines-by-sea-cove.jpg', t:'Pines by the Cove', themes:['Landscape','Water'], motifs:['Tree','Sea'], pal:['#2f4a3a','#1c5f63','#9fc2cf'] },
+      { f:'nature-scenery/purple-lit-forest.jpg', t:'Violet Forest', themes:['Nature','Wonder'], motifs:['Forest','Light'], pal:['#5b4a9c','#45245e','#2f4a3a'] },
+      { f:'nature-scenery/red-butterfly-pink.jpg', t:'Red Butterfly', themes:['Nature'], motifs:['Butterfly'], pal:['#c02a23','#e89bbf','#c25a3a'] },
+      { f:'nature-scenery/sea-and-clouds-sailboat.jpg', t:'Sailboat & Clouds', themes:['Water','Landscape'], motifs:['Sea','Sail'], pal:['#1b4f8c','#9fc2cf','#e6ddcb'] },
+      { f:'nature-scenery/tree-lined-path.jpg', t:'Tree-Lined Path', themes:['Landscape','Nature'], motifs:['Path','Tree'], pal:['#5b7a4a','#2f6b4f','#b0a86a'] },
+      { f:'nature-scenery/tropical-garden-palms.jpg', t:'Tropical Palms', themes:['Nature','Travel'], motifs:['Palm','Jungle'], pal:['#2f6b4f','#5b7a4a','#1c5f63'] },
+      { f:'nature-scenery/white-flowers-garden.jpg', t:'White Flowers', themes:['Nature'], motifs:['Botanical','Flower'], pal:['#e6ddcb','#5b7a4a','#bcd6cf'] },
+    ];
+    A.forEach((e,i)=> e.id = 'DD-' + String(i+1).padStart(3,'0'));
+    const dims = {}; // filled as images load
+
+    const themes = [...new Set(A.flatMap(e=>e.themes))].sort();
+    let view='grid', q='', theme=null, sort='id';
+    const sel = new Set();
+
+    const stage = document.getElementById('stage');
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+    function filtered(){
+      let r = A.filter(e=>{
+        if (theme && !e.themes.includes(theme)) return false;
+        if (q){ const hay=(e.t+' '+e.themes.join(' ')+' '+e.motifs.join(' ')+' '+e.id).toLowerCase(); if(!hay.includes(q)) return false; }
+        return true;
+      });
+      r.sort((a,b)=> sort==='title' ? a.t.localeCompare(b.t) : sort==='theme' ? a.themes[0].localeCompare(b.themes[0])||a.t.localeCompare(b.t) : a.id.localeCompare(b.id));
+      return r;
+    }
+
+    function palDots(pal){ return `<span class="pal">${pal.map(c=>`<i style="background:${c}"></i>`).join('')}</span>`; }
+
+    function render(){
+      const r = filtered();
+      document.getElementById('count').textContent = r.length + ' plate' + (r.length===1?'':'s') + (theme||q?' · filtered':'');
+      stage.className = view;
+      if (!r.length){ stage.className=''; stage.innerHTML = '<div class="empty">No plates match — try another theme.</div>'; return; }
+      if (view==='grid'){
+        stage.innerHTML = r.map(e=>`
+          <div class="card ${sel.has(e.id)?'sel':''}" data-id="${e.id}">
+            <div class="thumb">
+              <img src="${DIR}${e.f}" alt="" data-id="${e.id}" />
+              <span class="id">${e.id}</span>
+              <button class="pick" data-pick="${e.id}">${sel.has(e.id)?'✓':'+'}</button>
+            </div>
+            <div class="cap">
+              <div class="ttl">${esc(e.t)}</div>
+              <div class="tags">${e.themes.concat(e.motifs).slice(0,3).join(' · ')} ${palDots(e.pal)}</div>
+            </div>
+          </div>`).join('');
+      } else {
+        stage.innerHTML = `<table><thead><tr>
+            <th></th><th>Plate</th><th>Title</th><th>Theme</th><th>Motifs</th><th>Palette</th><th>Dimensions</th>
+          </tr></thead><tbody>${r.map(e=>`
+          <tr class="${sel.has(e.id)?'sel':''}" data-id="${e.id}">
+            <td class="tn"><img src="${DIR}${e.f}" alt="" data-id="${e.id}" /></td>
+            <td class="idc">${e.id}</td>
+            <td class="ttlc">${esc(e.t)}</td>
+            <td class="metac">${e.themes.join(', ')}</td>
+            <td class="metac">${e.motifs.join(', ')}</td>
+            <td>${palDots(e.pal)}</td>
+            <td class="dim" data-dim="${e.id}">${dims[e.id]||'—'}</td>
+          </tr>`).join('')}</tbody></table>`;
+      }
+      // wire
+      stage.querySelectorAll('[data-id]').forEach(n=>{});
+      stage.querySelectorAll('.card, tbody tr').forEach(n=>{
+        n.addEventListener('click', ev=>{ if (ev.target.closest('[data-pick]')) return; openDetail(n.dataset.id); });
+      });
+      stage.querySelectorAll('[data-pick]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); toggle(b.dataset.pick); }));
+      stage.querySelectorAll('img[data-id]').forEach(img=>{
+        if (img.complete && img.naturalWidth) recordDim(img);
+        else img.addEventListener('load', ()=>recordDim(img));
+      });
+    }
+
+    function recordDim(img){
+      const id = img.dataset.id, e = A.find(x=>x.id===id);
+      const w = img.naturalWidth, h = img.naturalHeight;
+      const orient = w>h ? 'Landscape' : h>w ? 'Portrait' : 'Square';
+      dims[id] = `${w}×${h} · ${orient}`;
+      e._w=w; e._h=h; e._orient=orient;
+      document.querySelectorAll(`[data-dim="${id}"]`).forEach(td=> td.textContent = dims[id]);
+    }
+
+    function toggle(id){
+      if (sel.has(id)) sel.delete(id); else sel.add(id);
+      render(); renderCompose();
+    }
+    function renderCompose(){
+      const bar = document.getElementById('compose');
+      bar.classList.toggle('on', sel.size>0);
+      document.getElementById('composeN').textContent = sel.size + ' selected';
+      document.getElementById('composeThumbs').innerHTML = [...sel].slice(0,6).map(id=>{ const e=A.find(x=>x.id===id); return `<img src="${DIR}${e.f}" alt=""/>`; }).join('');
+    }
+
+    function openDetail(id){
+      const e = A.find(x=>x.id===id); if(!e) return;
+      const d = document.getElementById('drawer');
+      const dimText = dims[id] || 'measuring…';
+      d.innerHTML = `
+        <button class="x" id="dx">✕</button>
+        <img class="dimg" src="${DIR}${e.f}" alt="" />
+        <div class="dbody">
+          <div class="did">${e.id}</div>
+          <h2>${esc(e.t)}</h2>
+          <div class="meta-grid">
+            <div class="k">Theme</div><div class="v"><div class="tagpills">${e.themes.map(t=>`<span>${t}</span>`).join('')}</div></div>
+            <div class="k">Motifs</div><div class="v"><div class="tagpills">${e.motifs.map(t=>`<span>${t}</span>`).join('')}</div></div>
+            <div class="k">Palette</div><div class="v"><div class="palrow">${e.pal.map(c=>`<i style="background:${c}" title="${c}"></i>`).join('')}</div></div>
+            <div class="k">Dimensions</div><div class="v" data-dim="${e.id}">${dimText}</div>
+            <div class="k">File</div><div class="v" style="word-break:break-all">${e.f}</div>
+          </div>
+          <div class="dactions">
+            <button class="btn gold" id="dadd">${sel.has(id)?'✓ In issue':'+ Add to issue'}</button>
+            <button class="btn ghost">Open full</button>
+          </div>
+        </div>`;
+      d.classList.add('on');
+      d.querySelector('#dx').onclick = ()=> d.classList.remove('on');
+      d.querySelector('#dadd').onclick = ()=>{ toggle(id); openDetail(id); };
+      const img = d.querySelector('.dimg');
+      if (!img.complete) { img.dataset.id = id; img.addEventListener('load', ()=>recordDim(img)); }
+    }
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') document.getElementById('drawer').classList.remove('on'); });
+
+    // controls
+    document.getElementById('q').addEventListener('input', e=>{ q=e.target.value.trim().toLowerCase(); render(); });
+    document.getElementById('sort').addEventListener('change', e=>{ sort=e.target.value; render(); });
+    document.getElementById('viewseg').querySelectorAll('button').forEach(b=> b.onclick=()=>{ view=b.dataset.v; document.querySelectorAll('#viewseg button').forEach(x=>x.classList.toggle('on',x===b)); render(); });
+    document.getElementById('composeClear').onclick = ()=>{ sel.clear(); render(); renderCompose(); };
+    document.getElementById('composeGo').onclick = ()=>{ const bar=document.getElementById('compose'); const go=document.getElementById('composeGo'); go.textContent='Issue composed ✦'; setTimeout(()=>go.textContent='Compose issue →',1400); };
+
+    const tc = document.getElementById('themechips');
+    tc.innerHTML = `<button class="chip on" data-t="">All</button>` + themes.map(t=>`<button class="chip" data-t="${t}">${t}</button>`).join('');
+    tc.querySelectorAll('.chip').forEach(c=> c.onclick=()=>{ theme=c.dataset.t||null; tc.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c)); render(); });
+
+    render();
+  </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+/* ===========================================================================
+   deryadilara · Typography
+   ---------------------------------------------------------------------------
+   Marzo            — display / wordmark. Always letterspaced, often all-caps.
+   Cormorant Garamond — editorial headlines & pull-quotes (high-contrast serif).
+   EB Garamond      — long-form reading body.
+   DM Mono          — eyebrows, labels, captions, metadata (the magazine voice).
+   ========================================================================== */
+
+:root {
+  /* ---- Families --------------------------------------------------------- */
+  --font-display: 'Marzo', 'Cormorant Garamond', serif;
+  --font-serif:   'Cormorant Garamond', 'EB Garamond', Georgia, serif;
+  --font-text:    'EB Garamond', Georgia, 'Times New Roman', serif;
+  --font-mono:    'DM Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* ---- Type scale (fluid-ish, rem) -------------------------------------- */
+  --text-xs:   0.75rem;   /* 12 — fine print */
+  --text-sm:   0.875rem;  /* 14 — captions */
+  --text-base: 1rem;      /* 16 — body */
+  --text-md:   1.125rem;  /* 18 — lead body */
+  --text-lg:   1.375rem;  /* 22 */
+  --text-xl:   1.75rem;   /* 28 */
+  --text-2xl:  2.25rem;   /* 36 */
+  --text-3xl:  3rem;      /* 48 */
+  --text-4xl:  4rem;      /* 64 */
+  --text-5xl:  5.5rem;    /* 88 — hero display */
+
+  /* ---- Weights ---------------------------------------------------------- */
+  --weight-light:   300;
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold:600;
+
+  /* ---- Leading ---------------------------------------------------------- */
+  --leading-tight:  1.04;
+  --leading-snug:   1.22;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.7;
+
+  /* ---- Tracking --------------------------------------------------------- */
+  --tracking-display: 0.18em;  /* Marzo wordmark */
+  --tracking-label:   0.26em;  /* mono eyebrows / labels */
+  --tracking-wide:    0.08em;
+  --tracking-normal:  0;
+  --tracking-tight:  -0.01em;
+}
+
+/* ---- Helper classes (optional, mirror the tokens) ---------------------- */
+.dd-wordmark {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+}
+.dd-display {
+  font-family: var(--font-serif);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+.dd-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  font-weight: var(--weight-regular);
+  font-size: var(--text-xs);
+}
+.dd-body {
+  font-family: var(--font-text);
+  font-size: var(--text-md);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+}

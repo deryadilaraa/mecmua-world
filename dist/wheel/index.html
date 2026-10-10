@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mecmûa — The Crystal Globe Oracle</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../shared/midnight.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { min-height: 100vh; color: #f2e9dd; font-family: var(--font-text);
+    background: radial-gradient(115% 80% at 50% 30%, #1c2658 0%, #121a42 40%, #0a0e2c 72%, #070a20 100%) no-repeat;
+    background-attachment: fixed; overflow-x: hidden; }
+  body::before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.5; z-index: 0;
+    background-image: radial-gradient(1px 1px at 12% 22%, #ecd79b 50%, transparent 51%),
+      radial-gradient(1px 1px at 78% 12%, #fff 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 88% 64%, #ecd79b 50%, transparent 51%),
+      radial-gradient(1px 1px at 30% 80%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 60% 38%, #ecd79b 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 8% 58%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 44% 8%, #fff 50%, transparent 51%); }
+  a { color: inherit; text-decoration: none; }
+
+  /* ===== header ===== */
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: 0 44px; height: 70px;
+    display: flex; align-items: center; gap: 22px; }
+  .wm-mini { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.3em; font-size: 17px;
+    background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; padding-left: 0.3em; }
+  .spacer { flex: 1; }
+  .nav { display: flex; gap: 6px; }
+  .nav a { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.2em; font-size: 10px;
+    color: rgba(243,236,221,0.66); padding: 9px 14px; border-radius: 999px; transition: color var(--dur-fast) var(--ease-quiet); white-space: nowrap; }
+  .nav a:hover, .nav a.here { color: #e6c785; }
+
+  .page { position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 116px 30px 90px; display: grid; justify-items: center; }
+
+  h1 { font-family: var(--font-display), var(--font-serif); text-transform: uppercase; letter-spacing: 0.11em; font-weight: 400;
+    font-size: clamp(28px, 4.4vw, 48px); margin: 0; text-align: center; padding-left: 0.11em;
+    background: linear-gradient(180deg, #e8d09a 0%, #d2a851 52%, #b98b3d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: clamp(15px, 1.9vw, 19px); color: rgba(242,233,221,0.7); margin: 14px 0 0; text-align: center; max-width: 42ch; }
+
+  /* ===== the oracle: wheel + globe hub + scroll ===== */
+  .oracle { position: relative; width: min(540px, 92vw); aspect-ratio: 1; display: grid; place-items: center; margin-top: 40px; }
+
+  /* the spinning star-wheel */
+  .wheel { position: absolute; inset: 0; z-index: 1; filter: drop-shadow(0 18px 50px rgba(0,0,0,0.5));
+    transition: transform 4s cubic-bezier(0.12, 0.66, 0.08, 1); transform-origin: 50% 50%; }
+  .wheel svg { width: 100%; height: 100%; display: block; }
+
+  /* the garnet crystal at the centre */
+  .globe { position: absolute; z-index: 2; width: 44%; aspect-ratio: 1; border-radius: 50%; overflow: hidden; cursor: pointer;
+    background: radial-gradient(circle at 36% 30%, #ef5870 0%, #c01f37 20%, #840f22 50%, #46060f 100%);
+    box-shadow: 0 0 60px rgba(200,30,60,0.4), inset 0 0 0 1px rgba(214,178,112,0.55), 0 12px 34px rgba(0,0,0,0.55); }
+  .globe .facets { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; mix-blend-mode: overlay; opacity: 0.5;
+    background: conic-gradient(from 18deg, rgba(255,255,255,0.55), rgba(0,0,0,0.45) 22deg, rgba(255,255,255,0.42) 45deg, rgba(0,0,0,0.42) 68deg, rgba(255,255,255,0.48) 90deg, rgba(0,0,0,0.42) 113deg, rgba(255,255,255,0.42) 135deg, rgba(0,0,0,0.46) 158deg, rgba(255,255,255,0.48) 180deg, rgba(0,0,0,0.42) 203deg, rgba(255,255,255,0.42) 225deg, rgba(0,0,0,0.46) 248deg, rgba(255,255,255,0.48) 270deg, rgba(0,0,0,0.42) 293deg, rgba(255,255,255,0.42) 315deg, rgba(0,0,0,0.46) 338deg, rgba(255,255,255,0.55) 360deg); }
+  .globe .facets2 { position: absolute; inset: 14%; border-radius: 50%; pointer-events: none; mix-blend-mode: overlay; opacity: 0.4;
+    background: conic-gradient(from 0deg, rgba(0,0,0,0.4), rgba(255,255,255,0.45) 30deg, rgba(0,0,0,0.4) 60deg, rgba(255,255,255,0.45) 90deg, rgba(0,0,0,0.4) 120deg, rgba(255,255,255,0.45) 150deg, rgba(0,0,0,0.4) 180deg, rgba(255,255,255,0.45) 210deg, rgba(0,0,0,0.4) 240deg, rgba(255,255,255,0.45) 270deg, rgba(0,0,0,0.4) 300deg, rgba(255,255,255,0.45) 330deg, rgba(0,0,0,0.4) 360deg); }
+  .globe .glow { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; mix-blend-mode: screen;
+    background: radial-gradient(circle at 52% 58%, rgba(255,80,104,0.55) 0%, rgba(255,80,104,0) 46%); }
+  .globe .spec { position: absolute; inset: 0; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(42% 32% at 33% 25%, rgba(255,236,236,0.92) 0%, rgba(255,236,236,0) 58%),
+                radial-gradient(16% 12% at 68% 72%, rgba(255,180,190,0.6) 0%, rgba(255,180,190,0) 60%); }
+  .globe .limb { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; z-index: 2;
+    box-shadow: inset 0 0 2px 1px rgba(214,178,112,0.6), inset -10px -12px 40px rgba(40,2,10,0.7); }
+
+  /* fixed pointer at the top */
+  .pointer { position: absolute; z-index: 4; top: -6px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 13px solid transparent; border-right: 13px solid transparent; border-top: 22px solid #e8c98a;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.5)); }
+  .pointer::after { content: "✦"; position: absolute; top: -30px; left: 50%; transform: translateX(-50%); color: #e8c98a; font-size: 13px; }
+
+  /* ===== the parchment scroll (the answer) ===== */
+  .scroll { position: absolute; z-index: 20; width: min(372px, 84%); left: 50%; top: 50%;
+    transform: translate(-50%, -50%) scale(0.94); opacity: 0; pointer-events: none;
+    transition: opacity 0.45s var(--ease-quiet), transform 0.45s var(--ease-quiet); }
+  .scroll.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+  .rod { position: relative; height: 15px; border-radius: 8px; margin: 0 -6px;
+    background: linear-gradient(180deg, #7a5navy 0%, #6b4a24 18%, #432e16 100%);
+    background: linear-gradient(180deg, #8a652f 0%, #5e4120 50%, #3a2712 100%);
+    box-shadow: inset 0 1px 0 rgba(255,221,158,0.45), 0 5px 14px rgba(0,0,0,0.45); }
+  .rod::before, .rod::after { content: ""; position: absolute; top: -3px; width: 21px; height: 21px; border-radius: 50%;
+    background: radial-gradient(circle at 38% 32%, #efce8e, #9a6a30 70%, #5e4120); box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
+  .rod::before { left: -7px; } .rod::after { right: -7px; }
+  .parch-wrap { overflow: visible; }
+  .parch { overflow: hidden; max-height: 0; transition: max-height 0.9s cubic-bezier(0.4, 0.08, 0.2, 1); }
+  .parch-inner { position: relative; padding: 38px 32px 40px; text-align: center;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255,245,220,0.7), rgba(0,0,0,0) 60%),
+      linear-gradient(168deg, #efe4c6 0%, #e6d4a8 52%, #dcc999 100%);
+    box-shadow: inset 0 0 46px rgba(150,110,50,0.28), inset 0 0 0 1px rgba(120,85,35,0.25);
+    color: #3a2a14;
+    opacity: 0; transition: opacity 0.5s 0.4s var(--ease-quiet); }
+  .scroll.open .parch-inner { opacity: 1; }
+  /* deckle shadows where parchment meets the rods */
+  .parch-inner::before, .parch-inner::after { content: ""; position: absolute; left: 0; right: 0; height: 14px; pointer-events: none; }
+  .parch-inner::before { top: 0; background: linear-gradient(180deg, rgba(90,60,25,0.32), rgba(0,0,0,0)); }
+  .parch-inner::after { bottom: 0; background: linear-gradient(0deg, rgba(90,60,25,0.32), rgba(0,0,0,0)); }
+
+  .sc-kicker { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: #8a5d2b; }
+  .sc-rule { width: 34px; height: 1px; background: rgba(120,85,35,0.5); margin: 12px auto; }
+  .sc-glyph { font-family: var(--font-display), serif; line-height: 1.05; color: #7a4f1f; margin: 4px 0 10px; }
+  .sc-glyph.arabic { font-family: "Noto Naskh Arabic", "Amiri", var(--font-serif), serif; direction: rtl; font-size: clamp(40px, 12vw, 60px); line-height: 1.3; }
+  .sc-glyph.sym { font-size: clamp(50px, 15vw, 74px); }
+  .sc-title { font-family: var(--font-serif); font-weight: 600; font-size: clamp(21px, 2.6vw, 26px); line-height: 1.16; color: #2a1c0c; letter-spacing: -0.01em; }
+  .sc-body { font-family: var(--font-serif); font-style: italic; font-size: 15px; line-height: 1.5; color: rgba(58,42,20,0.86); margin: 12px 0 0; text-wrap: pretty; }
+  .sc-quote { font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: clamp(19px, 2.5vw, 24px); line-height: 1.3; color: #2a1c0c; text-wrap: balance; margin: 0; }
+  .sc-attrib { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase; color: #8a5d2b; margin-top: 14px; }
+  .sc-foot { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(120,85,35,0.8); margin-top: 16px; }
+
+  /* ===== controls ===== */
+  .controls { display: flex; gap: 12px; margin-top: 46px; align-items: center; min-height: 46px; }
+  .btn { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em; font-size: 10px; padding: 14px 30px; border-radius: 999px; cursor: pointer;
+    transition: all var(--dur-fast) var(--ease-quiet); border: 1px solid transparent; }
+  .btn.primary { background: var(--grad-gold); color: #2a1410; }
+  .btn.primary:hover { filter: brightness(1.06); }
+  .btn.primary:disabled { opacity: 0.5; cursor: default; filter: none; }
+  .btn.ghost { background: transparent; color: rgba(242,233,221,0.78); border-color: rgba(214,178,112,0.4); opacity: 0; pointer-events: none; transition: opacity var(--dur-base), border-color var(--dur-fast), color var(--dur-fast); }
+  .btn.ghost.show { opacity: 1; pointer-events: auto; }
+  .btn.ghost:hover { border-color: #e6c785; color: #e6c785; }
+
+  .hint { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(243,236,221,0.4); margin-top: 18px; min-height: 12px; }
+</style>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
+<script defer src="../shared/dark-toggle.js"></script>
+</head>
+<body>
+  <header>
+    <a class="wm-mini" href="../index.html">mecmûa</a>
+    <div class="spacer"></div>
+    <nav class="nav">
+      <a href="../index.html">Home</a>
+      <a href="../library/index.html">Library</a>
+      <a href="../mind/index.html">Mind</a>
+      <a href="../museum/index.html">Museum</a>
+      <a href="../magazine/index.html">Magazine</a>
+      <a class="here" href="./index.html">Oracle</a>
+      <a href="../chart/index.html">Chart</a>
+      <a href="../boutique/index.html">Boutique</a>
+    </nav>
+  </header>
+
+  <div class="page">
+    <h1>The Crystal Globe Oracle</h1>
+    <p class="dek">Hold a question lightly. Spin the wheel of stars — a single voice from the whole canon will unfurl.</p>
+
+    <div class="oracle" id="oracle">
+      <div class="pointer"></div>
+      <div class="wheel" id="wheel"></div>
+      <div class="globe" id="globe"><div class="facets"></div><div class="facets2"></div><div class="glow"></div><div class="spec"></div><div class="limb"></div></div>
+
+      <div class="scroll" id="scroll">
+        <div class="rod"></div>
+        <div class="parch-wrap"><div class="parch" id="parchBox"><div class="parch-inner" id="parch"></div></div></div>
+        <div class="rod"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn primary" id="spin">Consult the Oracle</button>
+      <button class="btn ghost" id="again">Ask again</button>
+    </div>
+    <div class="hint" id="hint">drag the globe to turn it · or spin the wheel</div>
+  </div>
+
+  <script>
+    /* ===== THE NAMES — al-Asmāʾ al-Ḥusná (99) ===== */
+    const NAMES = [
+      ['Ar-Raḥmān','الرحمن','The Most Merciful'],['Ar-Raḥīm','الرحيم','The Bestower of Mercy'],['Al-Malik','الملك','The Sovereign'],['Al-Quddūs','القدوس','The Most Holy'],['As-Salām','السلام','The Source of Peace'],['Al-Muʾmin','المؤمن','The Giver of Security'],['Al-Muhaymin','المهيمن','The Guardian'],['Al-ʿAzīz','العزيز','The Almighty'],['Al-Jabbār','الجبار','The Compeller'],['Al-Mutakabbir','المتكبر','The Supreme in Greatness'],
+      ['Al-Khāliq','الخالق','The Creator'],['Al-Bāriʾ','البارئ','The Maker'],['Al-Muṣawwir','المصور','The Fashioner of Forms'],['Al-Ghaffār','الغفار','The Ever-Forgiving'],['Al-Qahhār','القهار','The Subduer'],['Al-Wahhāb','الوهاب','The Bestower'],['Ar-Razzāq','الرزاق','The Provider'],['Al-Fattāḥ','الفتاح','The Opener'],['Al-ʿAlīm','العليم','The All-Knowing'],['Al-Qābiḍ','القابض','The Withholder'],
+      ['Al-Bāsiṭ','الباسط','The Expander'],['Al-Khāfiḍ','الخافض','The Abaser'],['Ar-Rāfiʿ','الرافع','The Exalter'],['Al-Muʿizz','المعز','The Giver of Honour'],['Al-Mudhill','المذل','The Humbler'],['As-Samīʿ','السميع','The All-Hearing'],['Al-Baṣīr','البصير','The All-Seeing'],['Al-Ḥakam','الحكم','The Judge'],['Al-ʿAdl','العدل','The Utterly Just'],['Al-Laṭīf','اللطيف','The Subtle, The Gentle'],
+      ['Al-Khabīr','الخبير','The All-Aware'],['Al-Ḥalīm','الحليم','The Forbearing'],['Al-ʿAẓīm','العظيم','The Magnificent'],['Al-Ghafūr','الغفور','The All-Forgiving'],['Ash-Shakūr','الشكور','The Appreciative'],['Al-ʿAliyy','العلي','The Most High'],['Al-Kabīr','الكبير','The Most Great'],['Al-Ḥafīẓ','الحفيظ','The Preserver'],['Al-Muqīt','المقيت','The Sustainer'],['Al-Ḥasīb','الحسيب','The Reckoner'],
+      ['Al-Jalīl','الجليل','The Majestic'],['Al-Karīm','الكريم','The Most Generous'],['Ar-Raqīb','الرقيب','The Watchful'],['Al-Mujīb','المجيب','The Responsive'],['Al-Wāsiʿ','الواسع','The All-Encompassing'],['Al-Ḥakīm','الحكيم','The All-Wise'],['Al-Wadūd','الودود','The Most Loving'],['Al-Majīd','المجيد','The Most Glorious'],['Al-Bāʿith','الباعث','The Resurrector'],['Ash-Shahīd','الشهيد','The Witness'],
+      ['Al-Ḥaqq','الحق','The Truth'],['Al-Wakīl','الوكيل','The Trustee'],['Al-Qawiyy','القوي','The Most Strong'],['Al-Matīn','المتين','The Firm'],['Al-Waliyy','الولي','The Protecting Friend'],['Al-Ḥamīd','الحميد','The Praiseworthy'],['Al-Muḥṣī','المحصي','The Accounter'],['Al-Mubdiʾ','المبدئ','The Originator'],['Al-Muʿīd','المعيد','The Restorer'],['Al-Muḥyī','المحيي','The Giver of Life'],
+      ['Al-Mumīt','المميت','The Bringer of Death'],['Al-Ḥayy','الحي','The Ever-Living'],['Al-Qayyūm','القيوم','The Self-Subsisting'],['Al-Wājid','الواجد','The Finder'],['Al-Mājid','الماجد','The Noble'],['Al-Wāḥid','الواحد','The One'],['Al-Aḥad','الأحد','The Unique'],['Aṣ-Ṣamad','الصمد','The Eternal Refuge'],['Al-Qādir','القادر','The All-Powerful'],['Al-Muqtadir','المقتدر','The Determiner'],
+      ['Al-Muqaddim','المقدم','The Expediter'],['Al-Muʾakhkhir','المؤخر','The Delayer'],['Al-Awwal','الأول','The First'],['Al-Ākhir','الآخر','The Last'],['Aẓ-Ẓāhir','الظاهر','The Manifest'],['Al-Bāṭin','الباطن','The Hidden'],['Al-Wālī','الوالي','The Governor'],['Al-Mutaʿālī','المتعالي','The Most Exalted'],['Al-Barr','البر','The Source of Goodness'],['At-Tawwāb','التواب','The Acceptor of Repentance'],
+      ['Al-Muntaqim','المنتقم','The Avenger'],['Al-ʿAfuww','العفو','The Pardoner'],['Ar-Raʾūf','الرؤوف','The Most Kind'],['Mālik-ul-Mulk','مالك الملك','Master of the Kingdom'],['Dhul-Jalāli wal-Ikrām','ذو الجلال والإكرام','Lord of Majesty & Generosity'],['Al-Muqsiṭ','المقسط','The Equitable'],['Al-Jāmiʿ','الجامع','The Gatherer'],['Al-Ghaniyy','الغني','The Self-Sufficient'],['Al-Mughnī','المغني','The Enricher'],['Al-Māniʿ','المانع','The Preventer'],
+      ['Aḍ-Ḍārr','الضار','The Distresser'],['An-Nāfiʿ','النافع','The Benefactor'],['An-Nūr','النور','The Light'],['Al-Hādī','الهادي','The Guide'],['Al-Badīʿ','البديع','The Incomparable Originator'],['Al-Bāqī','الباقي','The Everlasting'],['Al-Wārith','الوارث','The Inheritor'],['Ar-Rashīd','الرشيد','The Guide to the Right Path'],['Aṣ-Ṣabūr','الصبور','The Most Patient'],
+    ].map(n=>({ type:'A Divine Name', glyph:n[1], arabic:true, title:n[0], body:n[2], foot:'al-Asmāʾ al-Ḥusná' }));
+
+    /* ===== THE VOICES — quotes ===== */
+    const VOICES = [
+      ['Until you make the unconscious conscious, it will direct your life and you will call it fate.','C. G. Jung','Depth Psychology'],
+      ['Who looks outside, dreams; who looks inside, awakes.','C. G. Jung','Depth Psychology'],
+      ['The privilege of a lifetime is to become who you truly are.','C. G. Jung','Depth Psychology'],
+      ['There is no coming to consciousness without pain.','C. G. Jung','Depth Psychology'],
+      ['Knowing your own darkness is the best method for dealing with the darknesses of other people.','C. G. Jung','Depth Psychology'],
+      ['Everything that irritates us about others can lead us to an understanding of ourselves.','C. G. Jung','Depth Psychology'],
+      ['The wound is the place where the Light enters you.','Rumi','Sufi'],
+      ['Out beyond ideas of wrongdoing and rightdoing, there is a field. I’ll meet you there.','Rumi','Sufi'],
+      ['What you seek is seeking you.','Rumi','Sufi'],
+      ['Don’t grieve. Anything you lose comes round in another form.','Rumi','Sufi'],
+      ['There is nothing in existence save God.','Ibn Arabi','Sufi'],
+      ['If I worship You from fear of Hell, burn me in Hell.','Rabia al-Adawiyya','Sufi'],
+      ['Knowledge without action is madness; action without knowledge is void.','Al-Ghazali','Sufi'],
+      ['You have power over your mind — not outside events. Realize this, and you will find strength.','Marcus Aurelius','Stoic'],
+      ['What stands in the way becomes the way.','Marcus Aurelius','Stoic'],
+      ['Waste no more time arguing what a good man should be. Be one.','Marcus Aurelius','Stoic'],
+      ['We suffer more often in imagination than in reality.','Seneca','Stoic'],
+      ['It is not that we have a short time to live, but that we waste much of it.','Seneca','Stoic'],
+      ['It’s not what happens to you, but how you react to it that matters.','Epictetus','Stoic'],
+      ['We cannot choose our external circumstances, but we can always choose how we respond.','Epictetus','Stoic'],
+      ['You must have chaos within you to give birth to a dancing star.','Friedrich Nietzsche','Philosophy'],
+      ['He who has a why to live can bear almost any how.','Friedrich Nietzsche','Philosophy'],
+      ['When I let go of what I am, I become what I might be.','Lao Tzu','Taoist'],
+    ].map(v=>({ type:'A Voice', quote:v[0], who:v[1], foot:v[2] }));
+
+    /* ===== THE TAROT — Major Arcana (22) ===== */
+    const TAROT = [
+      ['0','The Fool','The leap into the unknown — innocence, faith, the open road.'],
+      ['I','The Magician','Will meets skill; as above, so below. You have what you need.'],
+      ['II','The High Priestess','Intuition and the veiled mystery. Listen to the inner voice.'],
+      ['III','The Empress','Abundance and creation. Tend what is growing.'],
+      ['IV','The Emperor','Structure, authority, the steady hand. Build the frame.'],
+      ['V','The Hierophant','Tradition and teaching. Seek the established wisdom.'],
+      ['VI','The Lovers','Union and choice — an alignment of values.'],
+      ['VII','The Chariot','Willed momentum. Mastery through opposing forces held.'],
+      ['VIII','Strength','Gentle courage; the lion calmed by the open hand.'],
+      ['IX','The Hermit','Solitude and the inner lamp. The patient search.'],
+      ['X','Wheel of Fortune','Cycles turn; fortune pivots. Meet the change.'],
+      ['XI','Justice','Balance and truth — cause and consequence made clear.'],
+      ['XII','The Hanged Man','Surrender and suspension. See it from the other side.'],
+      ['XIII','Death','Ending and renewal. Release what must be released.'],
+      ['XIV','Temperance','Measure and blending. Walk the middle way.'],
+      ['XV','The Devil','Bondage and shadow — the chain you can choose to drop.'],
+      ['XVI','The Tower','Sudden upheaval; the false structure falls to free you.'],
+      ['XVII','The Star','Hope after the storm. Quiet renewal, faith restored.'],
+      ['XVIII','The Moon','Dream and illusion. The path is unlit but real.'],
+      ['XIX','The Sun','Clarity and vitality. Joy made plain.'],
+      ['XX','Judgement','Reckoning and awakening. Answer the call to rise.'],
+      ['XXI','The World','Completion and wholeness. The circle closed.'],
+    ].map(t=>({ type:'The Tarot', glyph:t[0], title:t[1], body:t[2], foot:'Major Arcana' }));
+
+    /* ===== THE RUNES — Elder Futhark (24) ===== */
+    const RUNES = [
+      ['ᚠ','Fehu','Wealth that must flow to stay alive. Abundance, beginnings.','f · cattle'],
+      ['ᚢ','Uruz','The wild ox — raw strength, health, untamed vitality.','u · auroch'],
+      ['ᚦ','Thurisaz','The thorn — a sharp, defensive force. Caution, catharsis.','th · giant'],
+      ['ᚨ','Ansuz','The god’s breath — a message, insight, the spoken word.','a · the divine'],
+      ['ᚱ','Raidho','The ride — journey, right action, the rhythm of the road.','r · the ride'],
+      ['ᚲ','Kenaz','The torch — illumination, craft, knowledge made useful.','k · the beacon'],
+      ['ᚷ','Gebo','The gift — exchange, generosity, true partnership.','g · the gift'],
+      ['ᚹ','Wunjo','Joy — harmony, belonging, a wish fulfilled.','w · joy'],
+      ['ᚺ','Hagalaz','Hail — the storm that disrupts and then clears the field.','h · hail'],
+      ['ᚾ','Nauthiz','Need — friction that teaches; the discipline of constraint.','n · need'],
+      ['ᛁ','Isa','Ice — stillness, a necessary pause. Wait, and watch.','i · ice'],
+      ['ᛃ','Jera','Harvest — the year’s turning. Reward comes in its time.','j · year'],
+      ['ᛇ','Eihwaz','The yew — the world-tree axis. Endurance, deep stability.','ï · yew'],
+      ['ᛈ','Perthro','The lot-cup — mystery, fate, what is not yet revealed.','p · chance'],
+      ['ᛉ','Algiz','The elk-sedge — protection, the reach toward the higher self.','z · protection'],
+      ['ᛊ','Sowilo','The sun — wholeness, victory, the vital force restored.','s · sun'],
+      ['ᛏ','Tiwaz','Tyr — justice, honour, sacrifice for the right cause.','t · the sky-god'],
+      ['ᛒ','Berkano','The birch — growth, birth, gentle tending of new life.','b · birch'],
+      ['ᛖ','Ehwaz','The horse — trust, movement, two moving as one.','e · horse'],
+      ['ᛗ','Mannaz','Humankind — the self in its community. Know your nature.','m · man'],
+      ['ᛚ','Laguz','Water — the unconscious, flow, intuition, what runs deep.','l · water'],
+      ['ᛜ','Ingwaz','The seed — potential held in waiting; gestation before release.','ng · the seed'],
+      ['ᛞ','Dagaz','Day — breakthrough, awakening, the certainty of dawn.','d · day'],
+      ['ᛟ','Othala','The ancestral home — heritage, what endures and is yours.','o · inheritance'],
+    ].map(r=>({ type:'A Rune', glyph:r[0], title:r[1], body:r[2], foot:r[3] }));
+
+    /* ===== one combined canon ===== */
+    const POOL = [...NAMES, ...VOICES, ...TAROT, ...RUNES];
+
+    /* ===== build the segmented star-wheel ===== */
+    (function(){
+      const N = 24, cx = 200, cy = 200, R = 196, rIn = 96;
+      const fills = ['#16224e', '#1d2c63'];
+      let segs = '', marks = '';
+      for (let i = 0; i < N; i++){
+        const a0 = (i / N) * 2 * Math.PI - Math.PI / 2;
+        const a1 = ((i + 1) / N) * 2 * Math.PI - Math.PI / 2;
+        const x1o = cx + R * Math.cos(a0), y1o = cy + R * Math.sin(a0);
+        const x2o = cx + R * Math.cos(a1), y2o = cy + R * Math.sin(a1);
+        const x1i = cx + rIn * Math.cos(a0), y1i = cy + rIn * Math.sin(a0);
+        const x2i = cx + rIn * Math.cos(a1), y2i = cy + rIn * Math.sin(a1);
+        segs += `<path d="M${x1o.toFixed(2)},${y1o.toFixed(2)} A${R},${R} 0 0 1 ${x2o.toFixed(2)},${y2o.toFixed(2)} L${x2i.toFixed(2)},${y2i.toFixed(2)} A${rIn},${rIn} 0 0 0 ${x1i.toFixed(2)},${y1i.toFixed(2)} Z" fill="${fills[i%2]}" stroke="rgba(214,178,112,0.5)" stroke-width="0.8"/>`;
+        const am = (a0 + a1) / 2, rm = R - 22;
+        marks += `<text x="${(cx + rm * Math.cos(am)).toFixed(2)}" y="${(cy + rm * Math.sin(am) + 4).toFixed(2)}" text-anchor="middle" font-size="13" fill="${i%2 ? 'rgba(236,215,155,0.95)' : 'rgba(236,215,155,0.62)'}">✦</text>`;
+        const rd = rIn + 22;
+        marks += `<text x="${(cx + rd * Math.cos(am)).toFixed(2)}" y="${(cy + rd * Math.sin(am) + 3).toFixed(2)}" text-anchor="middle" font-size="8" fill="rgba(236,215,155,0.5)">✧</text>`;
+      }
+      document.getElementById('wheel').innerHTML = `<svg viewBox="0 0 400 400">
+        <circle cx="200" cy="200" r="199" fill="#0b1234"/>
+        ${segs}${marks}
+        <circle cx="200" cy="200" r="199" fill="none" stroke="#e6c785" stroke-width="2.5"/>
+        <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(214,178,112,0.4)" stroke-width="0.8"/>
+        <circle cx="200" cy="200" r="${rIn}" fill="none" stroke="#e6c785" stroke-width="2"/>
+        <circle cx="200" cy="200" r="${rIn-6}" fill="none" stroke="rgba(214,178,112,0.4)" stroke-width="0.8"/>
+      </svg>`;
+    })();
+
+    /* ===== scroll render ===== */
+    const scroll = document.getElementById('scroll'), parch = document.getElementById('parch'), parchBox = document.getElementById('parchBox');
+    function renderScroll(it){
+      let html;
+      if (it.quote){
+        html = `<div class="sc-kicker">${it.type}</div><div class="sc-rule"></div>`+
+          `<p class="sc-quote">“${it.quote}”</p><div class="sc-attrib">— ${it.who}</div>`+
+          `<div class="sc-foot">${it.foot}</div>`;
+      } else {
+        html = `<div class="sc-kicker">${it.type}</div><div class="sc-rule"></div>`+
+          `<div class="sc-glyph ${it.arabic ? 'arabic' : 'sym'}">${it.glyph}</div>`+
+          `<div class="sc-title">${it.title}</div>`+
+          `<p class="sc-body">${it.body}</p>`+
+          `<div class="sc-foot">${it.foot}</div>`;
+      }
+      parch.innerHTML = html;
+    }
+
+    /* ===== spin logic ===== */
+    const wheelEl = document.getElementById('wheel');
+    const spinBtn = document.getElementById('spin'), againBtn = document.getElementById('again');
+    const hint = document.getElementById('hint');
+    let angle = 0, busy = false;
+
+    function closeScroll(){ scroll.classList.remove('open'); parchBox.style.maxHeight = '0px'; }
+
+    function spin(){
+      if (busy) return; busy = true;
+      closeScroll();
+      spinBtn.disabled = true; againBtn.classList.remove('show');
+      hint.textContent = 'the wheel turns…';
+      const it = POOL[Math.floor(Math.random() * POOL.length)];
+      angle += 360 * 5 + Math.floor(Math.random() * 360);
+      wheelEl.style.transform = `rotate(${angle}deg)`;
+      if (window.__globeFlick) window.__globeFlick();
+      renderScroll(it);
+      setTimeout(() => {
+        scroll.classList.add('open');
+        parchBox.style.maxHeight = parch.scrollHeight + 'px';
+        spinBtn.disabled = false;
+        againBtn.classList.add('show');
+        hint.textContent = 'one voice, drawn from the whole canon';
+        busy = false;
+      }, 4050);
+    }
+
+    spinBtn.onclick = spin;
+    againBtn.onclick = spin;
+
+    /* ===== the garnet crystal hub (static; click to consult) ===== */
+    {
+      const host = document.getElementById('globe');
+      if (host){ host.addEventListener('click', () => { if (!busy) spin(); }); }
+    }
+  </script>
+</body>
+</html>

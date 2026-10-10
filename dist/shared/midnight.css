@@ -1,0 +1,48 @@
+/* ===========================================================================
+   mecmûa · Midnight overlay
+   "Velvet suede cloaked in midnight wonder."
+   Link AFTER styles.css on any interior page to carry the homepage's
+   deep midnight-indigo field, gold hairlines and hushed chrome.
+   Uses !important so it wins over each page's light-first base rules.
+   =========================================================================== */
+
+/* ---- design tokens this overlay (and consumer pages) rely on ----------- */
+:root {
+  --gold-line: rgba(214,178,112,0.55);
+}
+
+/* ---- the field: deep midnight indigo with a soft central glow ---------- */
+html[data-theme="dark"] body,
+body {
+  background-color: #0a0d2a !important;
+  background-image: none !important;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(115% 80% at 50% 34%, #1c2658 0%, #121a42 40%, #0a0e2c 70%, #070a20 100%);
+}
+
+/* ---- header: midnight, frosted, with a single gold hairline ------------
+   (the base header background + hairline are owned by tokens/dark.css so the
+   treatment is identical on every page; nothing needed here.) */
+
+/* wordmark stays warm gold */
+.wm, .wm-mini {
+  background: linear-gradient(180deg, #e8d09a 0%, #d2a851 48%, #b98b3d 100%) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* breadcrumb + nav on midnight */
+.crumb { color: rgba(243,236,221,0.5) !important; }
+.nav a { color: rgba(243,236,221,0.7) !important; }
+.nav a:hover { background: rgba(214,178,112,0.16) !important; color: #e6c785 !important; }
+.nav a.here { background: rgba(214,178,112,0.16) !important; color: #e6c785 !important; }
+
+/* ---- gold hairline accents on section rules ---------------------------- */
+.sechead, .filtrow, .toolbar { border-color: rgba(214,178,112,0.22) !important; }

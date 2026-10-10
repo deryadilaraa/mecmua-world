@@ -1,0 +1,51 @@
+/* ===========================================================================
+   deryadilara · Effects
+   ---------------------------------------------------------------------------
+   Shadows are soft and warm, never hard or grey. Borders are hairline. A faint
+   paper grain lives under cream surfaces. Motion is slow and contemplative —
+   things fade and drift; nothing bounces.
+   ========================================================================== */
+
+:root {
+  /* ---- Shadows (warm, diffuse) ------------------------------------------ */
+  --shadow-xs:  0 1px 2px rgba(27, 26, 24, 0.06);
+  --shadow-sm:  0 4px 14px rgba(27, 26, 24, 0.08);
+  --shadow-md:  0 12px 34px rgba(27, 26, 24, 0.12);
+  --shadow-lg:  0 26px 70px rgba(31, 42, 68, 0.22);
+  --shadow-night: 0 30px 80px rgba(22, 32, 58, 0.55);
+  --shadow-gold-glow: 0 0 0 1px rgba(201,160,99,0.40), 0 8px 30px rgba(201,160,99,0.22);
+
+  /* ---- Hairline borders ------------------------------------------------- */
+  --hairline:        1px solid var(--border-hairline);
+  --hairline-soft:   1px solid var(--border-soft);
+  --hairline-gold:   1px solid rgba(196,154,75,0.5); /* @kind other */
+  --hairline-night:  1px solid var(--border-on-night);
+
+  /* ---- Motion ----------------------------------------------------------- */
+  --ease-quiet: cubic-bezier(0.22, 0.61, 0.36, 1); /* @kind other */
+  --ease-drift: cubic-bezier(0.4, 0.0, 0.2, 1); /* @kind other */
+  --dur-fast:   180ms; /* @kind other */
+  --dur-base:   320ms; /* @kind other */
+  --dur-slow:   620ms; /* @kind other */
+
+  /* ---- Texture ----------------------------------------------------------
+     Faint warm grain — apply as a layered background on parchment surfaces.
+     Usage: background-image: var(--grain), <your gradient/color>; */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"); /* @kind other */
+
+  /* Veiling gradient to seat type over imagery (protection scrim). */
+  --scrim-night: linear-gradient(180deg, rgba(22,32,58,0) 0%, rgba(22,32,58,0.74) 100%); /* @kind color */
+  --scrim-merlot: linear-gradient(180deg, rgba(31,42,68,0) 0%, rgba(122,30,46,0.18) 45%, rgba(20,16,28,0.78) 100%); /* @kind color */
+  --scrim-ember: linear-gradient(180deg, rgba(31,42,68,0) 0%, rgba(122,30,46,0.0) 40%, rgba(22,16,24,0.66) 100%); /* @kind color */
+}
+
+/* Paper texture helper — drop on any cream surface. */
+.dd-grain { position: relative; }
+.dd-grain::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: var(--grain);
+  background-repeat: repeat;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}

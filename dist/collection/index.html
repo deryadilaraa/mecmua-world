@@ -1,0 +1,625 @@
+<!-- @dsCard group="mecmûa" viewport="1320x900" name="The Collection" subtitle="In-brand asset library — search & tag the mecmûa image archive" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mecmûa — The Collection</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../shared/midnight.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { color: #f2e9dd; font-family: var(--font-text); overflow: hidden;
+    background: radial-gradient(120% 80% at 50% 0%, #1c2658 0%, #121a42 42%, #0a0e2c 74%, #070a20 100%) no-repeat; background-attachment: fixed; }
+  a { color: inherit; text-decoration: none; }
+  .app { display: grid; grid-template-rows: 64px 1fr; grid-template-columns: minmax(0, 1fr); height: 100vh; }
+
+  /* top bar */
+  .top { display: flex; align-items: center; gap: 20px; padding: 0 26px; min-width: 0; border-bottom: 1px solid rgba(214,178,112,0.22); }
+  .wm { font-family: var(--font-display); text-transform: lowercase; letter-spacing: 0.04em; font-size: 25px; line-height: 1;
+    background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .wm small { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.24em; font-size: 9px; color: rgba(243,236,221,0.5);
+    -webkit-text-fill-color: rgba(243,236,221,0.5); margin-left: 10px; }
+  .top .spacer { flex: 1; }
+  .search { position: relative; width: min(420px, 38vw); min-width: 0; flex-shrink: 1; }
+  .search input { width: 100%; font-family: var(--font-serif); font-style: italic; font-size: 15px; padding: 10px 16px 10px 38px;
+    border-radius: 999px; border: 1px solid rgba(214,178,112,0.3); background: rgba(255,255,255,0.04); color: #f4ecdd; outline: none; transition: border-color var(--dur-base); }
+  .search input:focus { border-color: var(--gold-line); }
+  .search input::placeholder { color: rgba(243,236,221,0.4); }
+  .search .mag { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: rgba(230,199,133,0.7); font-size: 14px; }
+  .tbtn { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; font-size: 10px; padding: 9px 15px; border-radius: 999px;
+    border: 1px solid rgba(214,178,112,0.35); background: transparent; color: rgba(243,236,221,0.8); cursor: pointer; transition: all var(--dur-fast); white-space: nowrap; }
+  .tbtn:hover { border-color: var(--gold-line); color: #e6c785; }
+  .tbtn.gold { background: var(--grad-gold); color: #2a1410; border-color: transparent; }
+  .tbtn.gold:hover { filter: brightness(1.06); }
+  .nav { display: flex; gap: 2px; }
+  @media (max-width: 1024px){ .nav { display: none; } }
+  .nav a { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.16em; font-size: 9.5px; color: rgba(243,236,221,0.6); padding: 7px 10px; border-radius: 999px; transition: color var(--dur-fast); }
+  .nav a:hover { color: #e6c785; }
+
+  /* body split */
+  .body { display: grid; grid-template-columns: 0 1fr; min-height: 0; min-width: 0; transition: grid-template-columns var(--dur-base) var(--ease-quiet); }
+  .body .side { opacity: 0; pointer-events: none; transition: opacity var(--dur-fast) var(--ease-quiet); }
+  .body.open { grid-template-columns: 224px 1fr; }
+  .body.open .side { opacity: 1; pointer-events: auto; }
+
+  /* sidebar */
+  .side { border-right: 1px solid rgba(214,178,112,0.18); overflow-y: auto; overflow-x: hidden; padding: 20px 0 40px; transition: opacity var(--dur-fast) var(--ease-quiet); }
+  .sidetoggle { flex-shrink: 0; width: 38px; height: 38px; border-radius: 10px; border: 1px solid rgba(214,178,112,0.3); background: transparent;
+    color: rgba(243,236,221,0.8); font-size: 15px; cursor: pointer; transition: all var(--dur-fast); display: grid; place-items: center; }
+  .sidetoggle:hover { border-color: var(--gold-line); color: #e6c785; }
+  .side h4 { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(214,178,112,0.7); margin: 22px 22px 10px; }
+  .side h4:first-child { margin-top: 4px; }
+  .row { display: flex; align-items: center; gap: 10px; padding: 8px 22px; cursor: pointer; font-family: var(--font-text); font-size: 13.5px; color: rgba(243,236,221,0.78);
+    border-left: 2px solid transparent; transition: all var(--dur-fast); }
+  .row:hover { background: rgba(255,255,255,0.03); color: #f4ecdd; }
+  .row.on { background: rgba(214,178,112,0.1); color: #e6c785; border-left-color: #e6c785; }
+  .row .ico { width: 16px; text-align: center; opacity: 0.8; }
+  .row .ct { margin-left: auto; font-family: var(--font-mono); font-size: 10px; color: rgba(243,236,221,0.4); }
+  .row.on .ct { color: rgba(230,199,133,0.7); }
+
+  /* main */
+  .main { overflow-y: auto; min-width: 0; padding: 18px 26px 60px; }
+  .crumbar { display: flex; align-items: baseline; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
+  .crumbar h2 { font-family: var(--font-serif); font-weight: 500; font-size: 23px; color: #f4ecdd; margin: 0; letter-spacing: -0.01em; }
+  .crumbar .n { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(243,236,221,0.45); }
+  .crumbar .selinfo { margin-left: auto; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(230,199,133,0.8); display: none; align-items: center; gap: 12px; }
+  .crumbar .selinfo.on { display: flex; }
+  .crumbar .selinfo button { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(243,236,221,0.6);
+    background: transparent; border: 1px solid rgba(214,178,112,0.3); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+
+  /* tag rail */
+  .tagrail { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 18px; }
+  .tag { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 11px; border-radius: 999px;
+    border: 1px solid rgba(214,178,112,0.24); background: transparent; color: rgba(243,236,221,0.62); cursor: pointer; transition: all var(--dur-fast); }
+  .tag:hover { border-color: var(--gold-line); color: #e6c785; }
+  .tag.tagmore { border-style: dashed; border-color: rgba(214,178,112,0.4); color: rgba(243,236,221,0.5); }
+  .tag.on { background: rgba(214,178,112,0.16); border-color: var(--gold-line); color: #e6c785; }
+
+  /* masonry grid */
+  .grid { column-width: 200px; column-gap: 14px; }
+  @media (max-width: 700px){ .grid { column-width: 150px; } }
+  .ass { break-inside: avoid; margin-bottom: 14px; position: relative; border-radius: 10px; overflow: hidden; cursor: pointer;
+    border: 1px solid rgba(214,178,112,0.18); background: #0c1132; background-image: repeating-conic-gradient(#222845 0 25%, #1a1f38 0 50%); background-size: 18px 18px; transition: border-color var(--dur-fast), transform var(--dur-base); }
+  .ass:hover { border-color: rgba(214,178,112,0.5); }
+  .ass img { width: 100%; display: block; }
+  .ass .ov { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,10,32,0) 50%, rgba(8,10,32,0.88) 100%);
+    opacity: 0; transition: opacity var(--dur-base); display: flex; flex-direction: column; justify-content: flex-end; padding: 11px; }
+  .ass:hover .ov, .ass.sel .ov { opacity: 1; }
+  .ass .nm { font-family: var(--font-serif); font-size: 13px; line-height: 1.16; color: #f4ecdd; }
+  .ass .ct { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(230,199,133,0.8); margin-top: 4px; }
+  .ass .chk { position: absolute; top: 9px; left: 9px; width: 21px; height: 21px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.6);
+    background: rgba(8,10,32,0.4); display: grid; place-items: center; color: transparent; font-size: 11px; opacity: 0; transition: all var(--dur-fast); }
+  .ass:hover .chk { opacity: 1; }
+  .ass.sel { border-color: #e6c785; }
+  .ass.sel .chk { opacity: 1; background: var(--grad-gold); border-color: transparent; color: #2a1410; }
+  .ass .swatches { position: absolute; top: 9px; right: 9px; display: flex; gap: 3px; opacity: 0; transition: opacity var(--dur-fast); }
+  .ass:hover .swatches { opacity: 1; }
+  .ass .swatches i { width: 9px; height: 9px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.4); }
+  .empty { text-align: center; padding: 80px 0; font-family: var(--font-serif); font-style: italic; font-size: 19px; color: rgba(243,236,221,0.5); }
+
+  /* video + audio cards */
+  .ass video { width: 100%; display: block; background: #06081a; }
+  .ass .badge { position: absolute; bottom: 9px; right: 9px; z-index: 2; font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase;
+    background: rgba(8,10,32,0.74); color: #e6c785; padding: 4px 8px; border-radius: 999px; backdrop-filter: blur(3px); }
+  .audiocard { aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 18px;
+    background: radial-gradient(120% 100% at 50% 30%, #1e2a64 0%, #121a42 60%, #0a0e2c 100%); }
+  .audiocard .wave { display: flex; align-items: center; gap: 3px; height: 42px; }
+  .audiocard .wave i { width: 3px; border-radius: 2px; background: rgba(230,199,133,0.8);
+    height: 30%; animation: eq 1.1s ease-in-out infinite; }
+  @media (prefers-reduced-motion: no-preference){
+    .audiocard .wave i:nth-child(2n){ animation-delay: .15s } .audiocard .wave i:nth-child(3n){ animation-delay: .3s }
+    .audiocard .wave i:nth-child(4n){ animation-delay: .45s } .audiocard .wave i:nth-child(5n){ animation-delay: .6s } }
+  @keyframes eq { 0%,100%{height:22%} 50%{height:92%} }
+  .audiocard .aname { font-family: var(--font-serif); font-size: 13px; color: rgba(243,236,221,0.82); text-align: center; line-height: 1.2; }
+
+  /* like + save actions */
+  .actbar { position: absolute; top: 9px; right: 9px; z-index: 3; display: flex; gap: 6px; }
+  .act { width: 27px; height: 27px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.32); background: rgba(8,10,32,0.5);
+    color: rgba(255,255,255,0.85); font-size: 12px; line-height: 1; display: grid; place-items: center; cursor: pointer; opacity: 0;
+    transition: all var(--dur-fast); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+  .ass:hover .act { opacity: 1; }
+  .act:hover { border-color: var(--gold-line); color: #e6c785; }
+  .act.on { opacity: 1; }
+  .act.like.on { background: #c0264b; border-color: #c0264b; color: #fff; }
+  .act.save.on { background: var(--grad-gold); border-color: transparent; color: #2a1410; }
+
+  /* drop-to-upload */
+  .dropmask { position: fixed; inset: 0; z-index: 95; display: none; place-items: center; background: rgba(8,11,34,0.86); backdrop-filter: blur(4px); }
+  .dropmask.on { display: grid; }
+  .dropmask .ring { border: 2px dashed rgba(214,178,112,0.6); border-radius: 22px; padding: 70px 90px; text-align: center; }
+  .dropmask .ring .big { font-family: var(--font-display), var(--font-serif); text-transform: lowercase; font-size: 40px;
+    background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .dropmask .ring .sm { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(243,236,221,0.6); margin-top: 14px; }
+  .lb .card video, .lb .card audio { max-width: 600px; }
+  .lb .card .audiobig { width: 360px; max-width: 70vw; height: 300px; display: grid; place-items: center; background: radial-gradient(120% 100% at 50% 30%, #1e2a64 0%, #0a0e2c 100%); }
+
+  /* lightbox */
+  .lb { position: fixed; inset: 0; z-index: 90; background: rgba(6,8,22,0.9); display: none; place-items: center; padding: 40px; }
+  .lb.on { display: grid; }
+  .lb .card { display: grid; grid-template-columns: auto 280px; max-width: 1000px; max-height: 86vh; background: #0c1132; border: 1px solid rgba(214,178,112,0.3); border-radius: 14px; overflow: hidden; }
+  @media (max-width: 720px){ .lb .card { grid-template-columns: 1fr; } }
+  .lb .card img { max-height: 86vh; max-width: 600px; object-fit: contain; display: block; background: #06081a; }
+  .lb .meta { padding: 26px 26px 30px; overflow-y: auto; }
+  .lb .meta h3 { font-family: var(--font-serif); font-weight: 500; font-size: 24px; color: #f4ecdd; margin: 0 0 4px; }
+  .lb .meta .mc { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(230,199,133,0.8); }
+  .lb .meta .lbl { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(243,236,221,0.45); margin: 22px 0 9px; }
+  .lb .meta .tgs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .lb .meta .tgs span { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; background: rgba(214,178,112,0.12); color: rgba(243,236,221,0.78); }
+  .lb .x { position: absolute; top: 20px; right: 24px; width: 38px; height: 38px; border-radius: 999px; background: rgba(10,13,42,0.7); border: 1px solid rgba(214,178,112,0.3); color: #fff; font-size: 15px; cursor: pointer; }
+  .lb .path { font-family: var(--font-mono); font-size: 10px; color: rgba(243,236,221,0.55); word-break: break-all; margin-top: 6px; }
+  .lbacts { display: flex; gap: 10px; margin: 20px 0 4px; }
+  .lbact { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 8px; width: 48px; height: 44px;
+    border-radius: 999px; border: 1px solid rgba(214,178,112,0.4); background: transparent; color: rgba(243,236,221,0.82); cursor: pointer; transition: all var(--dur-fast); }
+  .lbact:hover { border-color: var(--gold-line); color: #e6c785; }
+  .lbact.like.on { background: #c0264b; border-color: #c0264b; color: #fff; }
+  .lbact.save.on { background: var(--grad-gold); border-color: transparent; color: #2a1410; }
+
+  /* ===== edit mode ===== */
+  body.editing .ass { cursor: grab; }
+  body.editing .ass.dragging { opacity: 0.4; }
+  body.editing .ass.dragover { outline: 2px dashed #e6c785; outline-offset: 2px; }
+  .ass.hidden-asset { opacity: 0.42; }
+  .ass .editbar { position: absolute; bottom: 9px; left: 9px; z-index: 4; display: none; gap: 6px; }
+  body.editing .ass .editbar { display: flex; }
+  body.editing .ass .actbar { display: none; }
+  .ass .editbar button { width: 26px; height: 26px; border-radius: 7px; border: 1px solid rgba(214,178,112,0.5); background: rgba(8,10,32,0.78);
+    color: #e6c785; font-size: 12px; cursor: pointer; display: grid; place-items: center; -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+  .ass .editbar button:hover { background: rgba(214,178,112,0.22); }
+  .ass .draghandle { position: absolute; top: 9px; left: 9px; z-index: 4; display: none; width: 26px; height: 26px; border-radius: 7px;
+    background: rgba(8,10,32,0.78); color: #e6c785; cursor: grab; place-items: center; font-size: 13px; border: 1px solid rgba(214,178,112,0.5); }
+  body.editing .ass .draghandle { display: grid; }
+  body.editing .ass .chk { display: none; }
+  .editbadge { position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 110; font-family: var(--font-mono); font-size: 10px;
+    letter-spacing: 0.18em; text-transform: uppercase; color: #2a1410; background: var(--grad-gold); padding: 8px 18px; border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+  .row .coledit { margin-left: 8px; color: rgba(243,236,221,0.5); cursor: pointer; font-weight: 700; }
+  .row .coledit:hover { color: #e6c785; }
+
+  /* edit panel inside lightbox */
+  .ed { display: grid; gap: 14px; }
+  .ed .mc { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(214,178,112,0.8); }
+  .ed label { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(243,236,221,0.5); display:block; margin-bottom:6px; }
+  .ed input[type=text], .ed select { width: 100%; box-sizing: border-box; font-family: var(--font-serif); font-size: 15px; padding: 10px 13px; border-radius: 9px;
+    border: 1px solid rgba(214,178,112,0.3); background: rgba(255,255,255,0.03); color: #f4ecdd; outline: none; }
+  .ed input:focus, .ed select:focus { border-color: rgba(214,178,112,0.7); }
+  .tagedit { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tagedit .te { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 5px 6px 5px 10px; border-radius: 999px; background: rgba(214,178,112,0.14); color: #e6c785; }
+  .tagedit .te b { cursor: pointer; color: rgba(255,255,255,0.7); font-weight: 400; }
+  .ed .edbtns { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .ed .edbtns button { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; padding: 9px 13px; border-radius: 999px;
+    border: 1px solid rgba(214,178,112,0.4); background: transparent; color: rgba(243,236,221,0.85); cursor: pointer; }
+  .ed .edbtns button:hover { border-color: var(--gold-line); color: #e6c785; }
+  .ed .edbtns button.danger { border-color: rgba(192,38,75,0.5); color: #e98aa0; }
+
+  /* image editor (eraser / bg remover) */
+  .imged { position: fixed; inset: 0; z-index: 120; background: rgba(6,8,22,0.94); display: none; place-items: center; }
+  .imged.on { display: grid; }
+  .imged .wrap { display: grid; gap: 16px; justify-items: center; max-width: 92vw; }
+  .imged .canvaswrap { position: relative; background: repeating-conic-gradient(#1a1f3a 0 25%, #141830 0 50%) 0 0/22px 22px; border-radius: 10px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+  .imged canvas { display: block; max-width: 86vw; max-height: 66vh; cursor: crosshair; touch-action: none; }
+  .imged .tools { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center; }
+  .imged .tools button, .imged .tools .seg { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 10px 15px; border-radius: 999px;
+    border: 1px solid rgba(214,178,112,0.4); background: transparent; color: rgba(243,236,221,0.85); cursor: pointer; }
+  .imged .tools button.on, .imged .tools .seg.on { background: rgba(214,178,112,0.16); color: #e6c785; border-color: var(--gold-line); }
+  .imged .tools button.gold { background: var(--grad-gold); color: #2a1410; border-color: transparent; }
+  .imged .tools .range { display: flex; align-items: center; gap: 8px; color: rgba(243,236,221,0.7); font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .imged .hint { font-family: var(--font-serif); font-style: italic; font-size: 14px; color: rgba(243,236,221,0.6); }
+</style>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
+<script defer src="../shared/dark-toggle.js"></script>
+<script src="./asset-manifest.js"></script>
+</head>
+<body>
+  <div class="app">
+    <div class="top">
+      <button class="sidetoggle" id="sidetoggle" title="Hide menu" aria-label="Toggle menu">☰</button>
+      <a class="wm" href="../mecmua/index.html">mecmûa<small>The Collection</small></a>
+      <div class="spacer"></div>
+      <div class="search"><span class="mag">⌕</span><input id="q" type="text" placeholder="search a name, a colour, a motif…" autocomplete="off" /></div>
+      <button class="tbtn gold" id="autotag">✦ AI Auto-Tag</button>
+      <button class="tbtn" id="upload">⬆ Upload</button>
+      <button class="tbtn" id="editbtn">✎ Edit</button>
+      <button class="tbtn" id="exportbtn" style="display:none">⤓ Export</button>
+      <button class="tbtn" id="resetbtn" style="display:none">↺ Reset</button>
+      <nav class="nav">
+        <a href="../mecmua/index.html">Home</a>
+        <a href="../museum/index.html">Museum</a>
+        <a href="../boutique/index.html">Boutique</a>
+      </nav>
+    </div>
+
+    <div class="body">
+      <aside class="side" id="side"></aside>
+      <main class="main">
+        <div class="crumbar">
+          <h2 id="title">All Assets</h2>
+          <span class="n" id="count">—</span>
+          <div class="selinfo" id="selinfo"><span id="selN">0 selected</span><button id="selclear">Clear</button><button id="selcol">+ Collection</button></div>
+        </div>
+        <div class="grid" id="grid"></div>
+        <div class="empty" id="empty" style="display:none">Nothing matches that search.</div>
+      </main>
+    </div>
+  </div>
+
+  <div class="lb" id="lb">
+    <button class="x" id="lbx">✕</button>
+    <div class="card" id="lbcard"></div>
+  </div>
+
+  <script>
+    const A0 = (window.ASSET_MANIFEST || []).map((a,i)=> ({ ...a, id: i, type:'image' }));
+    let A = A0.slice();
+    const DIR = '../../assets/imagery/';
+    // non-image assets already in the archive
+    A.push({ id: A.length, type:'video', raw:true, src:'../../assets/video/golden-globe.mp4', name:'Golden Globe (turning)', cat:'objects-misc', catLabel:'Objects Misc', tags:['objects-misc','globe','video','gold','turning'], colors:['gold'] });
+    const sel = new Set();
+    const LS = { like:'mecmua-collection-liked', save:'mecmua-collection-saved', edits:'mecmua-collection-edits' };
+    const loadSet = k => { try { return new Set(JSON.parse(localStorage.getItem(k)||'[]')); } catch(e){ return new Set(); } };
+    const liked = loadSet(LS.like), saved = loadSet(LS.save);
+    const keyOf = a => a.blob ? ('blob:'+a.name) : a.src;
+    const persist = ()=>{ try { localStorage.setItem(LS.like, JSON.stringify([...liked])); localStorage.setItem(LS.save, JSON.stringify([...saved])); } catch(e){} };
+
+    // ===== edit overrides (persisted locally) =====
+    let EDITS = { meta:{}, order:[], collections:{}, newCollections:[] };
+    try { const e = JSON.parse(localStorage.getItem(LS.edits)||'null'); if(e) EDITS = Object.assign({ meta:{}, order:[], collections:{}, newCollections:[] }, e); } catch(e){}
+    let editMode = false;
+    function saveEdits(){ try { localStorage.setItem(LS.edits, JSON.stringify(EDITS)); } catch(err){ flash('Storage full — try fewer image edits or Export.'); } }
+    const metaOf = a => (EDITS.meta[keyOf(a)] || null);
+    const srcOf = a => { const m = metaOf(a); if (m && m.editedSrc) return m.editedSrc; return a.raw ? a.src : DIR + a.src; };
+    function titleCase(s){ return s.split(/[-_ ]+/).map(w=> w.charAt(0).toUpperCase()+w.slice(1)).join(' '); }
+    function collLabel(c){ if(EDITS.collections[c] && EDITS.collections[c].label!=null) return EDITS.collections[c].label;
+      const found = A0.find(a=>a.cat===c); if(found) return found.catLabel; return titleCase(c); }
+    const iconOf = c => (EDITS.collections[c]&&EDITS.collections[c].icon) || ICON[c] || '◦';
+    function applyEdits(){
+      A.forEach(a=>{ const m = metaOf(a); a._hidden = !!(m&&m.hidden);
+        if(!m) return;
+        if(m.name!=null) a.name = m.name;
+        if(m.tags!=null) a.tags = m.tags.slice();
+        if(m.cat!=null){ a.cat = m.cat; a.catLabel = collLabel(m.cat); }
+      });
+      if (EDITS.order && EDITS.order.length){
+        const pos = {}; EDITS.order.forEach((k,i)=> pos[k]=i);
+        A.sort((x,y)=>{ const px=pos[keyOf(x)], py=pos[keyOf(y)]; if(px==null&&py==null) return 0; if(px==null) return 1; if(py==null) return -1; return px-py; });
+      }
+    }
+    let cat = 'all', mediaType = 'all', view = 'none', activeTags = new Set(), query = '', tagsExpanded = false;
+    const MLABEL = { image:'Images', audio:'Audio', video:'Video' };
+
+    // collections (folders) with counts
+    let byCat = {}, catList = [], typeCount = {};
+    function recount(){
+      byCat = {}; typeCount = { image:0, audio:0, video:0 };
+      A.forEach(a=>{ if(a._hidden && !editMode) return; byCat[a.cat]=(byCat[a.cat]||0)+1; typeCount[a.type]=(typeCount[a.type]||0)+1; });
+      (EDITS.newCollections||[]).forEach(c=>{ if(byCat[c]==null) byCat[c]=0; });
+      catList = Object.keys(byCat).filter(c=> !(EDITS.collections[c]&&EDITS.collections[c].deleted)).sort();
+    }
+    applyEdits();
+    recount();
+    const catLabel = c => collLabel(c);
+    const ICON = { 'art-illustration':'🖼','astrology-mystic':'☾','charts-reference':'⊹','fashion':'✦','interiors-architecture':'⌂','jewellery':'◈','magazine-pages':'❡','moodboards':'❖','nature-scenery':'❀','objects-misc':'⬚','quotes-typography':'❝','sacred-art':'✚','textures-colour':'▦','travel-pools':'≈','uploads':'⬆' };
+
+    // sidebar
+    const side = document.getElementById('side');
+    function buildSide(){
+      const mAll = view==='none' && mediaType==='all' && cat==='all';
+      let h = `<h4>Library</h4>`;
+      h += `<div class="row ${mAll?'on':''}" data-mt="all"><span class="ico">🗂</span>All assets<span class="ct">${A.length}</span></div>`;
+      h += `<div class="row ${view==='none'&&mediaType==='image'?'on':''}" data-mt="image"><span class="ico">🖼</span>Images<span class="ct">${typeCount.image||0}</span></div>`;
+      h += `<div class="row ${view==='none'&&mediaType==='audio'?'on':''}" data-mt="audio"><span class="ico">🎵</span>Audio<span class="ct">${typeCount.audio||0}</span></div>`;
+      h += `<div class="row ${view==='none'&&mediaType==='video'?'on':''}" data-mt="video"><span class="ico">🎬</span>Video<span class="ct">${typeCount.video||0}</span></div>`;
+      h += `<h4>Yours</h4>`;
+      h += `<div class="row ${view==='saved'?'on':''}" data-view="saved"><span class="ico">👁</span>Saved<span class="ct">${saved.size}</span></div>`;
+      h += `<h4>Collections</h4>`;
+      catList.forEach(c=>{
+        const cv = EDITS.collections[c] && EDITS.collections[c].cover;
+        const cvAsset = cv ? A.find(a=>keyOf(a)===cv) : null;
+        const ico = cvAsset ? `<span class="ico"><img src="${srcOf(cvAsset)}" style="width:18px;height:18px;border-radius:4px;object-fit:cover;display:block"></span>` : `<span class="ico">${iconOf(c)}</span>`;
+        const ed = editMode ? `<b class="coledit" data-coledit="${c}" title="Rename / delete">\u22ef</b>` : '';
+        h += `<div class="row ${view==='none'&&cat===c?'on':''}" data-cat="${c}">${ico}${catLabel(c)}<span class="ct">${byCat[c]||0}</span>${ed}</div>`;
+      });
+      if (editMode) h += `<div class="row" id="newcol"><span class="ico">\uff0b</span>New collection</div>`;
+      side.innerHTML = h;
+      side.querySelectorAll('[data-mt]').forEach(r=> r.onclick = ()=>{ const t=r.dataset.mt; view='none'; if(t==='all'){mediaType='all';cat='all';} else mediaType=t; activeTags.clear(); render(); buildSide(); });
+      side.querySelectorAll('[data-cat]').forEach(r=> r.onclick = ()=>{ view='none'; cat = r.dataset.cat; activeTags.clear(); render(); buildSide(); });
+      side.querySelectorAll('[data-view]').forEach(r=> r.onclick = ()=>{ view = r.dataset.view; cat='all'; mediaType='all'; activeTags.clear(); render(); buildSide(); });
+      const nc = document.getElementById('newcol'); if(nc) nc.onclick = ()=>{ const name=prompt('New collection name:'); if(name){ const id=slugify(name); if(!EDITS.newCollections.includes(id)&&!catList.includes(id)) EDITS.newCollections.push(id); EDITS.collections[id]=Object.assign(EDITS.collections[id]||{},{label:name}); saveEdits(); recount(); buildSide(); } };
+      side.querySelectorAll('[data-coledit]').forEach(b=> b.onclick = (e)=>{ e.stopPropagation(); colEditMenu(b.dataset.coledit); });
+    }
+
+    // top tags for current scope
+    function topTags(pool){
+      const freq = {};
+      pool.forEach(a=> a.tags.forEach(t=>{ if(t!==a.cat) freq[t]=(freq[t]||0)+1; }));
+      return Object.entries(freq).filter(([t,n])=> n>=2 && t.length>2).sort((a,b)=> b[1]-a[1]).slice(0,22).map(([t])=>t);
+    }
+
+    function scope(){
+      let pool = A.filter(a=> editMode || !a._hidden);
+      if (view==='saved') pool = pool.filter(a=> saved.has(keyOf(a)));
+      if (mediaType!=='all') pool = pool.filter(a=> a.type===mediaType);
+      if (cat!=='all') pool = pool.filter(a=>a.cat===cat);
+      if (query){ const q=query.toLowerCase(); pool = pool.filter(a=> a.name.toLowerCase().includes(q) || a.tags.some(t=>t.includes(q))); }
+      if (activeTags.size) pool = pool.filter(a=> [...activeTags].every(t=> a.tags.includes(t)));
+      return pool;
+    }
+
+    const PAL = { blue:'#2a55b8', cobalt:'#1b3fc4', indigo:'#3a3a8c', navy:'#16205e', teal:'#1c7a73', emerald:'#1f8a5b', green:'#2f8f5e', gold:'#c9a063', golden:'#c9a063', amber:'#d9962f', red:'#c02a23', crimson:'#9c1f2e', pink:'#d06aa0', rose:'#c46b8a', purple:'#6a3d9c', violet:'#5b4a9c', orange:'#e0792f', silver:'#b8c0cc', white:'#e8e4d8', black:'#1a1a22', ultramarine:'#1e2278', sage:'#9fb0a0' };
+
+    function render(){
+      const pool = scope();
+      document.getElementById('title').textContent = view==='saved' ? 'Saved' : cat!=='all' ? catLabel(cat) : (mediaType==='all' ? 'All Assets' : MLABEL[mediaType]);
+      document.getElementById('count').textContent = pool.length + (pool.length===1?' item':' items');
+
+      // (tag rail removed)
+
+      const grid = document.getElementById('grid'), empty = document.getElementById('empty');
+      empty.style.display = pool.length ? 'none' : 'block';
+      grid.innerHTML = pool.map(a=>{
+        const k = keyOf(a);
+        let media;
+        if (a.type==='video') media = `<video src="${srcOf(a)}" muted loop playsinline preload="metadata"></video><div class="badge">▶ Video</div>`;
+        else if (a.type==='audio') media = `<div class="audiocard"><div class="wave">${'<i></i>'.repeat(13)}</div><div class="aname">${a.name}</div></div><div class="badge">♪ Audio</div>`;
+        else media = `<img src="${srcOf(a)}" alt="${a.name}" loading="lazy" />`;
+        return `<div class="ass ${sel.has(a.id)?'sel':''} ${a._hidden?'hidden-asset':''}" data-id="${a.id}" ${editMode?'draggable="true"':''}>
+          ${media}
+          <div class="draghandle" title="Drag to reorder">⠿</div>
+          <div class="chk" data-chk="${a.id}">✓</div>
+          <div class="actbar">
+            <button class="act save ${saved.has(k)?'on':''}" data-save="${a.id}" title="Save to collection"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          </div>
+          <div class="editbar">
+            <button data-edit="${a.id}" title="Edit">✎</button>
+            <button data-hide="${a.id}" title="${a._hidden?'Unhide':'Hide'}">${a._hidden?'🙈':'👁'}</button>
+          </div>
+          <div class="ov"><div class="nm">${a.name}</div><div class="ct">${a.catLabel}</div></div>
+        </div>`;
+      }).join('');
+      grid.querySelectorAll('.ass').forEach(n=>{
+        n.addEventListener('click', e=>{ if(e.target.closest('[data-chk]')||e.target.closest('.actbar')||e.target.closest('.editbar')||e.target.closest('.draghandle')) return; openLB(+n.dataset.id); });
+        const v = n.querySelector('video');
+        if (v){ n.addEventListener('mouseenter', ()=>{ v.play().catch(()=>{}); }); n.addEventListener('mouseleave', ()=>{ v.pause(); }); }
+      });
+      grid.querySelectorAll('[data-chk]').forEach(c=> c.addEventListener('click', e=>{ e.stopPropagation(); toggleSel(+c.dataset.chk); }));
+      grid.querySelectorAll('[data-save]').forEach(b=> b.addEventListener('click', e=>{ e.stopPropagation(); toggleMark('save', +b.dataset.save, b); }));
+      grid.querySelectorAll('[data-edit]').forEach(b=> b.addEventListener('click', e=>{ e.stopPropagation(); openLB(+b.dataset.edit); }));
+      grid.querySelectorAll('[data-hide]').forEach(b=> b.addEventListener('click', e=>{ e.stopPropagation(); toggleHide(+b.dataset.hide); }));
+      if (editMode) wireDrag(grid);
+    }
+
+    function toggleMark(kind, id, btn){
+      const set = kind==='like' ? liked : saved;
+      const k = keyOf(A[id]);
+      if (set.has(k)) set.delete(k); else set.add(k);
+      btn.classList.toggle('on', set.has(k));
+      persist();
+      buildSide();
+      if (view==='saved' || view==='liked') render();
+    }
+
+    function toggleSel(id){ sel.has(id)?sel.delete(id):sel.add(id);
+      const n = document.querySelector(`.ass[data-id="${id}"]`); if(n) n.classList.toggle('sel', sel.has(id));
+      const si = document.getElementById('selinfo'); si.classList.toggle('on', sel.size>0); document.getElementById('selN').textContent = sel.size + ' selected';
+    }
+    document.getElementById('selclear').onclick = ()=>{ sel.clear(); render(); document.getElementById('selinfo').classList.remove('on'); };
+    document.getElementById('selcol').onclick = ()=>{ if(!sel.size) return; const name=prompt('Move '+sel.size+' selected into collection (name):'); if(!name) return; const id=slugify(name); if(!EDITS.newCollections.includes(id)&&!catList.includes(id)) EDITS.newCollections.push(id); EDITS.collections[id]=Object.assign(EDITS.collections[id]||{},{label:name}); A.forEach(a=>{ if(sel.has(a.id)){ const k=keyOf(a); EDITS.meta[k]=EDITS.meta[k]||{}; EDITS.meta[k].cat=id; } }); sel.clear(); document.getElementById('selinfo').classList.remove('on'); saveEdits(); rebuildFromEdits(); flash('Moved to '+name); };
+
+    // lightbox
+    const lb = document.getElementById('lb');
+    function openLB(id){ const a = A[id]; if(!a) return;
+      let media;
+      if (a.type==='video') media = `<video src="${srcOf(a)}" controls autoplay loop muted playsinline></video>`;
+      else if (a.type==='audio') media = `<div class="audiobig"><audio src="${srcOf(a)}" controls autoplay></audio></div>`;
+      else media = `<img src="${srcOf(a)}" alt="${a.name}" />`;
+      const k = keyOf(a);
+      let metaHTML;
+      if (editMode){
+        const opts = catList.map(c=> `<option value="${c}" ${c===a.cat?'selected':''}>${catLabel(c)}</option>`).join('');
+        metaHTML = `<div class="ed">
+          <div class="mc">Editing \u00b7 ${a.type}</div>
+          <div><label>Name</label><input type="text" id="ed-name" value="${(a.name||'').replace(/"/g,'&quot;')}"></div>
+          <div><label>Collection</label><select id="ed-cat">${opts}<option value="__new">+ New collection\u2026</option></select></div>
+          <div><label>Tags</label><div class="tagedit" id="ed-tags"></div>
+            <input type="text" id="ed-tagadd" placeholder="add a tag, press Enter" style="margin-top:8px"></div>
+          <div class="edbtns">
+            ${a.type==='image' ? `<button id="ed-erase">\u270e Magic Eraser</button><button id="ed-bg">\u2702 Remove BG</button>` : ''}
+            <button id="ed-cover">\u2605 Set as cover</button>
+            <button id="ed-hide">${a._hidden?'Unhide':'Hide'}</button>
+            <button id="ed-del" class="danger">Delete</button>
+          </div>
+          <button id="ed-save" style="width:100%;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:0.18em;font-size:11px;padding:13px 0;border-radius:999px;border:none;background:var(--grad-gold);color:#2a1410;cursor:pointer">Save changes</button>
+        </div>`;
+      } else {
+        metaHTML = `<div class="mc">${a.catLabel} \u00b7 ${a.type}</div>
+          <h3>${a.name}</h3>
+          <div class="path">${a.raw||a.blob ? a.src.split('/').pop() : a.src}</div>
+          <div class="lbacts"><button class="lbact save ${saved.has(k)?'on':''}" id="lbsave" title="${saved.has(k)?'Saved':'Save'}"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+          <div class="lbl">Tags</div><div class="tgs">${a.tags.map(t=>`<span>${t}</span>`).join('')}</div>
+          ${a.colors&&a.colors.length?`<div class="lbl">Palette</div><div class="tgs">${a.colors.map(c=>`<span>${c}</span>`).join('')}</div>`:''}`;
+      }
+      document.getElementById('lbcard').innerHTML = `${media}<div class="meta">${metaHTML}</div>`;
+      if (editMode){ wireEditor(a); }
+      else {
+        const sync = ()=>{ const on=saved.has(k); const b=document.getElementById('lbsave'); b.classList.toggle('on',on); b.title=on?'Saved':'Save'; };
+        document.getElementById('lbsave').onclick = ()=>{ if(saved.has(k))saved.delete(k); else saved.add(k); persist(); sync(); buildSide(); render(); };
+      }
+      lb.classList.add('on');
+    }
+    document.getElementById('lbx').onclick = ()=> lb.classList.remove('on');
+    lb.addEventListener('click', e=>{ if(e.target===lb) lb.classList.remove('on'); });
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') lb.classList.remove('on'); });
+
+    // search
+    document.getElementById('q').addEventListener('input', e=>{ query = e.target.value; render(); });
+
+    // ===== upload + drag-and-drop =====
+    const fileInput = Object.assign(document.createElement('input'), { type:'file', accept:'image/*,audio/*,video/*', multiple:true, style:'display:none' });
+    document.body.appendChild(fileInput);
+    fileInput.addEventListener('change', e=> addFiles(e.target.files));
+    document.getElementById('upload').onclick = ()=> fileInput.click();
+
+    const dropmask = Object.assign(document.createElement('div'), { className:'dropmask' });
+    dropmask.innerHTML = `<div class="ring"><div class="big">drop to add</div><div class="sm">Images · Audio · Video</div></div>`;
+    document.body.appendChild(dropmask);
+
+    function addFiles(files){
+      let added = 0;
+      [...files].forEach(f=>{
+        const type = f.type.startsWith('image') ? 'image' : f.type.startsWith('audio') ? 'audio' : f.type.startsWith('video') ? 'video' : null;
+        if (!type) return;
+        const url = URL.createObjectURL(f);
+        const base = f.name.replace(/\.[a-z0-9]+$/i,'');
+        const name = base.split(/[-_ ]+/).map(w=> w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+        A.push({ id: A.length, type, raw:true, blob:true, src:url, name, cat:'uploads', catLabel:'Uploads', tags:['uploads', type, ...base.toLowerCase().split(/[-_ ]+/)], colors:[] });
+        added++;
+      });
+      if (added){ recount(); cat='uploads'; mediaType='all'; activeTags.clear(); buildSide(); render();
+        document.querySelector('.main').scrollTop = 0; }
+    }
+
+    let dragDepth = 0;
+    window.addEventListener('dragenter', e=>{ if(e.dataTransfer && [...e.dataTransfer.types].includes('Files')){ e.preventDefault(); dragDepth++; dropmask.classList.add('on'); } });
+    window.addEventListener('dragover', e=>{ if(dropmask.classList.contains('on')) e.preventDefault(); });
+    window.addEventListener('dragleave', e=>{ if(--dragDepth<=0){ dragDepth=0; dropmask.classList.remove('on'); } });
+    window.addEventListener('drop', e=>{ e.preventDefault(); dragDepth=0; dropmask.classList.remove('on'); if(e.dataTransfer.files.length) addFiles(e.dataTransfer.files); });
+
+    document.getElementById('autotag').onclick = ()=> alert('AI Auto-Tag — your '+A.length+' assets are already tagged by collection, motif and palette. (Re-tag would run your vision model on new uploads.)');
+
+    // sidebar show/hide — closed by default, opens on click
+    document.getElementById('sidetoggle').onclick = ()=>{ document.querySelector('.body').classList.toggle('open'); };
+    // auto-close the sidebar once the grid is scrolled
+    document.querySelector('.main').addEventListener('scroll', ()=>{
+      if (document.querySelector('.main').scrollTop > 40) document.querySelector('.body').classList.remove('open');
+    }, { passive: true });
+
+    // ===== edit helpers =====
+    function slugify(s){ return s.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
+    function flash(msg){ const d=document.createElement('div'); d.className='editbadge'; d.textContent=msg; document.body.appendChild(d); setTimeout(()=>d.remove(),1600); }
+    function rebuildFromEdits(){ applyEdits(); recount(); buildSide(); render(); }
+    function toggleHide(id){ const a=A[id]; const k=keyOf(a); const m=EDITS.meta[k]=EDITS.meta[k]||{}; m.hidden=!m.hidden; saveEdits(); rebuildFromEdits(); }
+
+    let dragId = null;
+    function wireDrag(grid){
+      grid.querySelectorAll('.ass').forEach(n=>{
+        n.addEventListener('dragstart', e=>{ dragId=+n.dataset.id; n.classList.add('dragging'); e.dataTransfer.effectAllowed='move'; });
+        n.addEventListener('dragend', ()=>{ n.classList.remove('dragging'); grid.querySelectorAll('.dragover').forEach(x=>x.classList.remove('dragover')); });
+        n.addEventListener('dragover', e=>{ e.preventDefault(); n.classList.add('dragover'); });
+        n.addEventListener('dragleave', ()=> n.classList.remove('dragover'));
+        n.addEventListener('drop', e=>{ e.preventDefault(); n.classList.remove('dragover'); reorderAsset(dragId, +n.dataset.id); });
+      });
+    }
+    function reorderAsset(fromId, toId){
+      if (fromId==null || fromId===toId) return;
+      const fi = A.findIndex(a=>a.id===fromId); if(fi<0) return;
+      const [moved] = A.splice(fi,1);
+      const ti = A.findIndex(a=>a.id===toId);
+      A.splice(ti<0?A.length:ti, 0, moved);
+      EDITS.order = A.map(keyOf); saveEdits(); render();
+    }
+
+    function wireEditor(a){
+      const k = keyOf(a);
+      let workingTags = (a.tags||[]).slice();
+      const m = ()=> (EDITS.meta[k] = EDITS.meta[k] || {});
+      function paintTags(){
+        document.getElementById('ed-tags').innerHTML = workingTags.length ? workingTags.map((t,i)=> `<span class="te">${t}<b data-i="${i}">\u2715</b></span>`).join('') : '<span style="color:rgba(243,236,221,0.4);font-family:var(--font-mono);font-size:9px">no tags</span>';
+        document.querySelectorAll('#ed-tags .te b').forEach(b=> b.onclick=()=>{ workingTags.splice(+b.dataset.i,1); paintTags(); });
+      }
+      paintTags();
+      const addInput = document.getElementById('ed-tagadd');
+      addInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); const v=addInput.value.trim().toLowerCase(); if(v && !workingTags.includes(v)){ workingTags.push(v); paintTags(); } addInput.value=''; } });
+      document.getElementById('ed-cat').addEventListener('change', e=>{ if(e.target.value==='__new'){ const name=prompt('New collection name:'); if(name){ const id=slugify(name); if(!EDITS.newCollections.includes(id)&&!catList.includes(id)) EDITS.newCollections.push(id); EDITS.collections[id]=Object.assign(EDITS.collections[id]||{},{label:name}); saveEdits(); recount(); e.target.innerHTML = catList.map(c=>`<option value="${c}" ${c===id?'selected':''}>${catLabel(c)}</option>`).join('')+'<option value="__new">+ New collection\u2026</option>'; } else { e.target.value=a.cat; } } });
+      document.getElementById('ed-save').onclick = ()=>{
+        const mm=m(); const nm=document.getElementById('ed-name').value.trim(); if(nm) mm.name=nm;
+        mm.tags = workingTags.slice();
+        const nc = document.getElementById('ed-cat').value; if(nc && nc!=='__new') mm.cat=nc;
+        saveEdits(); rebuildFromEdits(); lb.classList.remove('on');
+      };
+      document.getElementById('ed-cover').onclick = ()=>{ EDITS.collections[a.cat]=Object.assign(EDITS.collections[a.cat]||{},{cover:k}); saveEdits(); buildSide(); flash('Cover set \u2014 '+catLabel(a.cat)); };
+      document.getElementById('ed-hide').onclick = ()=>{ m().hidden=!m().hidden; saveEdits(); rebuildFromEdits(); lb.classList.remove('on'); };
+      document.getElementById('ed-del').onclick = ()=>{ if(confirm('Delete \u201c'+a.name+'\u201d from view? (Reset restores everything.)')){ m().hidden=true; saveEdits(); rebuildFromEdits(); lb.classList.remove('on'); } };
+      const eb=document.getElementById('ed-erase'); if(eb) eb.onclick=()=> openImgEditor(a,'erase');
+      const bb=document.getElementById('ed-bg'); if(bb) bb.onclick=()=> openImgEditor(a,'bg');
+    }
+
+    function colEditMenu(c){
+      const choice = prompt('Collection \u201c'+catLabel(c)+'\u201d \u2014 type R to rename, D to delete (items move to Unsorted):','R');
+      if(choice==null) return; const ch=choice.trim().toUpperCase();
+      if(ch==='R'){ const name=prompt('New name:', catLabel(c)); if(name){ EDITS.collections[c]=Object.assign(EDITS.collections[c]||{},{label:name}); saveEdits(); rebuildFromEdits(); } }
+      else if(ch==='D'){ if(confirm('Delete \u201c'+catLabel(c)+'\u201d? Its items move to Unsorted.')){ A.forEach(a=>{ if(a.cat===c){ const k=keyOf(a); EDITS.meta[k]=EDITS.meta[k]||{}; EDITS.meta[k].cat='unsorted'; } }); EDITS.collections[c]=Object.assign(EDITS.collections[c]||{},{deleted:true}); if(!EDITS.newCollections.includes('unsorted')) EDITS.newCollections.push('unsorted'); EDITS.collections['unsorted']=EDITS.collections['unsorted']||{label:'Unsorted'}; if(cat===c) cat='all'; saveEdits(); rebuildFromEdits(); } }
+    }
+
+    // ===== magic eraser / background remover =====
+    function openImgEditor(a, mode){
+      let modal = document.getElementById('imged');
+      if(!modal){ modal=document.createElement('div'); modal.className='imged'; modal.id='imged'; document.body.appendChild(modal); }
+      const img = new Image();
+      img.onload = ()=>{
+        const maxW=1200; let w=img.naturalWidth, h=img.naturalHeight; if(w>maxW){ h=Math.round(h*maxW/w); w=maxW; }
+        modal.innerHTML = `<div class="wrap">
+          <div class="tools">
+            <span class="seg ${mode==='erase'?'on':''}" data-tool="erase">\u270e Eraser</span>
+            <span class="seg ${mode==='bg'?'on':''}" data-tool="bg">\u2702 Remove BG</span>
+            <span class="range">Brush <input type="range" id="ie-size" min="6" max="90" value="34"></span>
+            <span class="range" id="ie-tolwrap" style="display:${mode==='bg'?'flex':'none'}">Tolerance <input type="range" id="ie-tol" min="10" max="140" value="52"></span>
+            <button id="ie-undo">\u21b6 Undo</button>
+            <button id="ie-reset2">Reset</button>
+            <button id="ie-cancel">Cancel</button>
+            <button id="ie-apply" class="gold">\u2713 Apply</button>
+          </div>
+          <div class="canvaswrap"><canvas id="ie-canvas" width="${w}" height="${h}"></canvas></div>
+          <div class="hint" id="ie-hint"></div>
+        </div>`;
+        modal.classList.add('on');
+        const cv=document.getElementById('ie-canvas'), ctx=cv.getContext('2d', { willReadFrequently:true });
+        ctx.drawImage(img,0,0,w,h);
+        let tool=mode, brush=34, tol=52, painting=false;
+        const history=[]; const snap=()=>{ try{ history.push(ctx.getImageData(0,0,w,h)); if(history.length>10) history.shift(); }catch(e){ flash('This image can\u2019t be edited (cross-origin).'); } }; snap();
+        const hint=document.getElementById('ie-hint');
+        const setHint=()=> hint.textContent = tool==='erase' ? 'Drag across the image to rub areas away.' : 'Click the background colour — every matching area lifts. Raise Tolerance for more.';
+        setHint();
+        modal.querySelectorAll('[data-tool]').forEach(s=> s.onclick=()=>{ tool=s.dataset.tool; modal.querySelectorAll('[data-tool]').forEach(x=>x.classList.toggle('on',x===s)); document.getElementById('ie-tolwrap').style.display=tool==='bg'?'flex':'none'; setHint(); });
+        document.getElementById('ie-size').oninput=e=> brush=+e.target.value;
+        document.getElementById('ie-tol').oninput=e=> tol=+e.target.value;
+        const pos=e=>{ const r=cv.getBoundingClientRect(); return { x:(e.clientX-r.left)*w/r.width, y:(e.clientY-r.top)*h/r.height }; };
+        const eraseAt=p=>{ ctx.save(); ctx.globalCompositeOperation='destination-out'; ctx.beginPath(); ctx.arc(p.x,p.y,brush/2,0,7); ctx.fill(); ctx.restore(); };
+        cv.addEventListener('pointerdown', e=>{ e.preventDefault(); if(tool==='erase'){ snap(); painting=true; eraseAt(pos(e)); } else { snap(); flood(pos(e)); } });
+        cv.addEventListener('pointermove', e=>{ if(painting&&tool==='erase') eraseAt(pos(e)); });
+        window.addEventListener('pointerup', ()=> painting=false);
+        function flood(p){
+          let id; try{ id=ctx.getImageData(0,0,w,h); }catch(e){ flash('Image can\u2019t be edited (cross-origin).'); return; }
+          const d=id.data, sx=Math.round(p.x), sy=Math.round(p.y); const si=(sy*w+sx)*4;
+          const tr=d[si],tg=d[si+1],tb=d[si+2]; const t2=tol*tol*3;
+          // lift EVERY pixel near the clicked colour (one-click background knockout)
+          for(let o=0;o<d.length;o+=4){ if(d[o+3]===0) continue; const dr=d[o]-tr,dg=d[o+1]-tg,db=d[o+2]-tb; if(dr*dr+dg*dg+db*db<=t2) d[o+3]=0; }
+          ctx.putImageData(id,0,0);
+        }
+        document.getElementById('ie-undo').onclick=()=>{ if(history.length>1){ history.pop(); ctx.putImageData(history[history.length-1],0,0); } };
+        document.getElementById('ie-reset2').onclick=()=>{ ctx.clearRect(0,0,w,h); ctx.drawImage(img,0,0,w,h); history.length=0; snap(); };
+        document.getElementById('ie-cancel').onclick=()=> modal.classList.remove('on');
+        document.getElementById('ie-apply').onclick=()=>{ let url; try{ url=cv.toDataURL('image/png'); }catch(e){ flash('Could not export edit.'); return; } EDITS.meta[keyOf(a)]=EDITS.meta[keyOf(a)]||{}; EDITS.meta[keyOf(a)].editedSrc=url; saveEdits(); modal.classList.remove('on'); rebuildFromEdits(); openLB(a.id); flash('Image updated'); };
+      };
+      img.onerror=()=> flash('Could not load this image for editing.');
+      img.src = srcOf(a);
+    }
+
+    // ===== edit / export / reset =====
+    (function(){
+      const editbtn=document.getElementById('editbtn'), exportbtn=document.getElementById('exportbtn'), resetbtn=document.getElementById('resetbtn');
+      editbtn.onclick = ()=>{ editMode=!editMode; document.body.classList.toggle('editing', editMode); editbtn.classList.toggle('gold', editMode); editbtn.textContent = editMode?'\u2713 Done':'\u270e Edit';
+        exportbtn.style.display=editMode?'':'none'; resetbtn.style.display=editMode?'':'none';
+        let b=document.querySelector('.editbadge.persist');
+        if(editMode){ if(!b){ b=document.createElement('div'); b.className='editbadge persist'; b.textContent='Edit mode \u2014 drag to reorder \u00b7 \u270e to edit'; document.body.appendChild(b); } }
+        else if(b) b.remove();
+        recount(); buildSide(); render();
+      };
+      exportbtn.onclick = ()=>{ const blob=new Blob([JSON.stringify(EDITS,null,2)],{type:'application/json'}); const u=URL.createObjectURL(blob); const link=document.createElement('a'); link.href=u; link.download='mecmua-collection.json'; link.click(); setTimeout(()=>URL.revokeObjectURL(u),1000); flash('Arrangement exported'); };
+      resetbtn.onclick = ()=>{ if(confirm('Reset everything \u2014 names, tags, collections, order & image edits \u2014 back to the original?')){ try{ localStorage.removeItem(LS.edits); }catch(e){} location.reload(); } };
+    })();
+
+    buildSide(); render();
+  </script>
+</body>
+</html>

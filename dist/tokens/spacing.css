@@ -1,0 +1,40 @@
+/* ===========================================================================
+   deryadilara · Spacing & layout
+   ---------------------------------------------------------------------------
+   4px base rhythm. Generous editorial whitespace is part of the brand — the
+   page should breathe like the margin of a printed book.
+   ========================================================================== */
+
+:root {
+  --space-0:  0;
+  --space-1:  0.25rem;  /* 4  */
+  --space-2:  0.5rem;   /* 8  */
+  --space-3:  0.75rem;  /* 12 */
+  --space-4:  1rem;     /* 16 */
+  --space-5:  1.5rem;   /* 24 */
+  --space-6:  2rem;     /* 32 */
+  --space-7:  3rem;     /* 48 */
+  --space-8:  4rem;     /* 64 */
+  --space-9:  6rem;     /* 96 */
+  --space-10: 8rem;     /* 128 */
+
+  /* ---- Containers ------------------------------------------------------- */
+  --measure-prose: 64ch;    /* comfortable reading column */
+  --container-narrow: 720px;
+  --container-page:   1040px;
+  --container-wide:   1320px;
+  --gutter: 2rem;
+
+  /* ---- Radii ------------------------------------------------------------
+     The signature shape is the soft "squircle" tile of the magazine grid and
+     the rounded monogram. Keep radii generous; corners are never sharp on
+     image tiles or cards. */
+  --radius-xs:  4px;
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  22px;
+  --radius-xl:  32px;    /* image tiles */
+  --radius-pill: 999px;
+  /* superellipse-ish ratio for large tiles (border-radius shorthand) */
+  --radius-tile: 7% / 11%;
+}

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mecmûa — The Atelier</title>
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../shared/midnight.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { color: #f2e9dd; font-family: var(--font-text);
+    background: radial-gradient(120% 80% at 50% 0%, #1c2658 0%, #121a42 42%, #0a0e2c 74%, #070a20 100%) no-repeat; background-attachment: fixed; }
+  a { color: inherit; text-decoration: none; }
+
+  header { position: sticky; top: 0; z-index: 50; padding: 0 40px; height: 70px; display: flex; align-items: center; gap: 22px; }
+  .wm { font-family: var(--font-display); text-transform: lowercase; letter-spacing: 0.04em; font-size: 28px; line-height: 1;
+    background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .crumb { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.22em; font-size: 11px; color: rgba(243,236,221,0.5); }
+  .spacer { flex: 1; }
+  .nav { display: flex; gap: 4px; flex-wrap: wrap; }
+  .nav a { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em; font-size: 10px; color: rgba(243,236,221,0.66);
+    padding: 8px 12px; border-radius: 999px; transition: color var(--dur-fast) var(--ease-quiet); white-space: nowrap; }
+  .nav a:hover, .nav a.here { color: #e6c785; }
+  .bag { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(243,236,221,0.8); border: 1px solid rgba(214,178,112,0.35); border-radius: 999px; padding: 9px 16px; cursor: pointer; transition: all var(--dur-fast); white-space: nowrap; }
+  .bag:hover { border-color: var(--gold-line); color: #e6c785; }
+  .bag .dot { background: var(--grad-gold); color: #2a1410; border-radius: 999px; min-width: 17px; height: 17px; display: grid; place-items: center; font-size: 9px; }
+
+  .hero { max-width: 1320px; margin: 0 auto; padding: 60px 40px 26px; text-align: center; }
+  .hero .eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.34em; text-transform: uppercase; color: rgba(214,178,112,0.8);
+    display: flex; align-items: center; justify-content: center; gap: 14px; }
+  .hero .eyebrow .r { width: 40px; height: 1px; background: rgba(214,178,112,0.4); }
+  .hero h1 { font-family: var(--font-display), var(--font-serif); text-transform: lowercase; font-weight: 400; letter-spacing: 0.01em;
+    font-size: clamp(46px, 8vw, 92px); line-height: 0.96; margin: 18px 0 0;
+    background: linear-gradient(180deg, #e8d09a 0%, #d2a851 52%, #b98b3d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { font-family: var(--font-serif); font-style: italic; font-size: clamp(16px, 2vw, 21px); color: rgba(242,233,221,0.72); margin: 16px auto 0; max-width: 54ch; }
+  .hero .ship { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(214,178,112,0.7); margin-top: 18px; }
+
+  .filters { max-width: 1320px; margin: 32px auto 0; padding: 0 40px; display: flex; gap: 9px; align-items: center; flex-wrap: wrap; justify-content: center;
+    border-bottom: 1px solid rgba(214,178,112,0.2); padding-bottom: 22px; }
+  .chip { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.15em; font-size: 10px; padding: 9px 15px; border-radius: 999px;
+    border: 1px solid rgba(214,178,112,0.28); background: transparent; color: rgba(243,236,221,0.7); cursor: pointer; transition: all var(--dur-fast) var(--ease-quiet); }
+  .chip:hover { border-color: var(--gold-line); color: #e6c785; }
+  .chip.on { background: rgba(214,178,112,0.14); border-color: var(--gold-line); color: #e6c785; }
+
+  main { max-width: 1320px; margin: 0 auto; padding: 34px 40px 120px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px 26px; }
+  @media (max-width: 1080px){ .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 760px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 460px){ .grid { grid-template-columns: 1fr; } }
+
+  .prod { cursor: pointer; }
+  .prod .ph { position: relative; aspect-ratio: 3/4; border-radius: 12px; overflow: hidden; border: 1px solid rgba(214,178,112,0.22);
+    background: #0c1132; box-shadow: 0 14px 36px rgba(0,0,0,0.4); }
+  .prod .ph img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--dur-slow) var(--ease-quiet); }
+  .prod:hover .ph img { transform: scale(1.05); }
+  .prod .ph .tag { position: absolute; top: 12px; left: 12px; font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: rgba(10,13,42,0.72); color: #e6c785; padding: 5px 10px; border-radius: 999px; backdrop-filter: blur(4px); }
+  .prod .ph .dl { position: absolute; top: 12px; right: 12px; font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
+    background: rgba(10,13,42,0.55); color: rgba(243,236,221,0.82); padding: 5px 9px; border-radius: 999px; backdrop-filter: blur(4px); }
+  .prod .ph .add { position: absolute; bottom: 12px; left: 12px; right: 12px; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    background: rgba(10,13,42,0.78); color: #e6c785; border: 1px solid rgba(214,178,112,0.45); border-radius: 999px; padding: 11px 0; text-align: center;
+    opacity: 0; transform: translateY(8px); transition: all var(--dur-base) var(--ease-quiet); backdrop-filter: blur(6px); }
+  .prod:hover .ph .add { opacity: 1; transform: translateY(0); }
+  .prod .info { padding: 14px 2px 0; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+  .prod .nm { font-family: var(--font-serif); font-size: 18px; line-height: 1.14; letter-spacing: -0.01em; color: #f4ecdd; }
+  .prod .kd { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(243,236,221,0.46); margin-top: 5px; }
+  .prod .pr { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; color: #e6c785; white-space: nowrap; }
+
+  .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: min(480px, 94vw); z-index: 80; background: #0c1132;
+    border-left: 1px solid rgba(214,178,112,0.3); box-shadow: -20px 0 60px rgba(0,0,0,0.5); transform: translateX(100%);
+    transition: transform var(--dur-base) var(--ease-quiet); overflow: auto; }
+  .drawer.on { transform: translateX(0); }
+  .drawer .dimg { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+  .drawer .x { position: absolute; top: 16px; right: 16px; background: rgba(10,13,42,0.6); color: #fff; border: 1px solid rgba(214,178,112,0.3);
+    width: 36px; height: 36px; border-radius: 999px; cursor: pointer; font-size: 15px; }
+  .drawer .db { padding: 26px 30px 40px; }
+  .drawer .dk { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(214,178,112,0.8); }
+  .drawer h2 { font-family: var(--font-serif); font-weight: 500; font-size: 30px; line-height: 1.06; letter-spacing: -0.015em; margin: 8px 0 6px; color: #f4ecdd; }
+  .drawer .dprice { font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.06em; color: #e6c785; }
+  .drawer .ddesc { font-family: var(--font-text); font-size: 15px; line-height: 1.65; color: rgba(243,236,221,0.72); margin: 20px 0 0; }
+  .drawer .specs { margin: 20px 0 0; display: grid; gap: 9px; }
+  .drawer .specs div { display: flex; justify-content: space-between; gap: 14px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid rgba(214,178,112,0.16); padding-bottom: 8px; }
+  .drawer .specs .sk { color: rgba(243,236,221,0.5); } .drawer .specs .sv { color: rgba(243,236,221,0.84); }
+  .drawer .dnote { font-family: var(--font-serif); font-style: italic; font-size: 15px; color: rgba(243,236,221,0.6); margin: 18px 0 0; padding-left: 14px; border-left: 1px solid rgba(214,178,112,0.4); }
+  .drawer .dadd { margin-top: 24px; width: 100%; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.2em; font-size: 11px;
+    padding: 15px 0; border-radius: 999px; border: none; background: var(--grad-gold); color: #2a1410; cursor: pointer; transition: filter var(--dur-fast); }
+  .drawer .dadd:hover { filter: brightness(1.06); }
+
+  .scrim { position: fixed; inset: 0; z-index: 79; background: rgba(6,8,24,0.55); opacity: 0; pointer-events: none; transition: opacity var(--dur-base); }
+  .scrim.on { opacity: 1; pointer-events: auto; }
+
+  footer { max-width: 1320px; margin: 0 auto; padding: 30px 40px 70px; display: grid; grid-template-columns: repeat(3,1fr);
+    border-top: 1px solid rgba(214,178,112,0.2); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.24em; font-size: 10px; color: rgba(243,236,221,0.5); }
+  footer span:nth-child(2){ text-align: center; } footer span:nth-child(3){ text-align: right; }
+</style>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
+<script defer src="../shared/dark-toggle.js"></script>
+</head>
+<body>
+  <header>
+    <a class="wm" href="../index.html">mecmûa</a>
+    <span class="crumb">/ The Atelier</span>
+    <div class="spacer"></div>
+    <nav class="nav">
+      <a href="../index.html">Home</a>
+      <a href="../library/index.html">Library</a>
+      <a href="../museum/index.html">Museum</a>
+      <a href="../wheel/index.html">Oracle</a>
+      <a href="../chart/index.html">Chart</a>
+      <a href="../boutique/index.html">Boutique</a>
+      <a class="here" href="./index.html">Atelier</a>
+      <a href="./tshirts.html">Tees</a>
+    </nav>
+    <button class="bag" id="bag">Bag <span class="dot" id="bagN">0</span></button>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow"><span class="r"></span>Digital Downloads<span class="r"></span></div>
+    <h1>the atelier</h1>
+    <p>Printable scrolls, oracle sheets, art prints and dated tools — made in the mecmûa register of midnight and gold, delivered the moment you order.</p>
+    <div class="ship">Instant download · Print at home or at a studio · Personal use</div>
+  </section>
+
+  <div class="filters" id="filters"></div>
+
+  <main><div class="grid" id="grid"></div></main>
+
+  <div class="scrim" id="scrim"></div>
+  <aside class="drawer" id="drawer"></aside>
+
+  <footer><span>Download once</span><span>Print &amp; keep</span><span>Return to it often</span></footer>
+
+  <script>
+    const DIR = '../assets/imagery/';
+    const AM = 'astrology-mystic/';
+    const P = [
+      // ---- Oracle Scrolls ----
+      { f:AM+'sufi-stoic-divine-names-cover.jpeg', n:'The 99 Names Scroll', cat:'Scrolls', kind:'Printable · PDF', price:'£18', fmt:'PDF · A2 + A3', pages:'1 scroll', note:'al-Asmāʾ al-Ḥusná, set in gold.', desc:'A printable scroll of the ninety-nine Divine Names in Arabic with English meanings, arranged for the wall. Two sizes included.' },
+      { f:AM+'sun-moon-velvet-tarot.jpg', n:'Amor Fati Scroll', cat:'Scrolls', kind:'Printable · PDF', price:'£12', fmt:'PDF · A3', pages:'1 scroll', note:'Love what is. It was always yours.', desc:'A single-line affirmation scroll on an aged-parchment ground, framed in gold ornament. Print, trim and hang.' },
+      { f:AM+'tarot-star-card-back.jpg', n:'Memento Mori Scroll', cat:'Scrolls', kind:'Printable · PDF', price:'£12', fmt:'PDF · A3', pages:'1 scroll', note:'Remember you will die — and live.', desc:'A meditation on mortality drawn from Seneca and the Sufi remembrance of death. Gilded border, ready to print.' },
+      { f:AM+'occult-anatomy-chart.webp', n:'The Daily Examen Scroll', cat:'Scrolls', kind:'Printable · PDF', price:'£14', fmt:'PDF · A4', pages:'1 scroll', note:'Three questions for the evening.', desc:'A Stoic evening-review scroll — three prompts for the day’s account, in the house calligraphy. Keep by the bed.' },
+
+      // ---- Calendars 2027–2030 ----
+      { f:AM+'medieval-celestial-spheres-angels.jpg', n:'2027 Celestial Calendar', cat:'Calendars', kind:'Wall calendar · PDF', price:'£24', fmt:'PDF · A3, 13 pp', pages:'12 months + cover', note:'A year beneath the spheres.', desc:'A twelve-month wall calendar with moon phases, equinoxes and feast days, each month paired with a celestial plate. Print as a set.' },
+      { f:AM+'antique-astronomy-manuscript-suns.jpg', n:'2028 Celestial Calendar', cat:'Calendars', kind:'Wall calendar · PDF', price:'£24', fmt:'PDF · A3, 13 pp', pages:'12 months + cover', note:'The suns of the old manuscripts.', desc:'The 2028 edition — twelve months illustrated with antique astronomy, lunar phases and the turning of the seasons marked throughout.' },
+      { f:AM+'ornate-spiral-clouds-illumination.jpg', n:'2029 Celestial Calendar', cat:'Calendars', kind:'Wall calendar · PDF', price:'£24', fmt:'PDF · A3, 13 pp', pages:'12 months + cover', note:'Illuminated, month by month.', desc:'The 2029 edition, paired with illuminated cloud-and-spiral plates. Moon phases, solstices and quiet-day markings included.' },
+      { f:AM+'art-deco-gold-zodiac-relief.jpg', n:'2030 Celestial Calendar', cat:'Calendars', kind:'Wall calendar · PDF', price:'£24', fmt:'PDF · A3, 13 pp', pages:'12 months + cover', note:'Gold zodiac, a new decade.', desc:'The 2030 edition in art-deco gold relief. A full year of moon phases, zodiacal ingresses and the wheel of the year.' },
+
+      // ---- Planners ----
+      { f:AM+'solar-anatomy-zodiac-chart.webp', n:'2027 Astrological Planner', cat:'Planners', kind:'Dated planner · PDF', price:'£32', fmt:'PDF · A5, 220 pp', pages:'Dated 2027', note:'Plan by the sky.', desc:'A fully dated 2027 planner with monthly moon calendars, void-of-course tables, weekly spreads and intention pages. Print or use on a tablet.' },
+      { f:AM+'moon-illusion-tarot-card.webp', n:'The Moon Planner', cat:'Planners', kind:'Undated · PDF', price:'£26', fmt:'PDF · A5, 160 pp', pages:'Undated, 13 cycles', note:'A lunation at a time.', desc:'An undated planner structured around the thirteen lunations — new-moon intentions, full-moon release, daily check-ins. Reusable any year.' },
+      { f:AM+'sufi-stoic-sanctuary-cover.jpeg', n:'Sufi–Stoic Daily Planner', cat:'Planners', kind:'Undated · PDF', price:'£28', fmt:'PDF · A5, 200 pp', pages:'Undated, 1 year', note:'Morning intention, evening account.', desc:'A daily practice planner: a morning page (the day ahead, one virtue) and an evening examen, framed by a rotating teaching. Undated.' },
+      { f:AM+'auric-field-chakra-chart.jpg', n:'The Inner Work Journal', cat:'Planners', kind:'Journal · PDF', price:'£22', fmt:'PDF · A5, 140 pp', pages:'Guided journal', note:'Muraqaba & muhasaba.', desc:'A guided journal for contemplative practice — prompts drawn from Sufi watchfulness and Stoic self-examination. Print or digital.' },
+
+      // ---- Art Prints ----
+      { f:AM+'leo-goddess-lion-illustration.jpg', n:'Leo, the Goddess — Print', cat:'Prints', kind:'Art print · PDF', price:'£16', fmt:'PDF · A3 + A2', pages:'1 print', note:'The lion, crowned.', desc:'A giclée-ready art print of the Leo goddess plate. High-resolution file in two sizes for home printing or a studio.' },
+      { f:AM+'medieval-celestial-spheres-angels.jpg', n:'Celestial Spheres — Print', cat:'Prints', kind:'Art print · PDF', price:'£16', fmt:'PDF · A3 + A2', pages:'1 print', note:'The music of the spheres.', desc:'A printable plate of the medieval celestial spheres with their attendant angels. Two sizes, ready to frame.' },
+      { f:AM+'veiled-madonna-gold-icon.png', n:'Veiled Madonna — Icon Print', cat:'Prints', kind:'Art print · PDF', price:'£16', fmt:'PDF · A4 + A3', pages:'1 print', note:'Gold-ground devotion.', desc:'A gold-icon style print of the veiled Madonna. High-resolution, suitable for an altar, a shelf, or a frame.' },
+      { f:AM+'rune-meanings-reference-chart.jpg', n:'Elder Futhark — Reference Print', cat:'Prints', kind:'Art print · PDF', price:'£14', fmt:'PDF · A3', pages:'1 chart', note:'The runes, at a glance.', desc:'A printable reference chart of the twenty-four Elder Futhark runes with names and meanings, in the house style.' },
+    ];
+    P.forEach((p,i)=> p.id = 'MA-' + String(i+1).padStart(3,'0'));
+
+    const cats = ['All', ...[...new Set(P.map(p=>p.cat))]];
+    let cat='All', bag=0;
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+    const filters = document.getElementById('filters');
+    filters.innerHTML = cats.map(c=>`<button class="chip ${c==='All'?'on':''}" data-c="${c}">${c}</button>`).join('');
+    filters.querySelectorAll('.chip').forEach(b=> b.onclick=()=>{ cat=b.dataset.c; filters.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===b)); render(); });
+
+    const grid = document.getElementById('grid');
+    function render(){
+      const r = cat==='All' ? P : P.filter(p=>p.cat===cat);
+      grid.innerHTML = r.map(p=>`
+        <div class="prod" data-id="${p.id}">
+          <div class="ph">
+            <img src="${DIR}${p.f}" alt="${esc(p.n)}" loading="lazy" />
+            <span class="tag">${p.cat}</span>
+            <span class="dl">↓ ${p.fmt.split('·')[0].trim()}</span>
+            <div class="add" data-add="${p.id}">Add to bag · ${p.price}</div>
+          </div>
+          <div class="info">
+            <div><div class="nm">${esc(p.n)}</div><div class="kd">${esc(p.kind)}</div></div>
+            <div class="pr">${p.price}</div>
+          </div>
+        </div>`).join('');
+      grid.querySelectorAll('.prod').forEach(n=> n.addEventListener('click', ev=>{ if(ev.target.closest('[data-add]')) return; openQV(n.dataset.id); }));
+      grid.querySelectorAll('[data-add]').forEach(b=> b.addEventListener('click', ev=>{ ev.stopPropagation(); addBag(); }));
+    }
+    function addBag(){ bag++; document.getElementById('bagN').textContent = bag; }
+
+    const drawer=document.getElementById('drawer'), scrim=document.getElementById('scrim');
+    function openQV(id){
+      const p = P.find(x=>x.id===id); if(!p) return;
+      drawer.innerHTML = `
+        <button class="x" id="qx">✕</button>
+        <img class="dimg" src="${DIR}${p.f}" alt="${esc(p.n)}" />
+        <div class="db">
+          <div class="dk">${p.cat} · ${p.id}</div>
+          <h2>${esc(p.n)}</h2>
+          <div class="dprice">${p.price} · ${esc(p.kind)}</div>
+          <p class="ddesc">${esc(p.desc)}</p>
+          <div class="specs">
+            <div><span class="sk">Format</span><span class="sv">${esc(p.fmt)}</span></div>
+            <div><span class="sk">Contents</span><span class="sv">${esc(p.pages)}</span></div>
+            <div><span class="sk">Delivery</span><span class="sv">Instant download</span></div>
+            <div><span class="sk">Licence</span><span class="sv">Personal use</span></div>
+          </div>
+          <div class="dnote">${esc(p.note)}</div>
+          <button class="dadd" id="qadd">Add to bag · ${p.price}</button>
+        </div>`;
+      drawer.classList.add('on'); scrim.classList.add('on');
+      drawer.querySelector('#qx').onclick = closeQV;
+      drawer.querySelector('#qadd').onclick = ()=>{ addBag(); closeQV(); };
+    }
+    function closeQV(){ drawer.classList.remove('on'); scrim.classList.remove('on'); }
+    scrim.onclick = closeQV;
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeQV(); });
+
+    render();
+  </script>
+</body>
+</html>

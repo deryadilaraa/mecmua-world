@@ -1,0 +1,276 @@
+<!-- @dsCard group="mecmûa" viewport="1280x900" name="Homepage" subtitle="Royal, quiet homepage — hairline wordmark + search" -->
+<!-- @startingPoint section="mecmûa" subtitle="Homepage — royal & quiet" viewport="1280x900" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mecmûa — a digital sanctuary</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100vh; }
+  body { background: #0a0d2a; color: #f3ecdd; font-family: var(--font-text); }
+  body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(115% 80% at 50% 34%, #1c2658 0%, #121a42 40%, #0a0e2c 70%, #070a20 100%); }
+  a { color: inherit; text-decoration: none; }
+
+  :root {
+    /* one royal indigo across the whole page */
+    --royal: #0c1030;
+    --royal-deep: #090c26;
+    --gold-line: rgba(214,178,112,0.55);
+    --gold-soft: rgba(214,178,112,0.32);
+    --ivory-dim: rgba(243,236,221,0.62);
+  }
+
+  /* ===== header ===== */
+  header { position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    padding: 0 44px; height: 70px; display: flex; align-items: center; justify-content: space-between; background: transparent;
+    border-bottom: 1px solid var(--gold-soft);
+    transition: background var(--dur-slow) var(--ease-quiet), backdrop-filter var(--dur-slow); }
+  header.solid { background: rgba(16,19,74,0.72); backdrop-filter: blur(16px) saturate(120%); -webkit-backdrop-filter: blur(16px) saturate(120%); box-shadow: 0 1px 0 var(--gold-soft); }
+  .nav a, .login-btn { transition: color var(--dur-base) var(--ease-quiet), border-color var(--dur-base); }
+  .wm-mini { position: absolute; left: 50%; transform: translateX(-50%); font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.3em; font-size: 17px;
+    background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; flex-shrink: 0; padding-left: 0.3em; }
+  .hdr-link { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.2em; font-size: 10px;
+    color: rgb(2, 0, 255); padding: 9px 4px; transition: color var(--dur-fast) var(--ease-quiet); white-space: nowrap; }
+  .hdr-link:hover, .hdr-link.here { color: rgb(2, 0, 255); }
+  .spacer { flex: 1; }
+  .nav { display: flex; gap: 0; }
+  .nav a { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.2em; font-size: 10px;
+    color: rgba(243,236,221,0.66); padding: 9px 8px; border-radius: 999px;
+    transition: color var(--dur-fast) var(--ease-quiet); white-space: nowrap; }
+  .nav a:hover, .nav a.here { color: #e6c785; }
+  .login-btn { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.18em; font-size: 10px;
+    color: rgba(243,236,221,0.72); border: 1px solid var(--gold-soft); background: transparent;
+    padding: 9px 18px; border-radius: 999px; cursor: pointer; transition: all var(--dur-fast) var(--ease-quiet); flex-shrink: 0; }
+  .login-btn:hover { border-color: var(--gold-line); color: #e6c785; }
+
+  /* ===== hero — flat royal field, hairline wordmark ===== */
+  .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 120px 24px 90px; overflow: hidden; }
+  .hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: none; }
+  .hero-inner { position: relative; z-index: 2; text-align: center; width: 100%; max-width: 1100px; }
+  .hero-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.42em; text-transform: uppercase;
+    color: rgba(214,178,112,0.82); display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 52px; }
+  .hero-eyebrow .rule { width: 46px; height: 1px; background: var(--gold-soft); }
+
+  .wordmark { font-family: var(--font-display); text-transform: uppercase; font-weight: 400;
+    letter-spacing: 0.16em; font-size: clamp(58px, 13vw, 188px); line-height: 0.9; padding-left: 0.16em;
+    background: linear-gradient(180deg, #e8d09a 0%, #d2a851 48%, #b98b3d 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent; margin: 0; }
+
+  .hero-tag { display: flex; align-items: center; justify-content: center; gap: 22px; margin: 22px 0 8px; }
+  .hero-tag .rule { width: 60px; height: 1px; background: var(--gold-soft); }
+  .hero-tag .words { font-family: var(--font-mono); font-style: normal; text-transform: uppercase; letter-spacing: 0.4em; font-size: clamp(11px, 1.4vw, 15px); color: rgba(214,178,112,0.82); padding-left: 0.4em; }
+
+  /* search — quiet, hairline */
+  .search-wrap { position: relative; width: 100%; max-width: 560px; margin: 56px auto 0; }
+  .search-wrap input { width: 100%; font-family: var(--font-serif); font-style: italic; font-size: 18px;
+    padding: 17px 58px 17px 26px; border-radius: 999px; border: 1px solid var(--gold-soft);
+    background: rgba(255,255,255,0.03); color: #f4ecdd; outline: none;
+    transition: border-color var(--dur-base), background var(--dur-base); }
+  .search-wrap input:focus { border-color: var(--gold-line); background: rgba(255,255,255,0.06); }
+  .search-wrap input::placeholder { color: rgba(243,236,221,0.4); font-style: italic; }
+  .search-wrap .go-btn { position: absolute; right: 9px; top: 50%; transform: translateY(-50%);
+    width: 42px; height: 42px; border-radius: 999px; background: transparent;
+    border: 1px solid var(--gold-soft); color: #e6c785; font-size: 17px; cursor: pointer;
+    display: grid; place-items: center; transition: all var(--dur-fast) var(--ease-quiet); }
+  .search-wrap .go-btn:hover { background: rgba(214,178,112,0.14); border-color: var(--gold-line); }
+  .search-hints { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+  .search-hints button { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    padding: 4px 2px; border: 0; background: transparent; color: rgba(243,236,221,0.5); cursor: pointer;
+    border-bottom: 1px solid transparent; transition: all var(--dur-fast) var(--ease-quiet); }
+  .search-hints button:hover { color: #e6c785; border-bottom-color: var(--gold-soft); }
+
+  .scroll-cue { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%); z-index: 2;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+    color: rgba(243,236,221,0.42); display: flex; flex-direction: column; align-items: center; gap: 9px; cursor: pointer; }
+  .scroll-cue .arr { animation: bob 2.4s ease-in-out infinite; }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+
+  /* ===== search results overlay ===== */
+  .results-pane { position: fixed; inset: 0; z-index: 60; overflow-y: auto; padding: 104px 44px 60px;
+    background: rgba(10,18,58,0.98); display: none; }
+  .results-pane.on { display: block; }
+  .results-pane .rh { display: flex; align-items: baseline; gap: 16px; max-width: 1180px; margin: 0 auto 34px;
+    border-bottom: 1px solid var(--gold-soft); padding-bottom: 22px; }
+  .results-pane .rh h2 { font-family: var(--font-serif); font-weight: 500; font-size: 30px; color: #f4ecdd; margin: 0; }
+  .results-pane .rh .rcnt { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #d7b265; }
+  .results-pane .rclose { margin-left: auto; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(243,236,221,0.6); background: transparent; border: 1px solid var(--gold-soft); padding: 9px 17px; border-radius: 999px; cursor: pointer; }
+  .results-grid { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: 22px; }
+  .rcard { border-radius: 11px; overflow: hidden; border: 1px solid var(--gold-soft); background: rgba(255,255,255,0.03);
+    cursor: pointer; transition: transform var(--dur-base) var(--ease-quiet), border-color var(--dur-base); }
+  .rcard:hover { transform: translateY(-4px); border-color: var(--gold-line); }
+  .rcard .rthumb { aspect-ratio: 4/3; overflow: hidden; background: var(--royal-deep); }
+  .rcard .rthumb img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow); }
+  .rcard:hover .rthumb img { transform: scale(1.04); }
+  .rcard .rbody { padding: 15px 17px 17px; }
+  .rcard .rkind { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: #d7b265; display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .rcard .rkind i { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
+  .rcard h3 { font-family: var(--font-serif); font-weight: 500; font-size: 19px; line-height: 1.1; letter-spacing: -0.01em; color: #f4ecdd; margin: 0 0 6px; }
+  .rcard p { font-family: var(--font-text); font-size: 13px; line-height: 1.5; color: rgba(243,236,221,0.7); margin: 0; }
+  .rcard .rsec { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(243,236,221,0.42); margin-top: 10px; }
+  .no-results { text-align: center; padding: 80px 0; }
+  .no-results .big { font-family: var(--font-serif); font-style: italic; font-size: 27px; color: rgba(243,236,221,0.6); }
+  .no-results .sm { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(243,236,221,0.32); margin-top: 12px; }
+
+  /* ===== below the fold — quiet index ===== */
+  .below { background: transparent; border-top: 1px solid var(--gold-soft); }
+  .library-frame { display: block; width: 100%; height: 100vh; border: 0; background: #0a0d2a; }
+  .index { max-width: 1180px; margin: 0 auto; padding: 110px 44px; }
+  .index-lead { text-align: center; max-width: 620px; margin: 0 auto 90px; }
+  .index-lead .es { color: #d7b265; font-size: 22px; letter-spacing: 0.6em; padding-left: 0.6em; }
+  .index-lead p { font-family: var(--font-serif); font-style: italic; font-size: clamp(21px, 2.6vw, 30px); line-height: 1.5; color: rgba(243,236,221,0.82); margin: 26px 0 0; }
+
+  .rooms { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--gold-soft); }
+  @media (max-width: 880px){ .rooms { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px){ .rooms { grid-template-columns: 1fr; } }
+  .room { position: relative; padding: 42px 30px 48px; border-bottom: 1px solid var(--gold-soft);
+    border-right: 1px solid var(--gold-soft); transition: background var(--dur-base) var(--ease-quiet); display: block; }
+  .room:hover { background: rgba(255,255,255,0.025); }
+  .rooms .room:nth-child(4n) { border-right: 0; }
+  @media (max-width: 880px){ .rooms .room:nth-child(2n) { border-right: 0; } .rooms .room { border-right: 1px solid var(--gold-soft); } }
+  .room .rn { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: #d7b265; }
+  .room h3 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 400;
+    font-size: 21px; color: #f3ecdd; margin: 26px 0 14px; padding-left: 0.14em; }
+  .room p { font-family: var(--font-text); font-size: 13.5px; line-height: 1.6; color: rgba(243,236,221,0.6); margin: 0; min-height: 64px; }
+  .room .go { margin-top: 22px; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(243,236,221,0.4); transition: color var(--dur-base); }
+  .room:hover .go { color: #e6c785; }
+
+  footer { max-width: 1180px; margin: 0 auto; padding: 40px 44px 64px; display: grid; grid-template-columns: repeat(3,1fr);
+    font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.26em; font-size: 10px; color: rgba(243,236,221,0.5); }
+  footer span:nth-child(2){ text-align: center; } footer span:nth-child(3){ text-align: right; }
+</style>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
+</head>
+<body>
+
+  <header id="hdr">
+    <a class="hdr-link here" href="./index.html">Home</a>
+    <a class="wm-mini" href="./index.html">mecmûa</a>
+    <a class="hdr-link" href="../library/index.html">Library</a>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-inner">
+      <h1 class="wordmark" style="font-size: 80px">mecmûa</h1>
+      <div class="hero-tag"><span class="rule"></span><span class="words" style="font-weight: 100; font-size: 11px; color: rgb(2, 0, 255)">mistik müze</span><span class="rule"></span></div>
+      <div class="search-wrap">
+        <input id="q" type="text" placeholder="search a name, an idea, a feeling…" autocomplete="off" />
+        <button class="go-btn" id="go-btn" aria-label="Search">⌕</button>
+      </div>
+    </div>
+    <div class="scroll-cue" onclick="document.getElementById('below').scrollIntoView({behavior:'smooth'})">
+      <span>Enter</span><span class="arr">↓</span>
+    </div>
+  </section>
+
+  <!-- ===== SEARCH RESULTS PANE ===== -->
+  <div class="results-pane" id="rp">
+    <div class="rh">
+      <h2 id="rh-title">Results</h2>
+      <span class="rcnt" id="rh-cnt"></span>
+      <button class="rclose" id="rclose">✕ Clear</button>
+    </div>
+    <div class="results-grid" id="rg"></div>
+  </div>
+
+  <!-- ===== BELOW FOLD — the Library, embedded ===== -->
+  <div class="below" id="below">
+    <iframe class="library-frame" src="../collection/index.html" title="The Collection" loading="lazy"></iframe>
+  </div>
+
+  <script>
+    const hdr = document.getElementById('hdr');
+    function onScroll(){
+      const solid = window.scrollY > 60;
+      hdr.classList.toggle('solid', solid);
+      if (solid) {
+        hdr.style.background = 'rgba(16,19,74,0.72)';
+        hdr.style.backdropFilter = 'blur(16px) saturate(120%)';
+        hdr.style.webkitBackdropFilter = 'blur(16px) saturate(120%)';
+        hdr.style.boxShadow = '0 1px 0 rgba(214,178,112,0.32)';
+      } else {
+        hdr.style.background = '';
+        hdr.style.backdropFilter = '';
+        hdr.style.webkitBackdropFilter = '';
+        hdr.style.boxShadow = '';
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    const IM = '../../assets/imagery/';
+    const LI = '../../assets/imagery/sacred-art/';
+    const ACCENT = { Stoic:'#5a78e0', Sufi:'#b98ce0', Both:'#d7b265', History:'#e0934f', Visual:'#7fb8c4' };
+
+    const LIBRARY = [
+      { kind:'Figure', name:'Marcus Aurelius', trad:'Stoic', dek:'Rule from the inner citadel; philosophy as daily practice.', img:'../library/img/marcus-aurelius.png', href:'../library/index.html', tags:'stoic stoicism philosopher emperor meditations inner citadel leadership' },
+      { kind:'Figure', name:'Rumi', trad:'Sufi', dek:'Love as the path to the divine; the self annihilated and remade.', img:'../library/img/rumi.jpg', href:'../library/index.html', tags:'sufi sufism rumi masnavi love grief poetry transformation fana' },
+      { kind:'Figure', name:'Epictetus', trad:'Stoic', dek:'The dichotomy of control — freedom found through discipline.', img:'../library/img/epictetus.png', href:'../library/index.html', tags:'stoic stoicism epictetus control freedom enchiridion slave' },
+      { kind:'Figure', name:'Al-Ghazali', trad:'Sufi', dek:'Sincerity in practice; knowledge unlived is no knowledge.', img:'../library/img/al-ghazali.jpg', href:'../library/index.html', tags:'sufi sufism al-ghazali knowledge sincerity practice' },
+      { kind:'Figure', name:'Ibn Arabi', trad:'Sufi', dek:'Wahdat al-Wujud — all things a disclosure of the One.', img:'../library/img/ibn-arabi.jpg', href:'../library/index.html', tags:'sufi sufism ibn arabi unity tawhid metaphysics' },
+      { kind:'Figure', name:'Seneca', trad:'Stoic', dek:'Time is the only thing we truly own.', img:'../library/img/seneca.webp', href:'../library/index.html', tags:'stoic stoicism seneca time death mortality letters' },
+      { kind:'Concept', name:'Amor Fati', trad:'Stoic', dek:'Love of fate — accept all that happens as necessary, and good.', img:'../library/img/amor-fati.jpg', href:'../library/index.html', tags:'stoic amor fati acceptance fate resilience surrender' },
+      { kind:'Concept', name:'Memento Mori', trad:'Stoic', dek:'Remember death; let mortality clarify how you live.', img:'../library/img/memento-mori.png', href:'../library/index.html', tags:'stoic memento mori death time impermanence mortality presence' },
+      { kind:'Concept', name:'Fana', trad:'Sufi', dek:'Annihilation of the ego; the self dissolved in divine presence.', img:'../library/img/fana-veil.jpg', href:'../library/index.html', tags:'sufi sufism fana ego death love non-attachment' },
+      { kind:'Concept', name:'Tawhid', trad:'Sufi', dek:'Unity of being; God as the only true reality beneath appearances.', img:'../library/img/tawhid-blue.jpg', href:'../library/index.html', tags:'sufi sufism tawhid unity wahdat al-wujud oneness' },
+      { kind:'Theme', name:'Death & Time', trad:'Both', dek:'Death as teacher rather than enemy.', img:IM+'art-illustration/woman-on-candle-flame-painting.jpg', href:'../library/index.html', tags:'death time memento mori impermanence presence mortality' },
+      { kind:'Theme', name:'Love', trad:'Both', dek:'Stoic reason meets Sufi passion in a mature, unpossessive love.', img:IM+'art-illustration/couple-kissing-in-water.jpg', href:'../library/index.html', tags:'love devotion rumi rabia ishq fana' },
+      { kind:'Text', name:'Meditations', trad:'Stoic', dek:'A private notebook of self-correction by Marcus Aurelius.', img:'../library/img/meditations.jpg', href:'../library/index.html', tags:'meditations marcus aurelius stoic journaling text book' },
+      { kind:'Text', name:'Masnavi', trad:'Sufi', dek:'Poetic teaching-stories on love and divine unity by Rumi.', img:'../library/img/masnavi.jpg', href:'../library/index.html', tags:'masnavi rumi sufi poetry text love fana' },
+      { kind:'Quote', name:'"The wound is the place where the Light enters you."', trad:'Sufi', dek:'Authentic Rumi — suffering as transformative.', img:'../library/img/rumi.jpg', href:'../library/index.html', tags:'quote rumi sufi wound light transformation suffering' },
+    ];
+
+    const MUSEUM = [
+      { t:'Veil under the Moon', img:LI+'blue-veil-desert-moon.jpg', tags:'veil moon desert sacred blue night mystical' },
+      { t:'The Blue Threshold', img:LI+'klein-blue-glass-arch.jpg', tags:'blue arch glass ikb sacred threshold interior' },
+      { t:'Night Pool', img:LI+'night-pool-blue-painting.jpg', tags:'night pool water painting blue figure' },
+      { t:'The Green Pool', img:LI+'green-pool-swimmers-painting.jpg', tags:'green pool water swimmers painting nature' },
+      { t:'Emerald Water', img:LI+'emerald-glass-water.jpg', tags:'emerald water sea green nature texture' },
+      { t:'Town of Lamps', img:LI+'starlit-town-window.jpg', tags:'night stars window lamps town interior' },
+      { t:'Red Sun, Glass', img:LI+'red-sun-glass-doors.jpg', tags:'red sun glass door interior sea cosmos' },
+      { t:'The Sunken Hall', img:LI+'sunken-blue-hall.jpg', tags:'blue hall sunken interior water light sacred' },
+    ];
+
+    const CORPUS = [
+      ...LIBRARY.map(e=>({ ...e, section:'Library' })),
+      ...MUSEUM.map(e=>({ kind:'Plate', name:e.t, trad:'Visual', dek:'A plate from the Museum.', img:e.img, href:'../museum/index.html', section:'Museum', tags:e.tags })),
+    ];
+    CORPUS.forEach(e=>{ e._hay = (e.name+' '+e.dek+' '+(e.trad||'')+' '+(e.tags||'')).toLowerCase(); });
+
+    function doSearch(q){
+      q = q.trim().toLowerCase();
+      if (!q){ closeResults(); return; }
+      const hits = CORPUS.filter(e=>e._hay.includes(q));
+      document.getElementById('rh-title').textContent = `Results for "${q}"`;
+      document.getElementById('rh-cnt').textContent = hits.length + ' found';
+      const rg = document.getElementById('rg');
+      rg.innerHTML = hits.length ? hits.map(e=>`
+          <a class="rcard" href="${e.href}">
+            <div class="rthumb"><img src="${e.img}" alt="${e.name}" loading="lazy"/></div>
+            <div class="rbody">
+              <div class="rkind"><i style="background:${ACCENT[e.trad]||'#d7b265'}"></i>${e.kind} · ${e.section}</div>
+              <h3>${e.name}</h3>
+              <p>${e.dek}</p>
+              <div class="rsec">${e.trad}</div>
+            </div>
+          </a>`).join('')
+        : `<div class="no-results" style="grid-column:1/-1"><div class="big">Nothing found for "${q}"</div><div class="sm">Try "sufism", "rumi", "sacred art"</div></div>`;
+      document.getElementById('rp').classList.add('on');
+    }
+    function closeResults(){ document.getElementById('rp').classList.remove('on'); document.getElementById('q').value=''; }
+
+    document.getElementById('q').addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(e.target.value); });
+    document.getElementById('go-btn').onclick = ()=> doSearch(document.getElementById('q').value);
+    document.getElementById('rclose').onclick = closeResults;
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeResults(); });
+  </script>
+</body>
+</html>

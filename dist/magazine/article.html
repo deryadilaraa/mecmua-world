@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>mejmûa — Article</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--surface-page); color: var(--text-primary); font-family: var(--font-text);
+    background-image: var(--grain); background-repeat: repeat; }
+  a { color: inherit; text-decoration: none; }
+
+  header { border-bottom: var(--hairline); position: sticky; top: 0; z-index: 40;
+    background: linear-gradient(180deg, rgba(242,233,221,0.96), rgba(242,233,221,0.82)); backdrop-filter: blur(8px); }
+  .topline { max-width: 1320px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 16px 30px; }
+  .back { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-secondary); display: inline-flex; gap: 8px; align-items: center; }
+  .back:hover { color: var(--merlot); }
+  .wm { grid-column: 2; font-family: var(--font-display); text-transform: lowercase; font-size: 38px; line-height: 1; color: var(--merlot); text-align: center; }
+  .topright { justify-self: end; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
+
+  .lead-wrap { max-width: 820px; margin: 0 auto; padding: 50px 30px 30px; text-align: center; }
+  .cat { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--merlot); display: inline-flex; gap: 10px; align-items: center; }
+  .cat .star { color: var(--antique-gold); }
+  h1 { font-family: var(--font-serif); font-weight: 500; font-size: clamp(40px, 5.6vw, 68px); line-height: 1.0; letter-spacing: -0.02em; margin: 18px 0 20px; text-wrap: balance; }
+  .dek { font-family: var(--font-serif); font-style: italic; font-size: 23px; line-height: 1.4; color: var(--text-secondary); max-width: 40ch; margin: 0 auto 26px; }
+  .byline { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); display: flex; gap: 16px; justify-content: center; }
+  .byline b { color: var(--text-primary); font-weight: 400; }
+
+  .hero-img { max-width: 1120px; margin: 14px auto 0; padding: 0 30px; }
+  .hero-img .frame { aspect-ratio: 16/9; border-radius: var(--radius-lg); overflow: hidden; border: var(--hairline); box-shadow: var(--shadow-md); }
+  .hero-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hero-img .cap { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); margin-top: 10px; text-align: right; }
+
+  article { max-width: 680px; margin: 0 auto; padding: 44px 30px 20px; }
+  article p { font-family: var(--font-text); font-size: 19px; line-height: 1.74; color: var(--text-secondary); margin: 0 0 22px; }
+  article p.lead { font-size: 22px; color: var(--text-primary); }
+  article p.lead::first-letter { font-family: var(--font-serif); font-weight: 600; font-size: 4em; float: left; line-height: 0.72; padding: 8px 14px 0 0; color: var(--merlot); }
+  article h2 { font-family: var(--font-serif); font-weight: 500; font-size: 30px; letter-spacing: -0.01em; margin: 36px 0 14px; }
+  .pull { margin: 40px -40px; text-align: center; }
+  @media (max-width:760px){ .pull { margin: 36px 0; } }
+  .pull .rule { width: 44px; height: 2px; background: var(--antique-gold); margin: 0 auto 22px; }
+  .pull blockquote { margin: 0; font-family: var(--font-serif); font-style: italic; font-weight: 500; font-size: 32px; line-height: 1.24; letter-spacing: -0.01em; color: var(--merlot); }
+  .endmark { text-align: center; color: var(--antique-gold); font-size: 18px; margin: 30px 0 0; }
+
+  /* related */
+  .related { max-width: 1320px; margin: 56px auto 0; padding: 40px 30px 0; border-top: var(--hairline); }
+  .related .h { font-family: var(--font-serif); font-size: 26px; margin-bottom: 22px; }
+  .rgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  @media (max-width: 760px){ .rgrid { grid-template-columns: 1fr; } }
+  .story { cursor: pointer; }
+  .story .ph { aspect-ratio: 3/2; border-radius: var(--radius-md); overflow: hidden; border: var(--hairline); margin-bottom: 14px; }
+  .story .ph img { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-quiet); }
+  .story:hover .ph img { transform: scale(1.05); }
+  .story .c { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--merlot); margin-bottom: 6px; }
+  .story h4 { font-family: var(--font-serif); font-weight: 500; font-size: 20px; line-height: 1.12; margin: 0; }
+
+  footer { margin-top: 64px; background: var(--merlot); color: rgba(247,236,217,0.85); }
+  footer .inner { max-width: 1320px; margin: 0 auto; padding: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+  footer .wm2 { font-family: var(--font-display); text-transform: lowercase; font-size: 30px; color: #f7ecd9; }
+  footer .mono { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+</style>
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
+<script defer src="../shared/dark-toggle.js"></script>
+</head>
+<body>
+  <header>
+    <div class="topline">
+      <a class="back" href="index.html">← The Edit</a>
+      <a class="wm" href="index.html">mejmûa</a>
+      <span class="topright">Issue 08</span>
+    </div>
+  </header>
+
+  <div id="doc"></div>
+
+  <footer><div class="inner"><span class="wm2">mejmûa</span><span class="mono">© 2026 · Beauty · Culture · Art · Life</span></div></footer>
+
+  <script>
+    const DIR = '../assets/imagery/';
+    const S = [
+      { cat:'Culture', title:'Beauty Beyond the Surface', dek:'Stories and objects that inspire a life rich in meaning.', author:'Derya Dilara', read:'8 min', img:'woman-lantern-golden-willow.jpg' },
+      { cat:'Culture', title:'Creative Minds', dek:'Interviews and insights from the world\u2019s most original voices.', author:'Derya Dilara', read:'9 min', img:'starry-haired-woman-painting.jpg' },
+      { cat:'Art', title:'Heirloom Pieces', dek:'Timeless treasures to wear, to collect, and to pass on.', author:'The Atelier', read:'6 min', img:'woman-gold-sun-stars-collage.jpg' },
+      { cat:'Living', title:'Spaces to Dream', dek:'Homes, objects and rituals that transform the everyday.', author:'Derya Dilara', read:'7 min', img:'monet-style-willow-pond.jpg' },
+      { cat:'Travel', title:'Wander Deeply', dek:'Journeys that awaken curiosity and leave a lasting impression.', author:'Field Notes', read:'11 min', img:'moonrise-white-sands-yucca.webp' },
+      { cat:'Beauty', title:'The Slow Ritual', dek:'On adornment as devotion — beauty practised as attention.', author:'Derya Dilara', read:'5 min', img:'crescent-moon-pink-clouds.jpg' },
+      { cat:'Fashion', title:'Drape & Memory', dek:'What we wear and why it stays with us.', author:'Derya Dilara', read:'7 min', img:'woman-sitting-olive-tree.jpg' },
+      { cat:'Culture', title:'The Library', dek:'A digital sanctuary for depth and beauty.', author:'Derya Dilara', read:'10 min', img:'snowy-street-lantern-night.jpg' },
+      { cat:'Art', title:'On Symbol', dek:'The eye, the moon, the horse — the old language of images.', author:'Derya Dilara', read:'6 min', img:'embroidered-eye-crescent-moon.jpg' },
+    ];
+    const BODY = [
+      'There is a kind of beauty that announces itself, and another that waits to be noticed. This magazine is devoted to the second kind — the slow beauty of attention, the meaning that gathers in objects and rooms and the way light falls across an ordinary afternoon.',
+      'To live well is not to accumulate but to notice. The heirloom on the dresser, the worn spine of a beloved book, the particular blue of a tile — these are not decoration. They are the vocabulary of a life lived on purpose.',
+      'We gather these things here the way one keeps a commonplace book: not as a catalogue, but as a conversation. Each piece is chosen because it rewards a second look.',
+    ];
+    const PULL = 'Curated with intention. Created to inspire.';
+
+    const esc = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+    const id = Math.max(0, Math.min(S.length-1, parseInt(new URLSearchParams(location.search).get('id')||'0',10)));
+    const a = S[id];
+    document.title = 'mejmûa — ' + a.title;
+
+    const related = S.map((s,i)=>({s,i})).filter(x=>x.i!==id && x.s.cat===a.cat).concat(S.map((s,i)=>({s,i})).filter(x=>x.i!==id && x.s.cat!==a.cat)).slice(0,3);
+
+    document.getElementById('doc').innerHTML = `
+      <div class="lead-wrap">
+        <div class="cat"><span class="star">✦</span> ${a.cat}</div>
+        <h1>${esc(a.title)}</h1>
+        <div class="dek">${esc(a.dek)}</div>
+        <div class="byline"><span>By <b>${esc(a.author)}</b></span><span>${a.read} read</span><span>Issue 08</span></div>
+      </div>
+      <div class="hero-img"><div class="frame"><img src="${DIR}${a.img}" alt=""/></div><div class="cap">fig. 01 — from the mejmûa archive</div></div>
+      <article>
+        <p class="lead">${esc(BODY[0])}</p>
+        <p>${esc(BODY[1])}</p>
+        <div class="pull"><div class="rule"></div><blockquote>“${esc(PULL)}”</blockquote></div>
+        <p>${esc(BODY[2])}</p>
+        <div class="endmark">✦</div>
+      </article>
+      <section class="related">
+        <div class="h">More from mejmûa</div>
+        <div class="rgrid">${related.map(x=>`
+          <a class="story" href="article.html?id=${x.i}">
+            <div class="ph"><img src="${DIR}${x.s.img}" alt=""/></div>
+            <div class="c">${x.s.cat}</div>
+            <h4>${esc(x.s.title)}</h4>
+          </a>`).join('')}</div>
+      </section>`;
+    window.scrollTo(0,0);
+  </script>
+</body>
+</html>

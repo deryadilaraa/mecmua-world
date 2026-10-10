@@ -1,0 +1,126 @@
+/* ===========================================================================
+   deryadilara · Color
+   ---------------------------------------------------------------------------
+   Two registers held in one palette:
+   1. THE SANCTUARY — refined, contemplative. Midnight navy, warm gold, parchment.
+      The "Sufi Stoic" identity register: quiet, reverent, literary.
+   2. THE GARDEN — expressive, painterly. Jewel pigments drawn from the imagery
+      world (folk portraits, Persian textiles, sunsets, Mediterranean light).
+   Use the Sanctuary register for chrome, type and structure; let the Garden
+   register live in imagery, accents and editorial moments.
+   ========================================================================== */
+
+:root {
+  /* ===== OFFICIAL mejmûa PALETTE =========================================
+     Documented on the brand moodboards (mejmua-website-moodboard,
+     dark-editorial-brand-moodboard). This is the canonical, brand-true set —
+     merlot-led, "Beauty · Culture · Art · Life" editorial. Prefer these for
+     all new mejmûa work. The Sanctuary/Garden sets below remain as an
+     extended pigment library for imagery & accents. */
+  --merlot:       #7a1e2e;  /* primary brand red */
+  --merlot-deep:  #5b1f24;  /* deep merlot (from deryadilara.com palette) */
+  --magenta:      #b6226e;  /* fuchsia accent */
+  --antique-gold: #c9a063;  /* metallic gold accent */
+  --midnight:     #1f2a44;  /* midnight blue ground */
+  --warm-taupe:   #a3958a;  /* neutral mid */
+  --soft-linen:   #f2e9dd;  /* primary cream ground */
+  --linen-deep:   #dcceb7;  /* sunk linen */
+  --char-900:     #0d0d0d;  /* near-black */
+  --char-800:     #1b1b1b;  /* charcoal */
+  --espresso:     #3b2a24;  /* warm dark brown */
+
+  /* ---- Base · Sanctuary -------------------------------------------------- */
+  --night-900: #0a0a26;   /* deepest midnight */
+  --night-800: #10103a;   /* brand navy (wordmark ground) */
+  --night-700: #1a1a52;   /* lifted navy */
+  --night-600: #2a2a6e;   /* navy hover */
+
+  --parchment-50:  #f6f2ea; /* lightest page */
+  --parchment-100: #efe9dd; /* primary cream ground (magazine) */
+  --parchment-200: #e6ddcb; /* sunk panel */
+  --parchment-300: #d8ccb4; /* hairline on cream */
+
+  --ink-900: #1b1a18;  /* near-black warm text */
+  --ink-700: #3d3a35;  /* secondary text */
+  --ink-500: #6b6559;  /* muted / captions */
+  --ink-300: #9c9485;  /* faint metadata */
+
+  /* ---- International Klein Blue (primary) -------------------------------- */
+  --ikb:      #1e2278;  /* deep indigo-ultramarine — the hero blue */
+  --ikb-deep: #131552;  /* shadowed IKB (near-indigo black) */
+  --ikb-lift: #2c33a4;  /* lifted / hover */
+
+  /* ---- Metallics (the brand's three finishes) --------------------------- */
+  --gold-700: #8a5d2b;  /* gold · shadow stop */
+  --gold-500: #c49a4b;  /* gold · solid */
+  --gold-400: #d7b265;  /* gold · light */
+  --gold-200: #ecd79b;  /* gold · highlight stop */
+
+  --bronze-700: #4e3015; /* bronze · deep */
+  --bronze-500: #9a6b33; /* bronze · solid */
+  --bronze-300: #c89a68; /* bronze · light */
+  --bronze-100: #e8cfa6; /* bronze · highlight */
+
+  --silver-700: #6f7680; /* silver · shadow */
+  --silver-500: #9aa0a8; /* silver · solid */
+  --silver-300: #c8ccd2; /* silver · light */
+  --silver-100: #f2f3f5; /* silver · highlight */
+
+  --chrome-700: #4a525e; /* chrome · deep (bluer, higher contrast) */
+  --chrome-500: #8b95a2; /* chrome · solid */
+  --chrome-300: #c2cad4; /* chrome · light */
+  --chrome-100: #eef3f9; /* chrome · highlight */
+
+  /* ---- Base · Garden (jewel pigments) ----------------------------------- */
+  --cobalt:   #2438c4;  /* folk blue (softer than IKB) */
+  --cobalt-deep: #1a2a8c;
+  --fuchsia:  #c0186f;  /* magenta textile */
+  --crimson:  #c02a23;  /* red sun, folk red */
+  --ember:    #e0612f;  /* sunset terracotta */
+  --amber:    #e3a637;  /* gold sun */
+  --emerald:  #2f6b4f;  /* deep foliage / tile */
+  --violet:   #5b4a9c;  /* twilight */
+
+  /* ---- Atelier aliases (back-compat) ------------------------------------ */
+  --taupe: var(--warm-taupe);
+  --linen: var(--soft-linen);
+  --merlot-700: #5b1f24;  /* deep merlot */
+  --merlot-300: #a14454;  /* lifted merlot / hover */
+
+  /* ---- Semantic · surfaces (merlot editorial) --------------------------- */
+  --surface-page:      var(--soft-linen);
+  --surface-raised:    #faf4e9;
+  --surface-sunk:      var(--linen-deep);
+  --surface-night:     var(--midnight);
+  --surface-night-deep:#16203a;
+  --surface-merlot:    var(--merlot);
+  --surface-card:      #fffdf8;
+
+  /* ---- Semantic · text -------------------------------------------------- */
+  --text-primary:   var(--ink-900);
+  --text-secondary: var(--ink-700);
+  --text-muted:     var(--ink-500);
+  --text-faint:     var(--ink-300);
+  --text-on-night:  #f2e9dd;
+  --text-on-night-muted: rgba(242,233,221,0.62);
+  --text-gold:      var(--antique-gold);
+  --text-merlot:    var(--merlot);
+
+  /* ---- Semantic · lines & accents --------------------------------------- */
+  --border-hairline:   var(--ink-900);   /* the thin dark magazine outline */
+  --border-soft:       var(--parchment-300);
+  --border-on-night:   rgba(201, 160, 99, 0.30);
+  --accent:            var(--merlot);    /* default interactive accent */
+  --accent-warm:       var(--magenta);
+
+  /* ---- Gradients -------------------------------------------------------- */
+  --grad-gold: linear-gradient(100deg, #8a5d2b 0%, #c49a4b 22%, #ecd79b 50%, #c49a4b 74%, #8a5d2b 100%); /* @kind color */
+  --grad-silver: linear-gradient(100deg, #6f7680 0%, #c8ccd2 24%, #f7f8fa 50%, #c8ccd2 76%, #6f7680 100%); /* @kind color */
+  --grad-chrome: linear-gradient(135deg, #4a525e 0%, #dfe6ef 20%, #aab4c1 42%, #f5f9fd 58%, #7e8893 80%, #cdd5df 100%); /* @kind color */
+  --grad-bronze: linear-gradient(100deg, #4e3015 0%, #8a5d2b 26%, #c89a68 50%, #8a5d2b 74%, #4e3015 100%); /* @kind color */
+  --grad-ikb: linear-gradient(180deg, #2c33a4 0%, #1e2278 55%, #131552 100%); /* @kind color */
+  --grad-merlot: linear-gradient(160deg, #8f2436 0%, #7a1e2e 52%, #5b1f24 100%); /* @kind color */
+  --grad-dusk: linear-gradient(165deg, #2a3354 0%, #1f2a44 55%, #16203a 100%); /* @kind color */
+  --grad-merlot-midnight: linear-gradient(150deg, #7a1e2e 0%, #4a2236 48%, #1f2a44 100%); /* @kind color */
+  --grad-ember: linear-gradient(180deg, #e3a637 0%, #e0612f 60%, #c02a23 100%); /* @kind color */
+}
