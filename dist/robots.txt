@@ -8,3 +8,11 @@
 # Replace this with a real Access gate before anything personal goes in.
 User-agent: *
 Disallow: /
+
+# Public Pinterest publishing endpoints. Keep the archive excluded.
+User-agent: Pinterestbot
+User-agent: Pinterest
+Disallow: /
+Allow: /feed.xml$
+Allow: /pin.html
+Allow: /pins.json$
