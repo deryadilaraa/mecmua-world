@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>mecmua · selected find</title>
+<style>
+:root{color-scheme:light;--ink:#24201f;--muted:#756d68;--line:#e8e1dc;--paper:#fbf8f5;--gold:#9d7951}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 Georgia,serif}
+main{max-width:760px;margin:0 auto;padding:28px 22px 64px}
+header{border-bottom:1px solid var(--line);padding:8px 0 20px;margin-bottom:28px}
+.brand{font:600 13px/1.4 system-ui,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);text-decoration:none}
+h1{font-size:clamp(28px,6vw,48px);line-height:1.1;font-weight:400;margin:22px 0 10px}
+.merchant,.disclosure{font:13px/1.5 system-ui,sans-serif;color:var(--muted)}
+img{display:block;width:100%;height:auto;max-height:720px;object-fit:cover;margin:24px 0;border-radius:3px}
+.shop{display:inline-block;background:var(--ink);color:white;text-decoration:none;padding:13px 19px;font:600 13px system-ui,sans-serif;letter-spacing:.04em}
+.shop:hover{background:var(--gold)}.disclosure{margin-top:18px}
+footer{border-top:1px solid var(--line);margin-top:42px;padding-top:16px;font:12px system-ui,sans-serif;color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+<header><a class="brand" href="/">mecmua</a></header>
+<article id="pin" aria-live="polite"><p>Loading selected find…</p></article>
+<footer><a href="/feed.xml">Pinterest feed</a> · Images and finds selected by mecmua.</footer>
+</main>
+<script>
+(async()=>{
+ const id=new URLSearchParams(location.search).get("id");
+ const root=document.getElementById("pin");
+ try{
+  const response=await fetch("/pins.json",{cache:"no-store"});
+  if(!response.ok)throw new Error("Pin data unavailable");
+  const pins=await response.json();
+  const pin=pins.find(item=>item.id===id);
+  if(!pin){root.innerHTML="<h1>Find not found</h1><p>This selection may have been removed.</p>";return;}
+  document.title=pin.pin_title+" · mecmua";
+  const title=document.createElement("h1");title.textContent=pin.pin_title;
+  const merchant=document.createElement("p");merchant.className="merchant";merchant.textContent=pin.merchant+" · "+pin.theme.replace(/-/g," ");
+  const img=document.createElement("img");img.src=pin.image_url;img.alt=pin.pin_title;img.loading="eager";
+  const cta=document.createElement("a");cta.className="shop";cta.href=pin.destination_link;cta.target="_blank";cta.rel="sponsored nofollow noopener noreferrer";cta.textContent="View at "+pin.merchant;
+  const note=document.createElement("p");note.className="disclosure";note.textContent="Mecmua may earn a commission from purchases through this link.";
+  root.replaceChildren(title,merchant,img,cta,note);
+ }catch(error){root.innerHTML="<h1>Temporarily unavailable</h1><p>Please try again shortly.</p>";}
+})();
+</script>
+</body>
+</html>
