@@ -15,4 +15,5 @@
 
 /* Hide Library in site navigation while keeping its content accessible. */
 header a[href$="library/index.html"],
-header a[href$="mind/index.html"] { display: none !important; }
+header a[href$="mind/index.html"],
+header a[href$="chart/index.html"] { display: none !important; }
