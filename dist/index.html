@@ -176,33 +176,12 @@
         <a class="hero-logo" href="./index.html" aria-label="Mecmûa home">mecmûa</a>
       </div>
       <p class="hero-description"><strong>Mecmûa</strong> — an Ottoman personal anthology of poems, pictures and fragments of knowledge gathered along a person's path. This mistik müze (mystical museum) is my mecmua.</p>
-      <div class="search-wrap">
-        <input id="q" type="text" placeholder="search a name, an idea, a feeling…" autocomplete="off" />
-        <button class="go-btn" id="go-btn" aria-label="Search">⌕</button>
-      </div>
-      <div class="search-hints">
-        <button data-q="sufism">Sufism</button>
-        <button data-q="stoicism">Stoicism</button>
-        <button data-q="rumi">Rumi</button>
-        <button data-q="death">Death &amp; Time</button>
-        <button data-q="love">Love</button>
-        <button data-q="sacred">Sacred Art</button>
-      </div>
+
     </div>
     <div class="scroll-cue" onclick="document.getElementById('below').scrollIntoView({behavior:'smooth'})">
       <span>Enter</span><span class="arr">↓</span>
     </div>
   </section>
-
-  <!-- ===== SEARCH RESULTS PANE ===== -->
-  <div class="results-pane" id="rp">
-    <div class="rh">
-      <h2 id="rh-title">Results</h2>
-      <span class="rcnt" id="rh-cnt"></span>
-      <button class="rclose" id="rclose">✕ Clear</button>
-    </div>
-    <div class="results-grid" id="rg"></div>
-  </div>
 
   <!-- ===== BELOW FOLD — quiet index ===== -->
   <div class="below" id="below">
@@ -272,72 +251,6 @@
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
 
-    const IM = 'assets/imagery/';
-    const LI = 'assets/imagery/sacred-art/';
-    const ACCENT = { Stoic:'#5a78e0', Sufi:'#b98ce0', Both:'#d7b265', History:'#e0934f', Visual:'#7fb8c4' };
-
-    const LIBRARY = [
-      { kind:'Figure', name:'Marcus Aurelius', trad:'Stoic', dek:'Rule from the inner citadel; philosophy as daily practice.', img:'library/img/marcus-aurelius.png', href:'library/index.html', tags:'stoic stoicism philosopher emperor meditations inner citadel leadership' },
-      { kind:'Figure', name:'Rumi', trad:'Sufi', dek:'Love as the path to the divine; the self annihilated and remade.', img:'library/img/rumi.jpg', href:'library/index.html', tags:'sufi sufism rumi masnavi love grief poetry transformation fana' },
-      { kind:'Figure', name:'Epictetus', trad:'Stoic', dek:'The dichotomy of control — freedom found through discipline.', img:'library/img/epictetus.png', href:'library/index.html', tags:'stoic stoicism epictetus control freedom enchiridion slave' },
-      { kind:'Figure', name:'Al-Ghazali', trad:'Sufi', dek:'Sincerity in practice; knowledge unlived is no knowledge.', img:'library/img/al-ghazali.jpg', href:'library/index.html', tags:'sufi sufism al-ghazali knowledge sincerity practice' },
-      { kind:'Figure', name:'Ibn Arabi', trad:'Sufi', dek:'Wahdat al-Wujud — all things a disclosure of the One.', img:'library/img/ibn-arabi.jpg', href:'library/index.html', tags:'sufi sufism ibn arabi unity tawhid metaphysics' },
-      { kind:'Figure', name:'Seneca', trad:'Stoic', dek:'Time is the only thing we truly own.', img:'library/img/seneca.webp', href:'library/index.html', tags:'stoic stoicism seneca time death mortality letters' },
-      { kind:'Concept', name:'Amor Fati', trad:'Stoic', dek:'Love of fate — accept all that happens as necessary, and good.', img:'library/img/amor-fati.jpg', href:'library/index.html', tags:'stoic amor fati acceptance fate resilience surrender' },
-      { kind:'Concept', name:'Memento Mori', trad:'Stoic', dek:'Remember death; let mortality clarify how you live.', img:'library/img/memento-mori.png', href:'library/index.html', tags:'stoic memento mori death time impermanence mortality presence' },
-      { kind:'Concept', name:'Fana', trad:'Sufi', dek:'Annihilation of the ego; the self dissolved in divine presence.', img:'library/img/fana-veil.jpg', href:'library/index.html', tags:'sufi sufism fana ego death love non-attachment' },
-      { kind:'Concept', name:'Tawhid', trad:'Sufi', dek:'Unity of being; God as the only true reality beneath appearances.', img:'library/img/tawhid-blue.jpg', href:'library/index.html', tags:'sufi sufism tawhid unity wahdat al-wujud oneness' },
-      { kind:'Theme', name:'Death & Time', trad:'Both', dek:'Death as teacher rather than enemy.', img:IM+'art-illustration/woman-on-candle-flame-painting.jpg', href:'library/index.html', tags:'death time memento mori impermanence presence mortality' },
-      { kind:'Theme', name:'Love', trad:'Both', dek:'Stoic reason meets Sufi passion in a mature, unpossessive love.', img:IM+'art-illustration/couple-kissing-in-water.jpg', href:'library/index.html', tags:'love devotion rumi rabia ishq fana' },
-      { kind:'Text', name:'Meditations', trad:'Stoic', dek:'A private notebook of self-correction by Marcus Aurelius.', img:'library/img/meditations.jpg', href:'library/index.html', tags:'meditations marcus aurelius stoic journaling text book' },
-      { kind:'Text', name:'Masnavi', trad:'Sufi', dek:'Poetic teaching-stories on love and divine unity by Rumi.', img:'library/img/masnavi.jpg', href:'library/index.html', tags:'masnavi rumi sufi poetry text love fana' },
-      { kind:'Quote', name:'"The wound is the place where the Light enters you."', trad:'Sufi', dek:'Authentic Rumi — suffering as transformative.', img:'library/img/rumi.jpg', href:'library/index.html', tags:'quote rumi sufi wound light transformation suffering' },
-    ];
-
-    const MUSEUM = [
-      { t:'Veil under the Moon', img:LI+'blue-veil-desert-moon.jpg', tags:'veil moon desert sacred blue night mystical' },
-      { t:'The Blue Threshold', img:LI+'klein-blue-glass-arch.jpg', tags:'blue arch glass ikb sacred threshold interior' },
-      { t:'Night Pool', img:LI+'night-pool-blue-painting.jpg', tags:'night pool water painting blue figure' },
-      { t:'The Green Pool', img:LI+'green-pool-swimmers-painting.jpg', tags:'green pool water swimmers painting nature' },
-      { t:'Emerald Water', img:LI+'emerald-glass-water.jpg', tags:'emerald water sea green nature texture' },
-      { t:'Town of Lamps', img:LI+'starlit-town-window.jpg', tags:'night stars window lamps town interior' },
-      { t:'Red Sun, Glass', img:LI+'red-sun-glass-doors.jpg', tags:'red sun glass door interior sea cosmos' },
-      { t:'The Sunken Hall', img:LI+'sunken-blue-hall.jpg', tags:'blue hall sunken interior water light sacred' },
-    ];
-
-    const CORPUS = [
-      ...LIBRARY.map(e=>({ ...e, section:'Library' })),
-      ...MUSEUM.map(e=>({ kind:'Plate', name:e.t, trad:'Visual', dek:'A plate from the Museum.', img:e.img, href:'museum/index.html', section:'Museum', tags:e.tags })),
-    ];
-    CORPUS.forEach(e=>{ e._hay = (e.name+' '+e.dek+' '+(e.trad||'')+' '+(e.tags||'')).toLowerCase(); });
-
-    function doSearch(q){
-      q = q.trim().toLowerCase();
-      if (!q){ closeResults(); return; }
-      const hits = CORPUS.filter(e=>e._hay.includes(q));
-      document.getElementById('rh-title').textContent = `Results for "${q}"`;
-      document.getElementById('rh-cnt').textContent = hits.length + ' found';
-      const rg = document.getElementById('rg');
-      rg.innerHTML = hits.length ? hits.map(e=>`
-          <a class="rcard" href="${e.href}">
-            <div class="rthumb"><img src="${e.img}" alt="${e.name}" loading="lazy"/></div>
-            <div class="rbody">
-              <div class="rkind"><i style="background:${ACCENT[e.trad]||'#d7b265'}"></i>${e.kind} · ${e.section}</div>
-              <h3>${e.name}</h3>
-              <p>${e.dek}</p>
-              <div class="rsec">${e.trad}</div>
-            </div>
-          </a>`).join('')
-        : `<div class="no-results" style="grid-column:1/-1"><div class="big">Nothing found for "${q}"</div><div class="sm">Try "sufism", "rumi", "sacred art"</div></div>`;
-      document.getElementById('rp').classList.add('on');
-    }
-    function closeResults(){ document.getElementById('rp').classList.remove('on'); document.getElementById('q').value=''; }
-
-    document.getElementById('q').addEventListener('keydown', e=>{ if(e.key==='Enter') doSearch(e.target.value); });
-    document.getElementById('go-btn').onclick = ()=> doSearch(document.getElementById('q').value);
-    document.querySelectorAll('.search-hints button').forEach(b=> b.onclick=()=>{ document.getElementById('q').value=b.dataset.q; doSearch(b.dataset.q); });
-    document.getElementById('rclose').onclick = closeResults;
-    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeResults(); });
   </script>
 </body>
 </html>
