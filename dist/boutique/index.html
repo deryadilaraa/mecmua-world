@@ -38,6 +38,12 @@
     background: linear-gradient(180deg, #e8d09a 0%, #d2a851 52%, #b98b3d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .hero p { font-family: var(--font-serif); font-style: italic; font-size: clamp(16px, 2vw, 21px); color: rgba(242,233,221,0.72); margin: 18px auto 0; max-width: 50ch; }
 
+  /* The Atelier is a digital-download section within Boutique. */
+  .boutique-sections { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 26px auto 0; }
+  .boutique-sections a, .boutique-sections span { display: inline-block; padding: 11px 19px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; border: 1px solid rgba(214,178,112,.38); border-radius: 999px; color: rgba(243,236,221,.77); }
+  .boutique-sections .active { border-color: rgba(214,178,112,.75); color: #e6c785; }
+  .boutique-sections a:hover { border-color: #e6c785; color: #e6c785; }
+
   /* filter row */
   .filters { max-width: 1320px; margin: 36px auto 0; padding: 0 40px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
     border-bottom: 1px solid rgba(214,178,112,0.2); padding-bottom: 22px; }
@@ -111,7 +117,6 @@
       <a href="../wheel/index.html">Oracle</a>
       <a href="../chart/index.html">Chart</a>
       <a class="here" href="./index.html">Boutique</a>
-      <a href="../atelier/index.html">Atelier</a>
     </nav>
     <button class="bag" id="bag">Bag <span class="dot" id="bagN">0</span></button>
   </header>
@@ -120,6 +125,7 @@
     <div class="eyebrow"><span class="r"></span>The Atelier<span class="r"></span></div>
     <h1>the boutique</h1>
     <p>Wearable talismans and quiet luxuries — adornment, garments and objects, chosen in the mecmûa register of midnight and gold.</p>
+    <nav class="boutique-sections" aria-label="Boutique sections"><span class="active" aria-current="page">Objects &amp; Adornment</span><a href="../atelier/index.html">Atelier · Digital Downloads →</a></nav>
   </section>
 
   <div class="filters" id="filters"></div>
