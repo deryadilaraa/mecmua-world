@@ -61,6 +61,9 @@
   .hero-tag .rule { width: 60px; height: 1px; background: var(--gold-soft); }
   .hero-tag .words { font-family: var(--font-mono); font-style: normal; text-transform: uppercase; letter-spacing: 0.4em; font-size: clamp(11px, 1.4vw, 15px); color: rgba(214,178,112,0.82); padding-left: 0.4em; }
 
+  .hero-description { max-width: 650px; margin: 24px auto 0; font-family: var(--font-serif); font-size: clamp(15px, 1.5vw, 19px); line-height: 1.7; color: rgba(243,236,221,.78); }
+  .hero-description strong { font-weight: 600; color: #e6c785; }
+
   /* Reserved space for a future curated Instagram image gallery. */
   .hero-tag h1.words { margin: 0; font-weight: 400; }
   .instagram-placeholder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: min(100%, 660px); margin: 42px auto 0; }
@@ -172,6 +175,7 @@
   <section class="hero" id="hero">
     <div class="hero-inner">
       <div class="hero-tag"><span class="rule"></span><h1 class="words">mistik müze</h1><span class="rule"></span></div>
+      <p class="hero-description">A <strong>mecmûa</strong> — an Ottoman personal anthology of poems, pictures and fragments of knowledge gathered along a person's path.</p>
       <div class="instagram-placeholder" aria-label="Instagram image gallery placeholder">
         <div class="instagram-placeholder-tile"></div>
         <div class="instagram-placeholder-tile"></div>
