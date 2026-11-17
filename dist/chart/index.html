@@ -33,6 +33,12 @@
     background: linear-gradient(180deg, #e8d09a 0%, #d2a851 52%, #b98b3d 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
   .dek { font-family: var(--font-serif); font-style: italic; font-size: clamp(14px, 1.7vw, 17px); color: rgba(242,233,221,0.68); margin: 12px auto 0; text-align: center; max-width: 52ch; }
 
+  /* Oracle section tools */
+  .oracle-tools { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; margin: 24px auto 0; }
+  .oracle-tools a, .oracle-tools span { border: 1px solid rgba(214,178,112,.35); border-radius: 999px; padding: 10px 17px; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: .11em; color: rgba(243,236,221,.75); }
+  .oracle-tools .active { color: #e6c785; border-color: rgba(214,178,112,.66); }
+  .oracle-tools a:hover { color: #e6c785; border-color: #e6c785; }
+
   /* ===== birth data form ===== */
   .formcard { margin: 44px auto 0; max-width: 900px; background: rgba(20,26,64,0.55); border: 1px solid rgba(214,178,112,0.28);
     border-radius: 18px; padding: 30px 34px; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
@@ -126,8 +132,7 @@
       <a href="../mind/index.html">Mind</a>
       <a href="../museum/index.html">Museum</a>
       <a href="../magazine/index.html">Magazine</a>
-      <a href="../wheel/index.html">Oracle</a>
-      <a class="here" href="./index.html">Chart</a>
+      <a class="here" href="../wheel/index.html">Oracle</a>
       <a href="../boutique/index.html">Boutique</a>
     </nav>
   </header>
@@ -135,6 +140,7 @@
   <div class="page">
     <h1>The Chart</h1>
     <p class="dek">A natal wheel drawn from the sky at your first breath, and the map of where its lines fall across the earth.</p>
+    <nav class="oracle-tools" aria-label="Oracle tools"><a href="../wheel/index.html">← Crystal Globe</a><span class="active" aria-current="page">Natal Chart &amp; Astrocartography</span></nav>
 
     <div class="formcard">
       <div class="frow">
