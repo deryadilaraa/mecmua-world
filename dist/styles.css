@@ -12,3 +12,6 @@
 @import url('./tokens/spacing.css');
 @import url('./tokens/effects.css');
 @import url('./tokens/dark.css');
+
+/* Hide Library in site navigation while keeping its content accessible. */
+header a[href$="library/index.html"] { display: none !important; }
