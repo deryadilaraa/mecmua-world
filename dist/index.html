@@ -61,6 +61,12 @@
   .hero-tag .rule { width: 60px; height: 1px; background: var(--gold-soft); }
   .hero-tag .words { font-family: var(--font-mono); font-style: normal; text-transform: uppercase; letter-spacing: 0.4em; font-size: clamp(11px, 1.4vw, 15px); color: rgba(214,178,112,0.82); padding-left: 0.4em; }
 
+  /* Reserved space for a future curated Instagram image gallery. */
+  .hero-tag h1.words { margin: 0; font-weight: 400; }
+  .instagram-placeholder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; width: min(100%, 660px); margin: 42px auto 0; }
+  .instagram-placeholder-tile { aspect-ratio: 1; border: 1px solid var(--gold-soft); background: rgba(255,255,255,0.025); }
+  .instagram-placeholder p { grid-column: 1 / -1; margin: 0; font-family: var(--font-mono); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: rgba(243,236,221,.46); }
+
   /* search — quiet, hairline */
   .search-wrap { position: relative; width: 100%; max-width: 560px; margin: 56px auto 0; }
   .search-wrap input { width: 100%; font-family: var(--font-serif); font-style: italic; font-size: 18px;
@@ -165,8 +171,13 @@
   <!-- ===== HERO ===== -->
   <section class="hero" id="hero">
     <div class="hero-inner">
-      <h1 class="wordmark" style="font-size: 80px">mecmûa</h1>
-      <div class="hero-tag"><span class="rule"></span><span class="words">mistik müze</span><span class="rule"></span></div>
+      <div class="hero-tag"><span class="rule"></span><h1 class="words">mistik müze</h1><span class="rule"></span></div>
+      <div class="instagram-placeholder" aria-label="Instagram image gallery placeholder">
+        <div class="instagram-placeholder-tile"></div>
+        <div class="instagram-placeholder-tile"></div>
+        <div class="instagram-placeholder-tile"></div>
+        <p>Images from Instagram — coming soon</p>
+      </div>
       <div class="search-wrap">
         <input id="q" type="text" placeholder="search a name, an idea, a feeling…" autocomplete="off" />
         <button class="go-btn" id="go-btn" aria-label="Search">⌕</button>
