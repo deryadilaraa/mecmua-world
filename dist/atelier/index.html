@@ -37,6 +37,12 @@
   .hero p { font-family: var(--font-serif); font-style: italic; font-size: clamp(16px, 2vw, 21px); color: rgba(242,233,221,0.72); margin: 16px auto 0; max-width: 54ch; }
   .hero .ship { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(214,178,112,0.7); margin-top: 18px; }
 
+  /* Boutique collection navigation. */
+  .boutique-sections { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; margin: 26px auto 0; }
+  .boutique-sections a, .boutique-sections span { display: inline-block; padding: 11px 19px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; border: 1px solid rgba(214,178,112,.38); border-radius: 999px; color: rgba(243,236,221,.77); }
+  .boutique-sections .active { border-color: rgba(214,178,112,.75); color: #e6c785; }
+  .boutique-sections a:hover { border-color: #e6c785; color: #e6c785; }
+
   .filters { max-width: 1320px; margin: 32px auto 0; padding: 0 40px; display: flex; gap: 9px; align-items: center; flex-wrap: wrap; justify-content: center;
     border-bottom: 1px solid rgba(214,178,112,0.2); padding-bottom: 22px; }
   .chip { font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.15em; font-size: 10px; padding: 9px 15px; border-radius: 999px;
@@ -110,8 +116,7 @@
       <a href="../museum/index.html">Museum</a>
       <a href="../wheel/index.html">Oracle</a>
       <a href="../chart/index.html">Chart</a>
-      <a href="../boutique/index.html">Boutique</a>
-      <a class="here" href="./index.html">Atelier</a>
+      <a class="here" href="../boutique/index.html">Boutique</a>
       <a href="./tshirts.html">Tees</a>
     </nav>
     <button class="bag" id="bag">Bag <span class="dot" id="bagN">0</span></button>
@@ -122,6 +127,7 @@
     <h1>the atelier</h1>
     <p>Printable scrolls, oracle sheets, art prints and dated tools — made in the mecmûa register of midnight and gold, delivered the moment you order.</p>
     <div class="ship">Instant download · Print at home or at a studio · Personal use</div>
+    <nav class="boutique-sections" aria-label="Boutique sections"><a href="../boutique/index.html">← Objects &amp; Adornment</a><span class="active" aria-current="page">Atelier · Digital Downloads</span></nav>
   </section>
 
   <div class="filters" id="filters"></div>
