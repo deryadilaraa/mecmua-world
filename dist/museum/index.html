@@ -123,6 +123,9 @@
   .collection-kinds[hidden] { display: none !important; }
   /* Display controls are temporarily hidden; the collection stays in grid view. */
   #sort, #viewseg { display: none !important; }
+  .collection-search { justify-content: center; }
+  .collection-search .search { flex: 0 1 360px; min-width: 0; width: 100%; }
+  .collection-search > .spacer { display: none; }
 </style>
 <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
 <script defer src="../shared/dark-toggle.js"></script>
@@ -149,7 +152,7 @@
       <button class="chip" data-kind="images" aria-pressed="false">Art &amp; Images</button>
       <button class="chip" data-kind="articles" aria-pressed="false">Articles &amp; Stories</button>
     </div>
-    <div class="toolbar">
+    <div class="toolbar collection-search">
       <div class="search"><span class="ic">⌕</span><input id="q" placeholder="Search Mistik Müze" /></div>
       <div class="chips" id="themechips" hidden></div>
       <div class="spacer"></div>
