@@ -120,6 +120,7 @@
   /* Category controls are temporarily hidden, ready to restore. */
   #themechips[hidden] { display: none !important; }
   #count { display: none !important; }
+  .collection-kinds[hidden] { display: none !important; }
 </style>
 <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
 <script defer src="../shared/dark-toggle.js"></script>
@@ -141,7 +142,7 @@
       </nav>
       <span class="count" id="count" aria-live="polite">— items</span>
     </div>
-    <div class="toolbar collection-kinds" role="group" aria-label="Collection type">
+    <div class="toolbar collection-kinds" hidden role="group" aria-label="Collection type">
       <button class="chip on" data-kind="all" aria-pressed="true">All</button>
       <button class="chip" data-kind="images" aria-pressed="false">Art &amp; Images</button>
       <button class="chip" data-kind="articles" aria-pressed="false">Articles &amp; Stories</button>
@@ -327,7 +328,7 @@
     A.forEach((e,i)=> e.id = 'DD-' + String(i+1).padStart(3,'0'));
     const dims = {}; // filled as images load
 
-    let kind = new URLSearchParams(location.search).get('kind') === 'articles' ? 'articles' : 'all';
+    let kind = 'all';
     const themes = [...new Set(A.flatMap(e=>e.themes))].sort();
     let view='grid', q='', theme=null, sort='id';
     const sel = new Set();
