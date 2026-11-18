@@ -157,6 +157,8 @@
   footer { max-width: 1180px; margin: 0 auto; padding: 40px 44px 64px; display: grid; grid-template-columns: repeat(3,1fr);
     font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.26em; font-size: 10px; color: rgba(243,236,221,0.5); }
   footer span:nth-child(2){ text-align: center; } footer span:nth-child(3){ text-align: right; }
+  /* Keep the original homepage content available for restoration. */
+  #below[hidden] { display: none !important; }
 </style>
 <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
 </head>
@@ -181,7 +183,7 @@
   </section>
 
   <!-- ===== BELOW FOLD — quiet index ===== -->
-  <div class="below" id="below">
+  <div class="below" id="below" hidden>
     <div class="index">
       <div class="index-lead">
         <div class="es">✦</div>
