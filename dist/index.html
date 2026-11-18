@@ -42,15 +42,14 @@
     color: rgba(243,236,221,0.72); border: 1px solid var(--gold-soft); background: transparent;
     padding: 9px 18px; border-radius: 999px; cursor: pointer; transition: all var(--dur-fast) var(--ease-quiet); flex-shrink: 0; }
   .login-btn:hover { border-color: var(--gold-line); color: #e6c785; }
-  #hdr { justify-content: space-between; }
-  .header-logo { position: relative; display: block; flex: 0 0 132px; height: 40px; overflow: hidden; }
+  #hdr { display: grid; grid-template-columns: minmax(0, 1fr) 132px minmax(0, 1fr); }
+  .header-logo { position: relative; display: block; grid-column: 2; grid-row: 1; width: 132px; height: 40px; overflow: hidden; }
   .header-logo img { position: absolute; width: 150%; max-width: none; height: auto; left: 50%; top: 50%; transform: translate(-50%, -50%); }
-  #hdr .nav { flex: 1 1 auto; min-width: 0; max-width: none; justify-content: center; }
-  #hdr .login-btn { position: static; }
+  #hdr .nav { grid-column: 1; grid-row: 1; min-width: 0; width: 100%; max-width: none; margin: 0; justify-content: flex-start; }
+  #hdr .login-btn { position: static; grid-column: 3; grid-row: 1; justify-self: end; }
   @media (max-width: 880px) {
-    #hdr { padding: 0 12px; gap: 12px; }
-    .header-logo { flex-basis: 104px; }
-    #hdr .nav { justify-content: flex-start; }
+    #hdr { padding: 8px 12px; gap: 4px 12px; height: 108px; grid-template-columns: minmax(0, 1fr) 132px minmax(0, 1fr); }
+    #hdr .nav { grid-column: 1 / -1; grid-row: 2; justify-content: flex-start; }
     #hdr .nav a { padding: 9px 10px; }
     #hdr .login-btn { padding: 9px 12px; }
   }
