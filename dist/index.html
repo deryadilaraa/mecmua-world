@@ -96,9 +96,9 @@
     border-bottom: 1px solid transparent; transition: all var(--dur-fast) var(--ease-quiet); }
   .search-hints button:hover { color: #e6c785; border-bottom-color: var(--gold-soft); }
 
-  .scroll-cue { position: absolute; bottom: 34px; left: 50%; transform: translateX(-50%); z-index: 2;
-    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
-    color: rgba(243,236,221,0.42); display: flex; flex-direction: column; align-items: center; gap: 9px; cursor: pointer; }
+  .scroll-cue { position: absolute; bottom: clamp(140px, 25vh, 280px); left: 50%; transform: translateX(-50%); z-index: 2;
+    font-family: var(--font-mono); font-size: clamp(18px, 2vw, 24px); letter-spacing: 0.28em; text-transform: uppercase;
+    color: #e6c785; display: flex; flex-direction: column; align-items: center; gap: 9px; cursor: pointer; }
   .scroll-cue .arr { animation: bob 2.4s ease-in-out infinite; }
   @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
 
