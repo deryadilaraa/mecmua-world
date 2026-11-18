@@ -42,9 +42,18 @@
     color: rgba(243,236,221,0.72); border: 1px solid var(--gold-soft); background: transparent;
     padding: 9px 18px; border-radius: 999px; cursor: pointer; transition: all var(--dur-fast) var(--ease-quiet); flex-shrink: 0; }
   .login-btn:hover { border-color: var(--gold-line); color: #e6c785; }
-  #hdr { justify-content: center; }
-  #hdr .login-btn { position: absolute; right: 24px; }
-  @media (max-width: 880px) { #hdr { padding: 0 12px; } #hdr .nav { max-width: calc(100% - 112px); margin-left: 0; margin-right: auto; } #hdr .nav a { padding: 9px 10px; } #hdr .login-btn { right: 12px; } }
+  #hdr { justify-content: space-between; }
+  .header-logo { position: relative; display: block; flex: 0 0 132px; height: 40px; overflow: hidden; }
+  .header-logo img { position: absolute; width: 150%; max-width: none; height: auto; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  #hdr .nav { flex: 1 1 auto; min-width: 0; max-width: none; justify-content: center; }
+  #hdr .login-btn { position: static; }
+  @media (max-width: 880px) {
+    #hdr { padding: 0 12px; gap: 12px; }
+    .header-logo { flex-basis: 104px; }
+    #hdr .nav { justify-content: flex-start; }
+    #hdr .nav a { padding: 9px 10px; }
+    #hdr .login-btn { padding: 9px 12px; }
+  }
 
   /* ===== hero — flat royal field, hairline wordmark ===== */
   .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column;
@@ -156,6 +165,7 @@
 <body>
 
   <header id="hdr">
+    <a class="header-logo" href="./index.html" aria-label="Mecmûa home"><img src="./assets/brand/mecmua-wordmark-original.png" alt="MECMÛA" /></a>
     <nav class="nav" aria-label="Main navigation">
       <a class="here" href="./index.html">Home</a>
       <a href="museum/index.html">Museum</a>
