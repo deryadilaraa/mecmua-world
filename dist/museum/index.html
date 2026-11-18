@@ -337,6 +337,8 @@
 
     function filtered(){
       let r = A.filter(e=>{
+        // Temporarily hide these article previews while preserving their source entries.
+        if (e.kind === 'articles' && ['The Painted Face', 'The Leopard Issue', 'Rooms of One’s Own'].includes(e.t)) return false;
         if (kind !== 'all' && e.kind !== kind) return false;
         if (theme && !e.themes.includes(theme)) return false;
         if (q){ const hay=(e.t+' '+e.themes.join(' ')+' '+e.motifs.join(' ')+' '+(e.dek||'')+' '+e.id).toLowerCase(); if(!hay.includes(q)) return false; }
