@@ -117,6 +117,8 @@
   .article-preview { cursor: default; }
   .article-preview:hover .thumb img { transform: none; }
   .article-preview .pick { display: none; }
+  /* Category controls are temporarily hidden, ready to restore. */
+  #themechips[hidden] { display: none !important; }
 </style>
 <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
 <script defer src="../shared/dark-toggle.js"></script>
@@ -145,7 +147,7 @@
     </div>
     <div class="toolbar">
       <div class="search"><span class="ic">⌕</span><input id="q" placeholder="Search Mistik Müze" /></div>
-      <div class="chips" id="themechips"></div>
+      <div class="chips" id="themechips" hidden></div>
       <div class="spacer"></div>
       <select class="sort" id="sort">
         <option value="id">Sort · Collection №</option>
