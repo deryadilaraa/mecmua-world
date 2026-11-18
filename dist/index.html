@@ -28,7 +28,8 @@
     padding: 0 44px; height: 70px; display: flex; align-items: center; gap: 22px; background: transparent;
     border-bottom: 1px solid var(--gold-soft);
     transition: background var(--dur-slow) var(--ease-quiet), backdrop-filter var(--dur-slow); }
-  header.solid { background: rgba(16,19,74,0.72); backdrop-filter: blur(16px) saturate(120%); -webkit-backdrop-filter: blur(16px) saturate(120%); box-shadow: 0 1px 0 var(--gold-soft); }
+  html #hdr { background: transparent !important; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  html #hdr.solid { background: rgba(12,16,48,0.35) !important; backdrop-filter: blur(22px) saturate(120%); -webkit-backdrop-filter: blur(22px) saturate(120%); box-shadow: 0 1px 0 var(--gold-soft); }
   .nav a, .login-btn { transition: color var(--dur-base) var(--ease-quiet), border-color var(--dur-base); }
   .wm-mini { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.3em; font-size: 17px;
     background: var(--grad-gold); -webkit-background-clip: text; background-clip: text; color: transparent; flex-shrink: 0; padding-left: 0.3em; }
@@ -227,17 +228,7 @@
     function onScroll(){
       const solid = window.scrollY > 60;
       hdr.classList.toggle('solid', solid);
-      if (solid) {
-        hdr.style.background = 'rgba(16,19,74,0.72)';
-        hdr.style.backdropFilter = 'blur(16px) saturate(120%)';
-        hdr.style.webkitBackdropFilter = 'blur(16px) saturate(120%)';
-        hdr.style.boxShadow = '0 1px 0 rgba(214,178,112,0.32)';
-      } else {
-        hdr.style.background = '';
-        hdr.style.backdropFilter = '';
-        hdr.style.webkitBackdropFilter = '';
-        hdr.style.boxShadow = '';
-      }
+
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
