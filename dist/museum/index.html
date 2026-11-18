@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>mecmûa — The Museum</title>
+<title>mecmûa — Mistik Müze</title>
 <link rel="stylesheet" href="../styles.css" />
 <link rel="stylesheet" href="../shared/midnight.css" />
 <style>
@@ -122,26 +122,30 @@
   <header>
     <div class="bar">
       <a class="wm" href="../index.html">mecmûa</a>
-      <span class="crumb">/ The Museum</span>
+      <span class="crumb">/ Mistik Müze</span>
       <div class="spacer"></div>
       <nav class="nav">
         <a href="../index.html">Home</a>
         <a href="../library/index.html">Library</a>
         <a href="../mind/index.html">Mind</a>
-        <a class="here" href="./index.html">Museum</a>
-        <a href="../magazine/index.html">Magazine</a>
-        <a href="../wheel/index.html">Wheel</a>
+        <a class="here" href="./index.html">Mistik Müze</a>
+        <a href="../wheel/index.html">The Wheel</a>
         <a href="../chart/index.html">Chart</a>
         <a href="../boutique/index.html">Boutique</a>
       </nav>
-      <span class="count" id="count">— plates</span>
+      <span class="count" id="count" aria-live="polite">— items</span>
+    </div>
+    <div class="toolbar collection-kinds" role="group" aria-label="Collection type">
+      <button class="chip on" data-kind="all" aria-pressed="true">All</button>
+      <button class="chip" data-kind="images" aria-pressed="false">Art &amp; Images</button>
+      <button class="chip" data-kind="articles" aria-pressed="false">Articles &amp; Stories</button>
     </div>
     <div class="toolbar">
-      <div class="search"><span class="ic">⌕</span><input id="q" placeholder="Search the museum" /></div>
+      <div class="search"><span class="ic">⌕</span><input id="q" placeholder="Search Mistik Müze" /></div>
       <div class="chips" id="themechips"></div>
       <div class="spacer"></div>
       <select class="sort" id="sort">
-        <option value="id">Sort · Plate №</option>
+        <option value="id">Sort · Collection №</option>
         <option value="title">Sort · Title</option>
         <option value="theme">Sort · Theme</option>
       </select>
@@ -295,9 +299,29 @@
       { f:'nature-scenery/tropical-garden-palms.jpg', t:'Tropical Palms', themes:['Nature','Travel'], motifs:['Palm','Jungle'], pal:['#2f6b4f','#5b7a4a','#1c5f63'] },
       { f:'nature-scenery/white-flowers-garden.jpg', t:'White Flowers', themes:['Nature'], motifs:['Botanical','Flower'], pal:['#e6ddcb','#5b7a4a','#bcd6cf'] },
     ];
+    const STORIES = [
+      { cat:'Culture', title:'Beauty Beyond the Surface', dek:'Stories and objects that inspire a life rich in meaning — an opening meditation for the new issue.', author:'Derya Dilara', read:'8 min', img:'woman-lantern-golden-willow.jpg', hero:true },
+      { cat:'Culture', title:'Creative Minds', dek:'Interviews, essays and insights from the world\u2019s most original voices.', author:'Derya Dilara', read:'9 min', img:'starry-haired-woman-painting.jpg' },
+      { cat:'Art', title:'Heirloom Pieces', dek:'Timeless treasures to wear, to collect, and to pass on.', author:'The Atelier', read:'6 min', img:'woman-gold-sun-stars-collage.jpg' },
+      { cat:'Living', title:'Spaces to Dream', dek:'Homes, objects and rituals that transform the everyday.', author:'Derya Dilara', read:'7 min', img:'monet-style-willow-pond.jpg' },
+      { cat:'Travel', title:'Wander Deeply', dek:'Journeys that awaken curiosity and leave a lasting impression.', author:'Field Notes', read:'11 min', img:'moonrise-white-sands-yucca.webp' },
+      { cat:'Beauty', title:'The Slow Ritual', dek:'On adornment as devotion — beauty practised as a form of attention.', author:'Derya Dilara', read:'5 min', img:'crescent-moon-pink-clouds.jpg' },
+      { cat:'Fashion', title:'Drape & Memory', dek:'What we wear and why it stays with us — cloth as a keeper of time.', author:'Derya Dilara', read:'7 min', img:'woman-sitting-olive-tree.jpg' },
+      { cat:'Culture', title:'The Library', dek:'A digital sanctuary for depth and beauty, and the rooms that hold our reading.', author:'Derya Dilara', read:'10 min', img:'snowy-street-lantern-night.jpg' },
+      { cat:'Art', title:'On Symbol', dek:'The eye, the moon, the horse — reading the old language of images.', author:'Derya Dilara', read:'6 min', img:'embroidered-eye-crescent-moon.jpg' },
+      { cat:'Beauty', title:'The Painted Face', dek:'On portraiture and presence — what a face keeps and what it gives away.', author:'Derya Dilara', read:'6 min', img:'magazine-pages/artist-cover-blonde-portrait.jpg' },
+      { cat:'Culture', title:'The Blue Hour', dek:'Holograms, icons and the sacred image in a screen-lit age.', author:'Derya Dilara', read:'8 min', img:'magazine-pages/blue-buddha-hologram-page.jpg' },
+      { cat:'Travel', title:'Under a Vogue Sky', dek:'Notes from the road, where fashion meets the far horizon.', author:'Field Notes', read:'9 min', img:'magazine-pages/vintage-vogue-sky-cover.jpg' },
+      { cat:'Fashion', title:'The Leopard Issue', dek:'Pattern as armour — on print, power and the animal we carry.', author:'The Atelier', read:'7 min', img:'magazine-pages/sagara-leopard-cover.png' },
+      { cat:'Living', title:'Rooms of One’s Own', dek:'Interiors that hold a practice — light, marble, water and quiet.', author:'Derya Dilara', read:'8 min', img:'interiors-architecture/woman-armchair-art-studio.jpg' },
+      { cat:'Art', title:'The Peacock & the Eye', dek:'Ornament as devotion in the old decorative traditions.', author:'Derya Dilara', read:'6 min', img:'art-illustration/peacock-ornate-artwork.jpg' },
+    ];
+    A.forEach(e => e.kind = 'images');
+    STORIES.forEach((s,i) => A.push({ f:s.img, t:s.title, themes:[s.cat], motifs:['Article'], pal:[], kind:'articles', dek:s.dek, articleURL:'../magazine/article.html?id='+i }));
     A.forEach((e,i)=> e.id = 'DD-' + String(i+1).padStart(3,'0'));
     const dims = {}; // filled as images load
 
+    let kind = new URLSearchParams(location.search).get('kind') === 'articles' ? 'articles' : 'all';
     const themes = [...new Set(A.flatMap(e=>e.themes))].sort();
     let view='grid', q='', theme=null, sort='id';
     const sel = new Set();
@@ -307,8 +331,9 @@
 
     function filtered(){
       let r = A.filter(e=>{
+        if (kind !== 'all' && e.kind !== kind) return false;
         if (theme && !e.themes.includes(theme)) return false;
-        if (q){ const hay=(e.t+' '+e.themes.join(' ')+' '+e.motifs.join(' ')+' '+e.id).toLowerCase(); if(!hay.includes(q)) return false; }
+        if (q){ const hay=(e.t+' '+e.themes.join(' ')+' '+e.motifs.join(' ')+' '+(e.dek||'')+' '+e.id).toLowerCase(); if(!hay.includes(q)) return false; }
         return true;
       });
       r.sort((a,b)=> sort==='title' ? a.t.localeCompare(b.t) : sort==='theme' ? a.themes[0].localeCompare(b.themes[0])||a.t.localeCompare(b.t) : a.id.localeCompare(b.id));
@@ -319,15 +344,15 @@
 
     function render(){
       const r = filtered();
-      document.getElementById('count').textContent = r.length + ' plate' + (r.length===1?'':'s') + (theme||q?' · filtered':'');
+      document.getElementById('count').textContent = r.length + ' item' + (r.length===1?'':'s') + (theme||q?' · filtered':'');
       stage.className = view;
-      if (!r.length){ stage.className=''; stage.innerHTML = '<div class="empty">No plates match — try another theme.</div>'; return; }
+      if (!r.length){ stage.className=''; stage.innerHTML = '<div class="empty">No items match — try another filter.</div>'; return; }
       if (view==='grid'){
         stage.innerHTML = r.map(e=>`
           <div class="card ${sel.has(e.id)?'sel':''}" data-id="${e.id}">
             <div class="thumb">
               <img src="${DIR}${e.f}" alt="" data-id="${e.id}" />
-              <span class="id">${e.id}</span>
+              <span class="id">${e.kind === 'articles' ? 'Article' : e.id}</span>
               <button class="pick" data-pick="${e.id}">${sel.has(e.id)?'✓':'+'}</button>
             </div>
             <div class="cap">
@@ -383,6 +408,7 @@
 
     function openDetail(id){
       const e = A.find(x=>x.id===id); if(!e) return;
+      if (e.kind === 'articles') { window.location.href = e.articleURL; return; }
       const d = document.getElementById('drawer');
       const dimText = dims[id] || 'measuring…';
       d.innerHTML = `
@@ -422,6 +448,15 @@
     tc.innerHTML = `<button class="chip on" data-t="">All</button>` + themes.map(t=>`<button class="chip" data-t="${t}">${t}</button>`).join('');
     tc.querySelectorAll('.chip').forEach(c=> c.onclick=()=>{ theme=c.dataset.t||null; tc.querySelectorAll('.chip').forEach(x=>x.classList.toggle('on',x===c)); render(); });
 
+    document.querySelectorAll('[data-kind]').forEach(button => {
+      const active = button.dataset.kind === kind;
+      button.classList.toggle('on', active); button.setAttribute('aria-pressed', String(active));
+      button.addEventListener('click', () => {
+        kind = button.dataset.kind;
+        document.querySelectorAll('[data-kind]').forEach(b => { const on = b === button; b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); });
+        render();
+      });
+    });
     render();
   </script>
 </body>
