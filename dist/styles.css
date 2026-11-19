@@ -18,3 +18,8 @@ header a[href$="library/index.html"],
 header a[href$="mind/index.html"],
 header a[href$="chart/index.html"],
 header a[href$="atelier/index.html"] { display: none !important; }
+
+/* Temporarily hide sections while their artwork and content are prepared. */
+nav a[href*="wheel/"], nav a[href*="boutique/"],
+header a[href*="wheel/"], header a[href*="boutique/"],
+footer a[href*="wheel/"], footer a[href*="boutique/"] { display: none !important; }
