@@ -149,13 +149,18 @@
 /* Simplified landing artwork; retain elements for later restoration. */
 .hero .wordmark, .hero .search-wrap { visibility: hidden; pointer-events: none; }
 .hero-tag .rule, .hero .scroll-cue { display: none !important; }
+
+/* Show the collection immediately below the navigation. */
+.hero { display: none !important; }
+.below { padding-top: 70px; border-top: 0; }
+.library-frame { height: calc(100dvh - 70px); }
 </style>
 <script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('mecmua-theme')||'dark');}catch(e){document.documentElement.setAttribute('data-theme','dark');}</script>
 </head>
 <body>
 
   <header id="hdr">
-    <a class="hdr-link here" href="./index.html">Home</a>
+    <a class="hdr-link here" href="./index.html">Mistik Müze</a>
     <a class="wm-mini" href="./index.html">mecmûa</a>
     <a class="hdr-link" href="./library/index.html">Library</a>
   </header>
@@ -187,7 +192,7 @@
 
   <!-- ===== BELOW FOLD — the Library, embedded ===== -->
   <div class="below" id="below">
-    <iframe class="library-frame" src="./collection/index.html" title="The Collection" loading="lazy"></iframe>
+    <iframe class="library-frame" src="./collection/index.html" title="Mistik Müze gallery" loading="eager"></iframe>
   </div>
 
   <script>
