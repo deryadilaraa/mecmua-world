@@ -40,12 +40,18 @@
   {
     "number": 5,
     "title": "The Bearer of Knowledge",
-    "status": "Visible in chat; attached image bytes not accessible through current tools; NOT backed up"
+    "status": "Saved local file",
+    "file": "cards/05-the-bearer-of-knowledge.png",
+    "sha256": "afd7023144f30ad05be2b4e8442b2ff74b1542d4bded8ab8a4c855f01becc2b9",
+    "note": "Recreated after original output was inaccessible."
   },
   {
     "number": 6,
     "title": "Loving Choices",
-    "status": "Visible in chat; attached image bytes not accessible through current tools; NOT backed up"
+    "status": "Saved local file",
+    "file": "cards/06-loving-choices.png",
+    "sha256": "08e48b098547001d92c325aae8054b5e21f8c09700a14a750f4ea49b3f5471d3",
+    "note": "Recreated after original output was inaccessible."
   },
   {
     "number": 7,

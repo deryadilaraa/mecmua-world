@@ -5,8 +5,8 @@
 - 2 · The Sacred: Saved local file. Saved chair version with left palm down; head raised slightly. Exact reattached version not accessible as a file.
 - 3 · Mother Nature: Saved local file. 
 - 4 · The Foundation: Saved local file. Recreated after original output was inaccessible.
-- 5 · The Bearer of Knowledge: Visible in chat; attached image bytes not accessible through current tools; NOT backed up. 
-- 6 · Loving Choices: Visible in chat; attached image bytes not accessible through current tools; NOT backed up. 
+- 5 · The Bearer of Knowledge: Saved local file. Recreated after original output was inaccessible.
+- 6 · Loving Choices: Saved local file. Recreated after original output was inaccessible.
 - 7 · The Time Is Now: Saved local file. 
 
-Original accessible versions are preserved in versions/. No files for cards 5 or 6 are present yet; do not claim this backup contains all eight cards.
+Original accessible versions are preserved in versions/. All eight card files are present. Cards 1, 4, 5 and 6 are recreations; earlier versions are retained.
