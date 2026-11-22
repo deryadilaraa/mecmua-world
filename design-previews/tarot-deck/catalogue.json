@@ -47,11 +47,11 @@
   },
   {
     "number": 6,
-    "title": "Loving Choices",
-    "status": "Saved local file",
-    "file": "cards/06-loving-choices.png",
-    "sha256": "08e48b098547001d92c325aae8054b5e21f8c09700a14a750f4ea49b3f5471d3",
-    "note": "Recreated after original output was inaccessible."
+    "title": "Choose Love",
+    "status": "Edited from user uploaded original",
+    "file": "cards/06-choose-love.png",
+    "sha256": "dd3b792c46f582040fa799d31a3d152b0652a67d4d771f0859ff057eaa3cb031",
+    "note": "Elephants removed; lorikeets green"
   },
   {
     "number": 7,
