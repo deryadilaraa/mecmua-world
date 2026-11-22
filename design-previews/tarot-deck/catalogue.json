@@ -1,0 +1,57 @@
+[
+  {
+    "number": 0,
+    "title": "The Beginning",
+    "status": "Saved local file",
+    "file": "cards/00-the-beginning.png",
+    "sha256": "7261ae0fa180521dc462e47977635a815a63b92e675eaf1568594cc3fbb79681"
+  },
+  {
+    "number": 1,
+    "title": "Magic",
+    "status": "Saved local file",
+    "file": "cards/01-magic.png",
+    "sha256": "695438b721668b9f8f195dba1e1cd2f095975e4fa95c8277f863130fcfd7e10a",
+    "note": "Recreated after original output was inaccessible."
+  },
+  {
+    "number": 2,
+    "title": "The Sacred",
+    "status": "Saved local file",
+    "file": "cards/02-the-sacred.png",
+    "sha256": "f266633882e77e39de0eae4e10585dcb158673e081294c6daeb8077d048e759e",
+    "note": "Saved chair version with left palm down; head raised slightly. Exact reattached version not accessible as a file."
+  },
+  {
+    "number": 3,
+    "title": "Mother Nature",
+    "status": "Saved local file",
+    "file": "cards/03-mother-nature.png",
+    "sha256": "ab77186253b64aec9e46c789ae2c38cdbcf9477a59a3cd620e987a0910ca8015"
+  },
+  {
+    "number": 4,
+    "title": "The Foundation",
+    "status": "Saved local file",
+    "file": "cards/04-the-foundation.png",
+    "sha256": "242db4d5ac714a973ae2d81d2634c968867fd9603b4036ecbc87cd6ba6fb51b1",
+    "note": "Recreated after original output was inaccessible."
+  },
+  {
+    "number": 5,
+    "title": "The Bearer of Knowledge",
+    "status": "Visible in chat; attached image bytes not accessible through current tools; NOT backed up"
+  },
+  {
+    "number": 6,
+    "title": "Loving Choices",
+    "status": "Visible in chat; attached image bytes not accessible through current tools; NOT backed up"
+  },
+  {
+    "number": 7,
+    "title": "The Time Is Now",
+    "status": "Saved local file",
+    "file": "cards/07-the-time-is-now.png",
+    "sha256": "c600f1f7f3f4b11b1bbff23010ad0a7a3b8dce973a5bb9fa224fb4a0545ff9e9"
+  }
+]
