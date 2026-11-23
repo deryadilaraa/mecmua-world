@@ -2,62 +2,155 @@
   {
     "number": 0,
     "title": "The Beginning",
-    "status": "Saved local file",
+    "src": "00-the-beginning.png",
     "file": "cards/00-the-beginning.png",
     "sha256": "7261ae0fa180521dc462e47977635a815a63b92e675eaf1568594cc3fbb79681"
   },
   {
     "number": 1,
     "title": "Magic",
-    "status": "Saved local file",
+    "src": "01-magic.png",
     "file": "cards/01-magic.png",
-    "sha256": "695438b721668b9f8f195dba1e1cd2f095975e4fa95c8277f863130fcfd7e10a",
-    "note": "Recreated after original output was inaccessible."
+    "sha256": "695438b721668b9f8f195dba1e1cd2f095975e4fa95c8277f863130fcfd7e10a"
   },
   {
     "number": 2,
     "title": "The Sacred",
-    "status": "Saved local file",
+    "src": "02-the-sacred.png",
     "file": "cards/02-the-sacred.png",
-    "sha256": "f266633882e77e39de0eae4e10585dcb158673e081294c6daeb8077d048e759e",
-    "note": "Saved chair version with left palm down; head raised slightly. Exact reattached version not accessible as a file."
+    "sha256": "f266633882e77e39de0eae4e10585dcb158673e081294c6daeb8077d048e759e"
   },
   {
     "number": 3,
     "title": "Mother Nature",
-    "status": "Saved local file",
+    "src": "03-mother-nature.png",
     "file": "cards/03-mother-nature.png",
     "sha256": "ab77186253b64aec9e46c789ae2c38cdbcf9477a59a3cd620e987a0910ca8015"
   },
   {
     "number": 4,
     "title": "The Foundation",
-    "status": "Saved local file",
+    "src": "04-the-foundation.png",
     "file": "cards/04-the-foundation.png",
-    "sha256": "242db4d5ac714a973ae2d81d2634c968867fd9603b4036ecbc87cd6ba6fb51b1",
-    "note": "Recreated after original output was inaccessible."
+    "sha256": "242db4d5ac714a973ae2d81d2634c968867fd9603b4036ecbc87cd6ba6fb51b1"
   },
   {
     "number": 5,
     "title": "The Bearer of Knowledge",
-    "status": "Exact user uploaded original",
+    "src": "05-the-bearer-of-knowledge.png",
     "file": "cards/05-the-bearer-of-knowledge.png",
-    "sha256": "393648572e3a2bdf2e56ddb6f7d8ff28b0ff3a23d93f867382c3241dd5f6220c",
-    "note": "PNG extracted unchanged from user ZIP"
+    "sha256": "393648572e3a2bdf2e56ddb6f7d8ff28b0ff3a23d93f867382c3241dd5f6220c"
   },
   {
     "number": 6,
     "title": "Choose Love",
-    "status": "Edited from user uploaded original",
+    "src": "06-choose-love.png",
     "file": "cards/06-choose-love.png",
-    "sha256": "4e62b36a76cb0a44b1af38a6e648e0aacca51f33ce28cb81a175928381bdc1c8",
-    "note": "Elephants removed; lorikeets green"
+    "sha256": "4e62b36a76cb0a44b1af38a6e648e0aacca51f33ce28cb81a175928381bdc1c8"
   },
   {
     "number": 7,
     "title": "The Time Is Now",
-    "status": "Saved local file",
+    "src": "07-the-time-is-now.png",
     "file": "cards/07-the-time-is-now.png",
     "sha256": "c600f1f7f3f4b11b1bbff23010ad0a7a3b8dce973a5bb9fa224fb4a0545ff9e9"
+  },
+  {
+    "number": 8,
+    "title": "Gentle Power",
+    "src": "08-gentle-power.png",
+    "file": "cards/08-gentle-power.png",
+    "sha256": "007f7cedd1c1e5c34e9725f0839518bea99035b191f370bc90c1187bcbf70f9c"
+  },
+  {
+    "number": 9,
+    "title": "Sweet Silence",
+    "src": "09-sweet-silence.png",
+    "file": "cards/09-sweet-silence.png",
+    "sha256": "3a26ad010cc8ff0ef44752866a8c0a4f1762f5ba08724468796e8ee5012d5d15"
+  },
+  {
+    "number": 10,
+    "title": "The Turning",
+    "src": "10-the-turning.png",
+    "file": "cards/10-the-turning.png",
+    "sha256": "1c96de17506351969965cee9369de8a9859a7c8e8a87e87101d57eb02b831bcf"
+  },
+  {
+    "number": 11,
+    "title": "The Integrous",
+    "src": "11-the-integrous.png",
+    "file": "cards/11-the-integrous.png",
+    "sha256": "a2cc61aea4072fa05fd547bdad5bb9cd146b827deaac118e5b78820dd458ec99"
+  },
+  {
+    "number": 12,
+    "title": "Surrender & See",
+    "src": "12-surrender-and-see.png",
+    "file": "cards/12-surrender-and-see.png",
+    "sha256": "5c92e3d5f39bf55d85930434a1c59e2b86416ee8dcfbd3dc2385dcf4ad8615bc"
+  },
+  {
+    "number": 13,
+    "title": "My Friend, The End.",
+    "src": "13-my-friend-the-end.png",
+    "file": "cards/13-my-friend-the-end.png",
+    "sha256": "897656e5f39c9b1893db5ac73504b9fcf37373fcebd9a243fd062bbb2521caab"
+  },
+  {
+    "number": 14,
+    "title": "Gentle Art of Life",
+    "src": "14-gentle-art-of-life.png",
+    "file": "cards/14-gentle-art-of-life.png",
+    "sha256": "c991186f2f5dfa86dbe3e0f089e73ad2275ec8a44d9fbddc2a7b63d8f8376eda"
+  },
+  {
+    "number": 15,
+    "title": "Earthly Pleasures",
+    "src": "15-earthly-pleasures.png",
+    "file": "cards/15-earthly-pleasures.png",
+    "sha256": "c2c66f247656d21d6a87d1a37e3ec77286276e7117de3056d0c48aa480e5e440"
+  },
+  {
+    "number": 16,
+    "title": "Let Go",
+    "src": "16-let-go.png",
+    "file": "cards/16-let-go.png",
+    "sha256": "ced64036bb98831e01af600cef74d4455121599a85ba32cab62ea8049dc7b1fd"
+  },
+  {
+    "number": 17,
+    "title": "Your Wish Is Your Command",
+    "src": "17-your-wish-is-your-command.png",
+    "file": "cards/17-your-wish-is-your-command.png",
+    "sha256": "b453f61ac8ae09d8bac7e25d98ae42dcb97cafbc7202978808e7928b00f1eca5"
+  },
+  {
+    "number": 18,
+    "title": "Guardian of the Night",
+    "src": "18-guardian-of-the-night.png",
+    "file": "cards/18-guardian-of-the-night.png",
+    "sha256": "d25233527318eb32e1d0a8c9f867c0aaefdd304e3d4dc80f64a36355384f2ac9"
+  },
+  {
+    "number": 19,
+    "title": "Let There Be Light",
+    "src": "19-let-there-be-light.png",
+    "file": "cards/19-let-there-be-light.png",
+    "sha256": "e3a6970c75729033651c6b41fc7f7e83606204e8016364ebc3776c3da937035e"
+  },
+  {
+    "number": 20,
+    "title": "The Eye at the Gate",
+    "src": "20-the-eye-at-the-gate.png",
+    "file": "cards/20-the-eye-at-the-gate.png",
+    "sha256": "81cf187b8a22054cea3e3e528ca2f7b9b4bb0997073b8a35c78961c6c5618509"
+  },
+  {
+    "number": 21,
+    "title": "Seven Earths",
+    "src": "21-seven-earths.png",
+    "file": "cards/21-seven-earths.png",
+    "sha256": "1e8066a90b6916f2ffe1bad8c44ac214bea7e22f6f305dd21027dd4be76a9464"
   }
 ]
